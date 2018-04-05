@@ -32,4 +32,6 @@
 //@property (nonatomic, assign) CGRect ratingF;
 
 @property (nonatomic, assign) CGFloat cellHeight;
+
+
 @end

@@ -33,6 +33,7 @@
 #define k_content_time [UIColor colorWithHex:@"#a9a4a4"]
 #define k_line [UIColor colorWithHex:@"#cdc8c8"]
 #define k_content_text [UIColor colorWithHex:@"#080808"]
+#define k_flash_pulish [UIColor colorWithHex:@"#030303"]
 #endif /* ColorMacro_h */
 
 

@@ -8,6 +8,9 @@
 
 #import "BaseView.h"
 
+@class CardModel;
 @interface CardDetailView : BaseView
+
+@property (nonatomic, strong) CardModel *cardModel;
 
 @end

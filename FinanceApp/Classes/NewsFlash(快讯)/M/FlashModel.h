@@ -35,7 +35,7 @@
 
 //@property (nonatomic, assign, readonly) CGRect cardF;
 //@property (nonatomic, assign) CGFloat cellHeight;
-@property (nonatomic, copy) CardModel *ico_card;
+@property (nonatomic, strong) CardModel *ico_card;
 @end
 
 @interface CardModel: NSObject

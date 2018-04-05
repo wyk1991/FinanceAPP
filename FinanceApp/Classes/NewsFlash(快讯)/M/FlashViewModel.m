@@ -11,6 +11,8 @@
 
 @implementation FlashViewModel
 
+
+
 -(CGSize)sizeWithText:(NSString *)text font:(UIFont *)font maxSize:(CGSize)maxSize
 {
     NSDictionary *attrs=@{NSFontAttributeName:font};
@@ -28,11 +30,11 @@
     if (model.ico_card) {
         _lineF = CGRectMake(contentX + CalculateWidth(5), 0, CalculateWidth(0.5), _contentF.size.height + CalculateHeight(80)*2);
         _detailF = CGRectMake(contentX, CGRectGetMaxY(_contentF) + CalculateHeight(20), kScreenWidth - CalculateWidth(24)*2, CalculateHeight(80));
-        _cellHeight = CGRectGetMaxY(_detailF)+ CalculateHeight(50);
+        _cellHeight = CGRectGetMaxY(_detailF)+ CalculateHeight(70);
     } else {
         _lineF = CGRectMake(contentX + CalculateWidth(5), 0, CalculateWidth(0.5), _contentF.size.height + CalculateHeight(80));
         _detailF = CGRectZero;
-        _cellHeight = CGRectGetMaxY(_contentF)+CalculateHeight(50);
+        _cellHeight = CGRectGetMaxY(_contentF)+CalculateHeight(70);
     }
     
     

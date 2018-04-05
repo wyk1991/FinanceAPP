@@ -7,7 +7,7 @@
 //
 
 #import "BaseCell.h"
-#import "FlashModel.h"
+#import "FlashViewModel.h"
 
 @class NewFlashListCell;
 @protocol ShareBtnClickDelegate<NSObject>
@@ -19,5 +19,5 @@
 @interface NewFlashListCell : BaseCell
 
 @property (nonatomic, weak) id<ShareBtnClickDelegate> delegate;
-@property (nonatomic, strong) FlashModel *model;
+@property (nonatomic, strong) FlashViewModel *viewModel;
 @end

@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-
+/** 极光注册id */
+@property (nonatomic, copy) NSString *registrationID;
 @end
 

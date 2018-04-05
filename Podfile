@@ -10,4 +10,9 @@ target 'FinanceApp' do
 	pod 'SVProgressHUD'
 	pod 'MJRefresh'
 	pod 'FMDB'
+	pod 'UMengUShare/UI', :inhibit_warnings => true
+    	pod 'UMengUShare/Social/ReducedWeChat', :inhibit_warnings => true
+    	pod 'UMengUShare/Social/QQ', :inhibit_warnings => true
+	pod 'UMengAnalytics-NO-IDFA' #无IDFA版SDK（请根据需要选择其中一个）
+	pod 'JPush'
 end

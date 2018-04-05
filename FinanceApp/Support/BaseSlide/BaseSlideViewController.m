@@ -14,7 +14,7 @@
 #define RGBAColor(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:a]
 static CGFloat const titleH = 44;/** 文字高度  */
 
-static CGFloat const MaxScale = 1.1;/** 选中文字放大  */
+static CGFloat const MaxScale = 1.0;/** 选中文字放大  */
 
 @interface BaseSlideViewController ()<UIScrollViewDelegate>
 

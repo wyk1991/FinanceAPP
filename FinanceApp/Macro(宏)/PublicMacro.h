@@ -81,8 +81,6 @@
 #define iOS10 ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0)
 #define iOS11 ([[UIDevice currentDevice].systemVersion doubleValue] >= 11.0)
 
-#define SafeAreaTopHeight (kScreenHeight == 812.0 ? 50 : 20)
-
 
 #define CalculateWidth(obj) (obj)*kScreenWidth / 375.f
 #define CalculateHeight(obj) (obj)*kScreenHeight / 667.f
@@ -126,6 +124,9 @@ static NSString *kAuthScope = @"snsapi_message,snsapi_userinfo,snsapi_friend,sns
 static NSString *kAuthOpenID = @"0c806938e2413ce73eef92cc3";
 static NSString *kAuthState = @"xxx";
 
-
+/** jPush账号配置 */
+static NSString *jPushKey = @"";
+static NSString *channel = @"";
+static BOOL isProduction = TRUE;
 
 #endif /* PublicMacro_h */

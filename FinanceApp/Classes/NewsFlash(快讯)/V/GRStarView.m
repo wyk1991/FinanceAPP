@@ -20,14 +20,14 @@
 
 - (UIImage *)prayStarImg {
     if (!_prayStarImg) {
-        _prayStarImg = [self imageNamed:@"pray_star"];
+        _prayStarImg = [self imageNamed:@"ic_star_gray"];
     }
     return _prayStarImg;
 }
 
 - (UIImage *)lightStarImg {
     if (!_lightStarImg) {
-        _lightStarImg = [self imageNamed:@"light_star"];
+        _lightStarImg = [self imageNamed:@"ic_stra_blue"];
     }
     return _lightStarImg;
 }

@@ -11,7 +11,7 @@
 @implementation FlashModel
 + (NSDictionary *)replacedKeyFromPropertyName{
     return @{
-             @"desc" : @"desciption",
+             @"desc" : @"description",
              };
 }
 

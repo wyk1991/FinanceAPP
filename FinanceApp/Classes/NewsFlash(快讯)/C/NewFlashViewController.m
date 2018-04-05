@@ -58,6 +58,7 @@
 - (void)addChildViewController {
     for (int i = 0; i < self.titlesArr.count; i++) {
         NewFlashListController * vc = [[NewFlashListController alloc] init];
+        vc.cateType = [MJYUtils transform:self.titlesArr[i]];
         vc.title  =  self.titlesArr[i];
         [self addChildViewController:vc];
     }

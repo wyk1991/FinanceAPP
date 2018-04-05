@@ -8,6 +8,8 @@
 
 #import "FlashHelper.h"
 #import "TagsModel.h"
+#import "FlashModel.h"
+#import "FlashViewModel.h"
 
 @implementation FlashHelper
 
@@ -68,13 +70,32 @@ static FlashHelper *_instance;
 
 - (void)helperGetFlashListDataWithPath:(NSString *)path withTags:(NSString *)tagStr callback:(UICallback)callback {
     WS(weakSelf);
-    [weakSelf startGETRequest:path inParam:@{} outParse:^(id retData, NSError *error) {
-        if (!error) {
-            
+    [weakSelf startGETRequest:path inParam:@{@"cate": tagStr, @"page": @(self.page).stringValue} outParse:^(id retData, NSError *error) {
+        if ([retData[@"status"] integerValue] == 100) {
+            [weakSelf dealFlashListData:retData];
         }
+        callback(retData, error);
     } callback:^(id obj, NSError *error) {
-        
+        callback(error, nil);
     }];
+}
+
+- (void)dealFlashListData:(id)result {
+    NSArray *arr = result[@"kuaixun"];
+    if (self.page == 1) {
+        [self.dataList removeAllObjects];
+    }
+    if (arr.count) {
+        NSMutableArray *tmp = @[].mutableCopy;
+        for (NSDictionary *dic in arr) {
+            FlashViewModel *viewModel = [[FlashViewModel alloc] init];
+            FlashModel *model = [FlashModel mj_objectWithKeyValues:dic];
+            viewModel.model = model;
+            [tmp addObject:viewModel];
+        }
+        [self.dataList addObject:tmp];
+    }
+    
 }
 
 @end
