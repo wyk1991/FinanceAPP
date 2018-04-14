@@ -7,10 +7,10 @@
 //
 
 #import "SituationCell.h"
+#import "CoinAllInfoModel.h"
+#import "ChartsDetailModel.h"
 
 @interface SituationCell()<UIScrollViewDelegate>
-
-@property (nonatomic, strong) NSMutableArray *titleArr;
 
 @property (nonatomic, assign) CGFloat labelWidth;
 
@@ -19,24 +19,6 @@
 @end
 
 @implementation SituationCell
-
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier WithArr:(NSMutableArray *)arr type:(LeftCellType )type{
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        
-        _leftType = type;
-        self.backgroundColor = k_white_color;
-        self.titleArr = arr;
-        [self initUI];
-    }
-    return self;
-}
-
-- (NSMutableArray *)titleArr {
-    if (!_titleArr) {
-        _titleArr = @[].mutableCopy;
-    }
-    return _titleArr;
-}
 
 - (UIImageView *)augurImg {
     if (!_augurImg) {
@@ -49,6 +31,7 @@
 - (UIImageView *)iconImg {
     if (!_iconImg) {
         _iconImg = [[UIImageView alloc] init];
+        _iconImg.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _iconImg;
 }
@@ -87,57 +70,16 @@
     return _rightScrollView;
 }
 
-- (void)initUI {
-    switch (self.leftType) {
-        case 0: {
-            [self.contentView addSubview:self.augurImg];
-            [self.contentView addSubview:self.nameLb];
-            [self.contentView addSubview:self.categoryLb];
-        }
-            break;
-        case 1: {
-            [self.contentView addSubview:self.numLb];
-            [self.contentView addSubview:self.iconImg];
-            [self.contentView addSubview:self.nameLb];
-        }
-            break;
-        case 2: {
-            [self.contentView addSubview:self.augurImg];
-            [self.contentView addSubview:self.categoryLb];
-        }
-            break;
-        default:
-            break;
-    }
-    
-    CGFloat labelW = (kScreenWidth / 2 - CalculateWidth(50));
-    [self.titleArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        UILabel *lb = [[UILabel alloc] initWithText:@"111" textColor:[UIColor redColor] textFont:k_text_font_args(CalculateHeight(14)) textAlignment:0];
-        lb.frame = CGRectMake(labelW*idx, 0, labelW, CalculateHeight(40));
-        [self.rightScrollView addSubview:lb];
-    }];
-    
-    self.rightScrollView.frame = CGRectMake(labelW, 0, (kScreenWidth - labelW)*(self.titleArr.count/2), CalculateHeight(40));
-    self.rightScrollView.contentSize = CGSizeMake((kScreenWidth - labelW)*(self.titleArr.count/2), 0);
-    
-    [self.contentView addSubview:self.rightScrollView];
-    
-    // 对scrollView添加手势
-    UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)];
-    [self.rightScrollView addGestureRecognizer:tapGes];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollMove:) name:tapCellScrollNotification object:nil];
-    
-    [self loadData];
-}
-
-- (void)loadData {
-    
+- (void)setupUI {
+    [self.contentView addSubview:self.augurImg];
+    [self.contentView addSubview:self.categoryLb];
+    [self.contentView addSubview:self.numLb];
+    [self.contentView addSubview:self.iconImg];
+    [self.contentView addSubview:self.nameLb];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
-    
     switch (self.leftType) {
         case 0: {
             [_augurImg mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -159,19 +101,19 @@
             break;
         case 1: {
             [_numLb mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.left.offset(CalculateWidth(k_leftMargin));
+                make.left.offset(CalculateWidth(23));
                 make.centerY.offset(0);
                 make.size.mas_equalTo(CGSizeMake(CalculateWidth(20), CalculateHeight(20)));
             }];
             [_iconImg mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(_numLb.mas_right).offset(CalculateWidth(30));
+                make.left.equalTo(_numLb.mas_right).offset(CalculateWidth(10));
                 make.centerY.offset(0);
-                make.size.mas_equalTo(CGSizeMake(CalculateWidth(15), CalculateHeight(15)));
+                make.size.mas_equalTo(CGSizeMake(CalculateWidth(20), CalculateHeight(20)));
             }];
             [_nameLb mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(_iconImg.mas_right).offset(CalculateWidth(5));
+                make.left.equalTo(_iconImg.mas_right).offset(CalculateWidth(10));
                 make.centerY.offset(0);
-                make.size.mas_equalTo(CGSizeMake(CalculateWidth(60), CalculateHeight(15)));
+                make.size.mas_equalTo(CGSizeMake(CalculateWidth(100), CalculateHeight(15)));
             }];
         }
             break;
@@ -191,63 +133,30 @@
         default:
             break;
     }
+}
+
+- (void)setModel:(CoinDetailListModel *)model withType:(CoinShowType)type{
+    if (_model != model) {
+        _model = model;
+    }
+   
+    [self.augurImg setHidden:YES];
+    [self.categoryLb setHidden:YES];
+    self.numLb.text = model.index;
+    [self.iconImg sd_setImageWithURL:[NSURL URLWithString:model.logo_url] placeholderImage:nil options:SDWebImageLowPriority];
+    self.nameLb.text = model.name;
+        
+}
+
+- (void)setPriceModel:(PricesModel *)priceModel {
+    [self.numLb setHidden:YES];
+    [self.iconImg setHidden:YES];
+    [self.nameLb setHidden:YES];
+    [self.augurImg setHidden:NO];
     
-    
-    
+    self.categoryLb.text = priceModel.trading_market_name;
 }
 
-#pragma mark - UIScrollerDelegate
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    _isNotification = NO;
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if (!_isNotification) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:tapCellScrollNotification object:self userInfo:@{@"cellOffX":@(scrollView.contentOffset.x)}];
-    }
-    _isNotification = NO;
-}
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    // 避开自己发的通知，只有手指拨动才会是自己的滚动
-    if (!_isNotification) {
-        // 发送通知
-        [[NSNotificationCenter defaultCenter] postNotificationName:tapCellScrollNotification object:self userInfo:@{@"cellOffX":@(scrollView.contentOffset.x)}];
-    }
-    _isNotification = NO;
-}
-
--(void)scrollMove:(NSNotification*)notification
-{
-    NSDictionary *noticeInfo = notification.userInfo;
-    NSObject *obj = notification.object;
-    float x = [noticeInfo[@"cellOffX"] floatValue];
-    if (obj!=self) {
-        _isNotification = YES;
-        [_rightScrollView setContentOffset:CGPointMake(x, 0) animated:NO];
-    }else{
-        _isNotification = NO;
-    }
-    obj = nil;
-}
-
-#pragma mark - 点击事件
-- (void)tapAction:(UITapGestureRecognizer *)gesture
-{
-    __weak typeof (self) weakSelf = self;
-    if (self.tapCellClick) {
-        NSIndexPath *indexPath = [weakSelf.tableView indexPathForCell:weakSelf];
-        weakSelf.tapCellClick(indexPath);
-    }
-}
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if ([NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"]) {
-        return NO;
-    }
-    return YES;
-}
 
 - (void)awakeFromNib {
     [super awakeFromNib];

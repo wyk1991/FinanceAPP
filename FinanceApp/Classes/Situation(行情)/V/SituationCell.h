@@ -7,15 +7,11 @@
 //
 
 #import "BaseCell.h"
+#import "IconDetailViewController.h"
 static NSString *situationCellIden = @"situationCellIden";
 typedef void(^TapCellClick)(NSIndexPath *indexPath);
 
-typedef enum : NSUInteger {
-    OptionType,
-    StroageType,
-    NormalType,
-} LeftCellType;
-
+@class CoinDetailListModel, ChartsDetailModel, PricesModel;
 @interface SituationCell : BaseCell
 
 @property (nonatomic, strong) UIImageView *augurImg;
@@ -27,7 +23,11 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) BOOL isNotification;
 @property (nonatomic, copy) TapCellClick tapCellClick;
 
-@property (nonatomic, assign) LeftCellType leftType;
+@property (nonatomic, assign) CoinShowType leftType;
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier WithArr:(NSMutableArray *)arr type:(LeftCellType)type;
+@property (nonatomic, strong) PricesModel *priceModel;
+@property (nonatomic, strong) CoinDetailListModel *model;
+- (void)setModel:(CoinDetailListModel *)model withType:(CoinShowType)type;
+
+
 @end

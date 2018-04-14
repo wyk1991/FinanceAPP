@@ -10,6 +10,7 @@
 
 @interface HeadMiddleView()
 
+@property (nonatomic, strong) UIView *backView;
 @property (nonatomic, strong) UILabel *iconNameLb;
 @property (nonatomic, strong) UILabel *middleLb;
 @property (nonatomic, strong) UILabel *bottomLb;
@@ -22,6 +23,13 @@
 @end
 
 @implementation HeadMiddleView
+- (UIView *)backView {
+    if (!_backView) {
+        _backView = [[UIView alloc] init];
+        _backView.backgroundColor = k_white_color;
+    }
+    return _backView;
+}
 
 - (UILabel *)iconNameLb {
     if (!_iconNameLb) {
@@ -47,6 +55,8 @@
 - (UIButton *)roseBtn {
     if (!_roseBtn) {
         _roseBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _roseBtn.layer.cornerRadius = 2.0f;
+        _roseBtn.layer.masksToBounds = YES;
         _roseBtn.userInteractionEnabled = NO;
         [_roseBtn setTitle:@"3.32%" forState:UIControlStateNormal];
         [_roseBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -87,10 +97,69 @@
     return _totalPrice;
 }
 
+- (void)setupUI {
+    [self addSubview:self.backView];
+    [self.backView addSubview:self.iconNameLb];
+    [self.backView addSubview:self.middleLb];
+    [self.backView addSubview:self.bottomLb];
+    [self.backView addSubview:self.roseBtn];
+    [self.backView addSubview:self.noticeImg];
+    [self.backView addSubview:self.maxPrice];
+    [self.backView addSubview:self.minPrice];
+    [self.backView addSubview:self.totalPrice];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [_backView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.offset(0);
+        make.size.height.mas_equalTo(CalculateHeight(104));
+    }];
+    [_iconNameLb mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.offset(CalculateWidth(20));
+        make.left.offset(CalculateWidth(15));
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(100), CalculateHeight(20)));
+    }];
+    [_middleLb mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_iconNameLb.mas_bottom).offset(CalculateHeight(5));
+        make.left.equalTo(_iconNameLb);
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(100), CalculateHeight(15)));
+    }];
+    [_bottomLb mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_iconNameLb.mas_bottom).offset(CalculateHeight(5));
+        make.left.equalTo(_iconNameLb);
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(120), CalculateHeight(25)));
+    }];
+    [_roseBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_bottomLb.mas_right).offset(CalculateWidth(10));
+        make.centerY.equalTo(_bottomLb);
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(80), CalculateHeight(20)));
+    }];
+    [_maxPrice mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.offset(-k_leftMargin);
+        make.top.offset(CalculateHeight(15));
+    }];
+    [_noticeImg mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(_maxPrice.mas_left).offset(-CalculateWidth(5));
+        make.top.equalTo(_maxPrice);
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(15), CalculateHeight(15)));
+    }];
+    [_minPrice mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(_maxPrice);
+        make.top.equalTo(_maxPrice.mas_bottom).offset(CalculateHeight(5));
+    }];
+    [_totalPrice mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(_maxPrice);
+        make.top.equalTo(_minPrice.mas_bottom).offset(CalculateHeight(5));
+    }];
+}
+
 - (void)panNoticeImg:(UIPanGestureRecognizer *)pan {
     if (self.block) {
         self.block(self.iconNameLb.text);
     }
 }
+
+
 
 @end

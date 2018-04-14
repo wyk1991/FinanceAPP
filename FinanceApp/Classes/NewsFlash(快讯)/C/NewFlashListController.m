@@ -62,6 +62,7 @@ static NSString *flashListCellIden = @"flashListCellIden";
         [weakSelf loadMoreData];
     }];
     
+    [self loadData];
     
 }
 
@@ -101,17 +102,16 @@ static NSString *flashListCellIden = @"flashListCellIden";
     [self addMasnory];
 }
 
+- (void)loadData {
+    [self.tableView.mj_header beginRefreshing];
+}
+
 - (void)addMasnory {
     [_tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.bottom.offset(0);
     }];
 }
 
-//- (void)loadData {
-//    [[FlashHelper shareHelper] helperGetFlashListDataWithPath:newFlashList withTags:_cateType callback:^(id obj, NSError *error) {
-//
-//    }];
-//}
 
 #pragma mark - tableViewDelegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -144,7 +144,7 @@ static NSString *flashListCellIden = @"flashListCellIden";
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if ([tableView isEqual:_tableView]) {
+    if (![tableView isEqual:_tableView]) {
         return nil;
     }
     UIView *headerView = nil;
@@ -154,7 +154,7 @@ static NSString *flashListCellIden = @"flashListCellIden";
     UILabel *timeLb = [[UILabel alloc] init];
     timeLb.textColor = k_flash_pulish;
     timeLb.font = k_text_font_args(CalculateHeight(15));
-    FlashViewModel *viewModel = [self.helper.dataList objectAtIndex:section];
+    FlashViewModel *viewModel= [self.helper.dataList objectAtIndex:section][0];
     timeLb.text = viewModel.model.publishedAt;
     timeLb.textAlignment = 1;
     [headerView addSubview:timeLb];

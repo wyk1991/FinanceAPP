@@ -7,11 +7,12 @@
 //
 
 #import "BaseView.h"
-
+@class ChartsDetailModel;
 typedef void (^ClickNoticeImg)(NSString *iconType);
 
 @interface HeadMiddleView : BaseView
 
 @property (nonatomic, copy) ClickNoticeImg block;
+@property (nonatomic, strong) ChartsDetailModel *model;
 
 @end

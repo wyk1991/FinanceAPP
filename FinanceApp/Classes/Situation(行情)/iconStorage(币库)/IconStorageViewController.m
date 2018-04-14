@@ -87,20 +87,6 @@
     
 }
 
-//- (void)setupUI {
-//    self.myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-64) style:UITableViewStylePlain];
-//
-//    self.myTableView.dataSource = self;
-//    self.myTableView.delegate = self;
-//
-//
-//    self.myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    [self addSubview:self.myTableView];
-//
-//    // 注册通知
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollMove:) name:tapCellScrollNotification object:nil];
-//}
-
 #pragma mark - UITableView Datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -114,9 +100,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     _situationCell = [tableView dequeueReusableCellWithIdentifier:situationCellIden];
     
-    if (!_situationCell) {
-        _situationCell = [[SituationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:situationCellIden WithArr:self.dataArr type:StroageType];
-    }
+//    if (!_situationCell) {
+//        _situationCell = [[SituationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:situationCellIden type:StroageCoinType];
+//    }
     _situationCell.tableView = self.myTableView;
     WS(weakSelf);
     _situationCell.tapCellClick = ^(NSIndexPath *indexPath) {

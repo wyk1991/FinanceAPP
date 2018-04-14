@@ -98,9 +98,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     _situationCell = [tableView dequeueReusableCellWithIdentifier:situationCellIden];
 
-    if (!_situationCell) {
-        _situationCell = [[SituationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:situationCellIden WithArr:self.dataArr type:OptionType];
-    }
+//    if (!_situationCell) {
+//        _situationCell = [[SituationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:situationCellIden type:OptionCoinType];
+//    }
     _situationCell.tableView = self.myTableView;
     WS(weakSelf);
     _situationCell.tapCellClick = ^(NSIndexPath *indexPath) {
