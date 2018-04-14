@@ -9,7 +9,7 @@
 #import "ZXCategorySliderBar.h"
 #import "ZXCategoryItemView.h"
 
-CGFloat itemInteval = 30;
+CGFloat itemInteval = 17;
 
 NSString *const RESETCOLORNOTIFICATION = @"RESETCOLORNOTIFICATION";
 
@@ -108,8 +108,8 @@ NSString *const RESETCOLORNOTIFICATION = @"RESETCOLORNOTIFICATION";
     self.currentIndex = index;
     [self adjustContentOffsetToIndex:index completeHanle:^{
         ZXCategoryItemView *itemView = (ZXCategoryItemView *)[self.mainCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-        itemView.contentLabel.textColor = [UIColor redColor];
-        NSNotification *notification = [[NSNotification alloc]initWithName:RESETCOLORNOTIFICATION object:@"color" userInfo:@{@"color":[UIColor blackColor],@"index":@(self.currentIndex)}];
+        itemView.contentLabel.textColor = k_siutaion_selectTag;
+        NSNotification *notification = [[NSNotification alloc]initWithName:RESETCOLORNOTIFICATION object:@"color" userInfo:@{@"color":k_siuation_unselectTag,@"index":@(self.currentIndex)}];
         [[NSNotificationCenter defaultCenter]postNotification:notification];
 
     } animation:YES];
@@ -150,8 +150,8 @@ NSString *const RESETCOLORNOTIFICATION = @"RESETCOLORNOTIFICATION";
         CGFloat distance = scrollView.contentOffset.x - _lastContentOffsetX;
         [self.indicateView setX:self.indicateView.x - originDistance/scrollView.width *distance];
         //改变宽度
-        CGFloat widthDistance = nextWitdth - currentWidth;
-        [self.indicateView setWidth:self.indicateView.width - distance/scrollView.width * widthDistance];
+//        CGFloat widthDistance = nextWitdth - currentWidth;
+//        [self.indicateView setWidth:self.indicateView.width - distance/scrollView.width * widthDistance];
          _lastContentOffsetX = scrollView.contentOffset.x;
         if (_lastContentOffsetX == self.scrollViewLastContentOffset) {
             return;
@@ -183,7 +183,7 @@ NSString *const RESETCOLORNOTIFICATION = @"RESETCOLORNOTIFICATION";
         [self.indicateView setX:self.indicateView.x + originDistance/scrollView.width *distance];
         //改变宽度
         CGFloat widthDistance = nextWitdth - currentWidth;
-        [self.indicateView setWidth:self.indicateView.width + distance/scrollView.width * widthDistance];
+//        [self.indicateView setWidth:self.indicateView.width + distance/scrollView.width * widthDistance];
         _lastContentOffsetX = scrollView.contentOffset.x;
         if (_lastContentOffsetX == self.scrollViewLastContentOffset) {
             return;
@@ -213,8 +213,8 @@ NSString *const RESETCOLORNOTIFICATION = @"RESETCOLORNOTIFICATION";
 - (UIView *)indicateView
 {
     if (!_indicateView) {
-        _indicateView = [[UIView alloc]initWithFrame:CGRectMake([self.itemOriginXArray[_originIndex] floatValue], CalculateHeight(50) - 2, [self.itemWidthArray [_originIndex] floatValue], 2)];
-        _indicateView.backgroundColor = [UIColor redColor];
+        _indicateView = [[UIView alloc]initWithFrame:CGRectMake([self.itemOriginXArray[_originIndex] floatValue], CalculateHeight(50) - 2, CalculateWidth(16) , 2)];
+        _indicateView.backgroundColor = k_flash_line;
     }
     return _indicateView;
 }
@@ -237,12 +237,12 @@ NSString *const RESETCOLORNOTIFICATION = @"RESETCOLORNOTIFICATION";
     CGFloat originX = itemInteval;
     for (int i = 0; i< self.itemArray.count; i++) {
         NSString *item = self.itemArray[i];
-        NSDictionary *attributes = @{NSFontAttributeName : [UIFont systemFontOfSize:16]};
+        NSDictionary *attributes = @{NSFontAttributeName : [UIFont systemFontOfSize:18]};
         CGSize textSize = [item sizeWithAttributes:attributes];
         CGFloat currentOriginX = originX;
         [self.itemOriginXArray addObject:@(currentOriginX)];
         [self.itemWidthArray addObject:@(textSize.width)];
-        originX = originX + textSize.width + itemInteval;
+        originX = originX + textSize.width + itemInteval+CalculateWidth(3);
     }
     if (originX > self.frame.size.width) {
         _isOutScreen = YES;
@@ -295,10 +295,10 @@ NSString *const RESETCOLORNOTIFICATION = @"RESETCOLORNOTIFICATION";
     cell.contentLabel.text = self.itemArray[indexPath.row];
     cell.index = indexPath.row;
     if (indexPath.row == self.currentIndex) {
-        cell.contentLabel.textColor = [UIColor redColor];
+        cell.contentLabel.textColor = k_siutaion_selectTag;
     }
     else{
-        cell.contentLabel.textColor = [UIColor blackColor];
+        cell.contentLabel.textColor = k_siuation_unselectTag;
     }
     return cell;
 }
@@ -306,7 +306,7 @@ NSString *const RESETCOLORNOTIFICATION = @"RESETCOLORNOTIFICATION";
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    CGSize itemSize = CGSizeMake([self.itemWidthArray[indexPath.row]floatValue], self.frame.size.height);
+    CGSize itemSize = CGSizeMake([self.itemWidthArray[indexPath.row]floatValue] + CalculateWidth(3), self.frame.size.height);
     return itemSize;
 }
 
@@ -314,10 +314,10 @@ NSString *const RESETCOLORNOTIFICATION = @"RESETCOLORNOTIFICATION";
 {
     _isMoniteScroll = NO;
     _lastContentOffsetX = self.moniterScrollView.width * indexPath.row;
-    NSNotification *notification = [[NSNotification alloc]initWithName:RESETCOLORNOTIFICATION object:@"color" userInfo:@{@"color":[UIColor blackColor],@"index":@(indexPath.row)}];
+    NSNotification *notification = [[NSNotification alloc]initWithName:RESETCOLORNOTIFICATION object:@"color" userInfo:@{@"color":k_siuation_unselectTag,@"index":@(indexPath.row)}];
     [[NSNotificationCenter defaultCenter]postNotification:notification];
     ZXCategoryItemView *cell = (ZXCategoryItemView *)[collectionView cellForItemAtIndexPath:indexPath];
-    cell.contentLabel.textColor = [UIColor redColor];
+    cell.contentLabel.textColor = k_siutaion_selectTag;
     _currentIndex = indexPath.row;
     [self adjustContentOffsetToIndex:indexPath.row completeHanle:^{
     } animation:YES];
@@ -350,8 +350,8 @@ NSString *const RESETCOLORNOTIFICATION = @"RESETCOLORNOTIFICATION";
         __weak typeof(self)weakSelf = self;
         [UIView animateWithDuration:0.2 animations:^{
             weakSelf.isOutScreen?[weakSelf.mainCollectionView setContentOffset:point]:nil;
-            [weakSelf.indicateView setWidth:[self.itemWidthArray[self.currentIndex] floatValue]];
-            [weakSelf.indicateView setX:[self.itemOriginXArray[self.currentIndex]floatValue]];
+//            [weakSelf.indicateView setWidth:[self.itemWidthArray[self.currentIndex] floatValue]];
+            [weakSelf.indicateView setX:[self.itemOriginXArray[self.currentIndex]floatValue] +([self.itemWidthArray[self.currentIndex]floatValue] - CalculateWidth(16)) /2];
             
         }completion:^(BOOL finished) {
             if (completeHandle) {
@@ -361,8 +361,8 @@ NSString *const RESETCOLORNOTIFICATION = @"RESETCOLORNOTIFICATION";
 
     }else{
         self.isOutScreen ? [self.mainCollectionView setContentOffset:point]:nil;
-        [self.indicateView setWidth:[self.itemWidthArray[self.currentIndex] floatValue]];
-        [self.indicateView setX:[self.itemOriginXArray[self.currentIndex]floatValue]];
+//        [self.indicateView setWidth:[self.itemWidthArray[self.currentIndex] floatValue]];
+        [self.indicateView setX:[self.itemOriginXArray[self.currentIndex]floatValue] +([self.itemWidthArray[self.currentIndex]floatValue] - CalculateWidth(16)) /2];
         if (completeHandle) {
             completeHandle();
         }

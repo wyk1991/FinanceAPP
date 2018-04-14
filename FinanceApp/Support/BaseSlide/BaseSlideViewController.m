@@ -125,7 +125,7 @@ static CGFloat const MaxScale = 1.0;/** 选中文字放大  */
         
         btn.tag = i;
         [btn setTitle:vc.title forState:UIControlStateNormal];
-        [btn setTitleColor:RGBColor(63, 63, 63) forState:UIControlStateNormal];
+        [btn setTitleColor:k_flash_slideUnselect forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont systemFontOfSize:18];
         
         
@@ -152,7 +152,7 @@ static CGFloat const MaxScale = 1.0;/** 选中文字放大  */
         self.lineView = [[UIView alloc] initWithFrame:CGRectMake((w-self.titleScrollView.contentSize.width/self.titlesArr.count/8)/2, titleH - 2, self.titleScrollView.contentSize.width/self.titlesArr.count/8, 2)];
     }
     
-    self.lineView.backgroundColor = RGBColor(243,36,119);
+    self.lineView.backgroundColor = k_flash_line;
     [self.titleScrollView addSubview:self.lineView];
     
     //中间竖线
@@ -177,11 +177,11 @@ static CGFloat const MaxScale = 1.0;/** 选中文字放大  */
 -(void)selectTitleBtn:(UIButton *)btn{
     
     
-    [self.selectedBtn setTitleColor:RGBColor(63, 63, 63) forState:UIControlStateNormal];
+    [self.selectedBtn setTitleColor:k_flash_slideUnselect forState:UIControlStateNormal];
     self.selectedBtn.transform = CGAffineTransformIdentity;
     
     
-    [btn setTitleColor:RGBColor(243,36,119) forState:UIControlStateNormal];
+    [btn setTitleColor:k_flash_slideSelect forState:UIControlStateNormal];
     btn.transform = CGAffineTransformMakeScale(MaxScale, MaxScale);
     self.selectedBtn = btn;
     

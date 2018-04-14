@@ -46,6 +46,16 @@
 #define flash_tag @"kuaixun_category"
 
 
+/**            SITUATION COIN  **************/
+#define situation_tag @"coin/popular_coins"
+
+#define situation_coinAllInfo @"coin/allinfo"
+
+#define situation_listCoin @"coin/listcoins"
+
+// 图表货币详情
+#define situation_coinDetail(obj)  [NSString stringWithFormat:@"coin/details?coin_name=%@", obj]
+
 
 /**  -----------  login and register  --------   */
 #define register @"register"

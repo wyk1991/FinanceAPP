@@ -29,13 +29,11 @@
 #define kWindow [[UIApplication sharedApplication].delegate window]
 
 #define k_text_font_args(obj) [UIFont systemFontOfSize:obj]
-
-#define k_text_font_args(obj) [UIFont systemFontOfSize:obj]
 #define k_textB_font_args(obj) [UIFont boldSystemFontOfSize:obj]
 
-
+/** NSUserDefaults */
 #define kNSUserDefaults [NSUserDefaults standardUserDefaults]
-
+/** 用户信息单例 */
 #define kUserInfoHelper (UserInfoModelHelper *) [UserInfoModelHelper shareInstance]
 
 /** iphoneX 适配 */
@@ -128,5 +126,7 @@ static NSString *kAuthState = @"xxx";
 static NSString *jPushKey = @"";
 static NSString *channel = @"";
 static BOOL isProduction = TRUE;
+
+#define user_currency @"user_currency"
 
 #endif /* PublicMacro_h */

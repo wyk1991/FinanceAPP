@@ -138,12 +138,22 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // 设置未读消息bage
+    
+    
     [JPUSHService resetBadge];
     [application setApplicationIconBadgeNumber:0];
     // 禁止本地的通知
     [application cancelAllLocalNotifications];
 }
 
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [JPUSHService registerDeviceToken:deviceToken];
+}
+
+- (void)application:(UIApplication *)application
+didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"did Fail To Register For Remote Notifications With Error: %@", error);
+}
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.

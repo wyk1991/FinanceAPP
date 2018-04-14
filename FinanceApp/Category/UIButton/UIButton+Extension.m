@@ -98,4 +98,21 @@
             break;
     }
 }
+
+//- (UIButton *)addRightItemWithImage:(NSString *)imageName action:(SEL)action {
+//    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+//    UIImage *image = [UIImage imageNamed:imageName];
+//    button.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+//
+//    // 这里需要注意：由于是想让图片右移，所以left需要设置为正，right需要设置为负。正在是相反的。
+//    // 让按钮图片右移15
+//    [button setImageEdgeInsets:UIEdgeInsetsMake(0, 15, 0, -15)];
+//
+//    [button setImage:image forState:UIControlStateNormal];
+//    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+//    button.titleLabel.font = [UIFont systemFontOfSize:16];
+//    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+//    self.navigationItem.rightBarButtonItem = rightItem;
+//    return button;
+//}
 @end

@@ -25,6 +25,8 @@
 
 #define k_home_search [UIColor colorWithHex:@"#a29fa0"]
 #define k_line_color [UIColor colorWithHex:@"#cacaca"]
+#define k_flash_slideSelect [UIColor colorWithHex:@"#151414"]
+#define k_flash_slideUnselect [UIColor colorWithHex:@"#5f5b5b"]
 
 #define k_tagSelected [UIColor colorWithHex:@"#fffdff"]
 #define k_tagUnselected [UIColor colorWithHex:@"#b5bcc5"]
@@ -34,6 +36,20 @@
 #define k_line [UIColor colorWithHex:@"#cdc8c8"]
 #define k_content_text [UIColor colorWithHex:@"#080808"]
 #define k_flash_pulish [UIColor colorWithHex:@"#030303"]
+#define k_flash_line [UIColor colorWithHex:@"#309dd9"]
+
+/** 行情 */
+#define k_siutaion_selectTag [UIColor colorWithHex:@"#37b2e5"]
+#define k_siuation_unselectTag [UIColor colorWithHex:@"#979797"]
+#define k_siuation_leftHeadBg [UIColor colorWithHex:@"#9e9d9c"]
+#define k_siuation_rightHeadBg [UIColor colorWithHex:@"#979797"]
+#define k_siuation_searchText [UIColor colorWithHex:@"#b5b3b0"]
+#define k_siuation_count [UIColor colorWithHex:@"#090909"]
+#define k_siutaion_title [UIColor colorWithHex:@"#a8a6a6"]
+
+#define k_siutaion_coloum [UIColor colorWithHex:@"#080808"]
+#define k_siutaion_reduce [UIColor colorWithHex:@"#2abf3b"]
+#define k_siutaion_increase [UIColor colorWithHex:@"#fa322b"]
 #endif /* ColorMacro_h */
 
 
