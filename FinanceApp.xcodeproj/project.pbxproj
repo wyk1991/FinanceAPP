@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		288D77E8E89945F7A28F6D2A /* libPods-FinanceApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F99603DF92FD8D4DF779CBB3 /* libPods-FinanceApp.a */; };
+		591175322075A60D00AB77B7 /* DDFlashCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 591175312075A60D00AB77B7 /* DDFlashCache.m */; };
 		5911BBB9205388530099D237 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5911BBB8205388530099D237 /* Assets.xcassets */; };
 		5911BBBC205388530099D237 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5911BBBA205388530099D237 /* LaunchScreen.storyboard */; };
 		5911BBC9205388530099D237 /* FinanceAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5911BBC8205388530099D237 /* FinanceAppTests.m */; };
@@ -62,8 +63,20 @@
 		5911BCB2205389780099D237 /* BaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5911BCAC205389780099D237 /* BaseCell.m */; };
 		5911BCB3205389780099D237 /* BaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5911BCAD205389780099D237 /* BaseView.m */; };
 		5911BCB72053BAA20099D237 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5911BCB62053BAA20099D237 /* AppDelegate.m */; };
+		5982FC412082F7CA00DCF50C /* SituationSetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5982FC402082F7CA00DCF50C /* SituationSetViewController.m */; };
+		5982FC47208326D400DCF50C /* SituationColorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5982FC46208326D400DCF50C /* SituationColorViewController.m */; };
+		5982FC4A2083470400DCF50C /* PushManageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5982FC492083470400DCF50C /* PushManageViewController.m */; };
+		5982FC4D2083699200DCF50C /* SituationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5982FC4C2083699200DCF50C /* SituationManager.m */; };
 		59832D1C206F36A50065E8AC /* BaseSlideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59832D1A206F36A50065E8AC /* BaseSlideViewController.m */; };
 		59832D1F206F513B0065E8AC /* NewFlashListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 59832D1E206F513B0065E8AC /* NewFlashListCell.m */; };
+		59919D682081B427004775C3 /* NormalCoinHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D622081B426004775C3 /* NormalCoinHeadView.m */; };
+		59919D692081B427004775C3 /* StorageHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D662081B427004775C3 /* StorageHeaderView.m */; };
+		59919D6A2081B427004775C3 /* UnitStorageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D672081B427004775C3 /* UnitStorageView.m */; };
+		59919D732081B446004775C3 /* ChartsDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D6B2081B445004775C3 /* ChartsDetailModel.m */; };
+		59919D742081B446004775C3 /* CoinAllInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D6D2081B445004775C3 /* CoinAllInfoModel.m */; };
+		59919D752081B446004775C3 /* SituationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D6E2081B445004775C3 /* SituationManager.m */; };
+		59919D762081B446004775C3 /* SituationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D722081B446004775C3 /* SituationHelper.m */; };
+		59919D792081B451004775C3 /* UnitInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D772081B451004775C3 /* UnitInfoModel.m */; };
 		599A19BB2070633300B9A669 /* CardDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 599A19BA2070633300B9A669 /* CardDetailView.m */; };
 		599A19BE20706CCD00B9A669 /* FlashModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 599A19BD20706CCD00B9A669 /* FlashModel.m */; };
 		59BA44E820707C0300EB5791 /* FlashViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BA44E720707C0300EB5791 /* FlashViewModel.m */; };
@@ -77,8 +90,6 @@
 		F028604D20594BF3007F8602 /* HeadMiddleView.m in Sources */ = {isa = PBXBuildFile; fileRef = F028604C20594BF3007F8602 /* HeadMiddleView.m */; };
 		F0286050205A157D007F8602 /* IconDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F028604F205A157D007F8602 /* IconDetailViewController.m */; };
 		F0286053205A1A7B007F8602 /* IconStorageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0286052205A1A7B007F8602 /* IconStorageViewController.m */; };
-		F028605A205A1CF4007F8602 /* StorageHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0286059205A1CF4007F8602 /* StorageHeaderView.m */; };
-		F028605D205A1D6E007F8602 /* UnitStorageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F028605C205A1D6E007F8602 /* UnitStorageView.m */; };
 		F0286060205A5121007F8602 /* BaseSituationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F028605F205A5121007F8602 /* BaseSituationViewController.m */; };
 		F0286069205A97F9007F8602 /* ZXCategoryItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0286063205A97F9007F8602 /* ZXCategoryItemView.m */; };
 		F028606A205A97F9007F8602 /* ZXCategoryItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F0286064205A97F9007F8602 /* ZXCategoryItemView.xib */; };
@@ -218,6 +229,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		591175302075A60C00AB77B7 /* DDFlashCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDFlashCache.h; sourceTree = "<group>"; };
+		591175312075A60D00AB77B7 /* DDFlashCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFlashCache.m; sourceTree = "<group>"; };
 		5911BBAC205388530099D237 /* FinanceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinanceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5911BBB8205388530099D237 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5911BBBB205388530099D237 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -332,10 +345,34 @@
 		5911BCB52053BAA20099D237 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5911BCB62053BAA20099D237 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5911BCB82053C23C0099D237 /* FinanceApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FinanceApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		5982FC3F2082F7CA00DCF50C /* SituationSetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SituationSetViewController.h; sourceTree = "<group>"; };
+		5982FC402082F7CA00DCF50C /* SituationSetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SituationSetViewController.m; sourceTree = "<group>"; };
+		5982FC45208326D400DCF50C /* SituationColorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SituationColorViewController.h; sourceTree = "<group>"; };
+		5982FC46208326D400DCF50C /* SituationColorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SituationColorViewController.m; sourceTree = "<group>"; };
+		5982FC482083470400DCF50C /* PushManageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PushManageViewController.h; sourceTree = "<group>"; };
+		5982FC492083470400DCF50C /* PushManageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PushManageViewController.m; sourceTree = "<group>"; };
+		5982FC4B2083699200DCF50C /* SituationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SituationManager.h; sourceTree = "<group>"; };
+		5982FC4C2083699200DCF50C /* SituationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SituationManager.m; sourceTree = "<group>"; };
 		59832D1A206F36A50065E8AC /* BaseSlideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseSlideViewController.m; sourceTree = "<group>"; };
 		59832D1B206F36A50065E8AC /* BaseSlideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseSlideViewController.h; sourceTree = "<group>"; };
 		59832D1D206F513B0065E8AC /* NewFlashListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewFlashListCell.h; sourceTree = "<group>"; };
 		59832D1E206F513B0065E8AC /* NewFlashListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewFlashListCell.m; sourceTree = "<group>"; };
+		59919D622081B426004775C3 /* NormalCoinHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NormalCoinHeadView.m; sourceTree = "<group>"; };
+		59919D632081B426004775C3 /* UnitStorageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitStorageView.h; sourceTree = "<group>"; };
+		59919D642081B426004775C3 /* StorageHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StorageHeaderView.h; sourceTree = "<group>"; };
+		59919D652081B426004775C3 /* NormalCoinHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NormalCoinHeadView.h; sourceTree = "<group>"; };
+		59919D662081B427004775C3 /* StorageHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StorageHeaderView.m; sourceTree = "<group>"; };
+		59919D672081B427004775C3 /* UnitStorageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnitStorageView.m; sourceTree = "<group>"; };
+		59919D6B2081B445004775C3 /* ChartsDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChartsDetailModel.m; sourceTree = "<group>"; };
+		59919D6C2081B445004775C3 /* SituationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SituationManager.h; sourceTree = "<group>"; };
+		59919D6D2081B445004775C3 /* CoinAllInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoinAllInfoModel.m; sourceTree = "<group>"; };
+		59919D6E2081B445004775C3 /* SituationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SituationManager.m; sourceTree = "<group>"; };
+		59919D6F2081B445004775C3 /* CoinAllInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoinAllInfoModel.h; sourceTree = "<group>"; };
+		59919D702081B445004775C3 /* SituationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SituationHelper.h; sourceTree = "<group>"; };
+		59919D712081B446004775C3 /* ChartsDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChartsDetailModel.h; sourceTree = "<group>"; };
+		59919D722081B446004775C3 /* SituationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SituationHelper.m; sourceTree = "<group>"; };
+		59919D772081B451004775C3 /* UnitInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnitInfoModel.m; sourceTree = "<group>"; };
+		59919D782081B451004775C3 /* UnitInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitInfoModel.h; sourceTree = "<group>"; };
 		599A19B92070633300B9A669 /* CardDetailView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CardDetailView.h; sourceTree = "<group>"; };
 		599A19BA2070633300B9A669 /* CardDetailView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CardDetailView.m; sourceTree = "<group>"; };
 		599A19BC20706CCD00B9A669 /* FlashModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlashModel.h; sourceTree = "<group>"; };
@@ -364,10 +401,6 @@
 		F028604F205A157D007F8602 /* IconDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IconDetailViewController.m; sourceTree = "<group>"; };
 		F0286051205A1A7B007F8602 /* IconStorageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IconStorageViewController.h; sourceTree = "<group>"; };
 		F0286052205A1A7B007F8602 /* IconStorageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IconStorageViewController.m; sourceTree = "<group>"; };
-		F0286058205A1CF4007F8602 /* StorageHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StorageHeaderView.h; sourceTree = "<group>"; };
-		F0286059205A1CF4007F8602 /* StorageHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StorageHeaderView.m; sourceTree = "<group>"; };
-		F028605B205A1D6E007F8602 /* UnitStorageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnitStorageView.h; sourceTree = "<group>"; };
-		F028605C205A1D6E007F8602 /* UnitStorageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UnitStorageView.m; sourceTree = "<group>"; };
 		F028605E205A5121007F8602 /* BaseSituationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseSituationViewController.h; sourceTree = "<group>"; };
 		F028605F205A5121007F8602 /* BaseSituationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseSituationViewController.m; sourceTree = "<group>"; };
 		F0286062205A97F9007F8602 /* ZXCategoryItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXCategoryItemView.h; sourceTree = "<group>"; };
@@ -901,6 +934,7 @@
 		5911BC17205389520099D237 /* C */ = {
 			isa = PBXGroup;
 			children = (
+				5982FC3B2082F71600DCF50C /* siuationSetting */,
 				F031F9A92057A14A005E70AC /* AboutUs */,
 				F031F99D20579F46005E70AC /* feedBack */,
 				5911BC18205389520099D237 /* SettingViewController.h */,
@@ -1185,6 +1219,45 @@
 			path = AppDelegate;
 			sourceTree = "<group>";
 		};
+		5982FC3B2082F71600DCF50C /* siuationSetting */ = {
+			isa = PBXGroup;
+			children = (
+				5982FC3E2082F72E00DCF50C /* C */,
+				5982FC3D2082F72900DCF50C /* M */,
+				5982FC3C2082F72400DCF50C /* V */,
+			);
+			path = siuationSetting;
+			sourceTree = "<group>";
+		};
+		5982FC3C2082F72400DCF50C /* V */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = V;
+			sourceTree = "<group>";
+		};
+		5982FC3D2082F72900DCF50C /* M */ = {
+			isa = PBXGroup;
+			children = (
+				5982FC4B2083699200DCF50C /* SituationManager.h */,
+				5982FC4C2083699200DCF50C /* SituationManager.m */,
+			);
+			path = M;
+			sourceTree = "<group>";
+		};
+		5982FC3E2082F72E00DCF50C /* C */ = {
+			isa = PBXGroup;
+			children = (
+				5982FC3F2082F7CA00DCF50C /* SituationSetViewController.h */,
+				5982FC402082F7CA00DCF50C /* SituationSetViewController.m */,
+				5982FC45208326D400DCF50C /* SituationColorViewController.h */,
+				5982FC46208326D400DCF50C /* SituationColorViewController.m */,
+				5982FC482083470400DCF50C /* PushManageViewController.h */,
+				5982FC492083470400DCF50C /* PushManageViewController.m */,
+			);
+			path = C;
+			sourceTree = "<group>";
+		};
 		59832D19206F36A50065E8AC /* BaseSlide */ = {
 			isa = PBXGroup;
 			children = (
@@ -1228,7 +1301,6 @@
 		F0286055205A1C65007F8602 /* iconStorage(币库) */ = {
 			isa = PBXGroup;
 			children = (
-				F0286057205A1CC7007F8602 /* V */,
 				F0286051205A1A7B007F8602 /* IconStorageViewController.h */,
 				F0286052205A1A7B007F8602 /* IconStorageViewController.m */,
 			);
@@ -1242,17 +1314,6 @@
 				F028604F205A157D007F8602 /* IconDetailViewController.m */,
 			);
 			path = "iconDetail(币种类目)";
-			sourceTree = "<group>";
-		};
-		F0286057205A1CC7007F8602 /* V */ = {
-			isa = PBXGroup;
-			children = (
-				F0286058205A1CF4007F8602 /* StorageHeaderView.h */,
-				F0286059205A1CF4007F8602 /* StorageHeaderView.m */,
-				F028605B205A1D6E007F8602 /* UnitStorageView.h */,
-				F028605C205A1D6E007F8602 /* UnitStorageView.m */,
-			);
-			path = V;
 			sourceTree = "<group>";
 		};
 		F0286061205A97F9007F8602 /* ZXScrollPageView */ = {
@@ -1621,6 +1682,12 @@
 		F031FA31205812B3005E70AC /* V */ = {
 			isa = PBXGroup;
 			children = (
+				59919D652081B426004775C3 /* NormalCoinHeadView.h */,
+				59919D622081B426004775C3 /* NormalCoinHeadView.m */,
+				59919D642081B426004775C3 /* StorageHeaderView.h */,
+				59919D662081B427004775C3 /* StorageHeaderView.m */,
+				59919D632081B426004775C3 /* UnitStorageView.h */,
+				59919D672081B427004775C3 /* UnitStorageView.m */,
 				F0DA47C9205BD9A900873DFD /* RightTableViewCell.h */,
 				F0DA47C8205BD9A900873DFD /* RightTableViewCell.m */,
 				F02860422058EAAF007F8602 /* SituationHeadView.h */,
@@ -1636,6 +1703,16 @@
 		F031FA32205812B7005E70AC /* M */ = {
 			isa = PBXGroup;
 			children = (
+				59919D782081B451004775C3 /* UnitInfoModel.h */,
+				59919D772081B451004775C3 /* UnitInfoModel.m */,
+				59919D712081B446004775C3 /* ChartsDetailModel.h */,
+				59919D6B2081B445004775C3 /* ChartsDetailModel.m */,
+				59919D6F2081B445004775C3 /* CoinAllInfoModel.h */,
+				59919D6D2081B445004775C3 /* CoinAllInfoModel.m */,
+				59919D702081B445004775C3 /* SituationHelper.h */,
+				59919D722081B446004775C3 /* SituationHelper.m */,
+				59919D6C2081B445004775C3 /* SituationManager.h */,
+				59919D6E2081B445004775C3 /* SituationManager.m */,
 				F0DA47D4205BDE8F00873DFD /* Stock.h */,
 				F0DA47D3205BDE8F00873DFD /* Stock.m */,
 			);
@@ -1674,6 +1751,8 @@
 		F03B0737206E1113006DAFCC /* V */ = {
 			isa = PBXGroup;
 			children = (
+				591175302075A60C00AB77B7 /* DDFlashCache.h */,
+				591175312075A60D00AB77B7 /* DDFlashCache.m */,
 				59BA44ED2070CCB300EB5791 /* GRStarsView.h */,
 				59BA44EE2070CCB300EB5791 /* GRStarsView.m */,
 				59BA44EC2070CCB300EB5791 /* GRStarView.h */,
@@ -1930,11 +2009,17 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-FinanceApp/Pods-FinanceApp-resources.sh",
 				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
 				"${PODS_ROOT}/SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle",
+				"${PODS_ROOT}/UMengUShare/UShareSDK/UMSocialSDK/UMSocialSDKPromptResources.bundle",
+				"${PODS_ROOT}/UMengUShare/UShareSDK/SocialLibraries/QQ/QQSDK/TencentOpenApi_IOS_Bundle.bundle",
+				"${PODS_ROOT}/UMengUShare/UShareSDK/UMSocialUI/UMSocialSDKResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SVProgressHUD.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/UMSocialSDKPromptResources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TencentOpenApi_IOS_Bundle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/UMSocialSDKResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1971,6 +2056,7 @@
 				5911BC34205389520099D237 /* SearchViewController.m in Sources */,
 				5911BC8E205389670099D237 /* UIView+Badge.m in Sources */,
 				5911BC3A205389520099D237 /* NewsListCell.m in Sources */,
+				59919D762081B446004775C3 /* SituationHelper.m in Sources */,
 				F0DA47D5205BDE8F00873DFD /* Stock.m in Sources */,
 				F031FA1F20580FF8005E70AC /* AAItemStyle.m in Sources */,
 				F031FA1720580FF8005E70AC /* AAAnimation.m in Sources */,
@@ -1993,6 +2079,7 @@
 				F031FA2C20580FF8005E70AC /* AASubtitle.m in Sources */,
 				F031F98C20579D6D005E70AC /* ZLPhotoPickerBrowserPhotoScrollView.m in Sources */,
 				F0DA47DE205E809900873DFD /* RollModel.m in Sources */,
+				5982FC47208326D400DCF50C /* SituationColorViewController.m in Sources */,
 				5911BC2C205389520099D237 /* NewFlashViewController.m in Sources */,
 				F031FA0E20580FF8005E70AC /* AAChartView.m in Sources */,
 				F031F9A82057A12B005E70AC /* ProblemFeedbackViewController.m in Sources */,
@@ -2002,12 +2089,14 @@
 				5911BC2A205389520099D237 /* QuickLoginViewController.m in Sources */,
 				F0DA47E920633EE900873DFD /* DDChannelLabel.m in Sources */,
 				5911BC91205389670099D237 /* UIView+LMJNjHuFrame.m in Sources */,
+				59919D732081B446004775C3 /* ChartsDetailModel.m in Sources */,
 				F028606C205A97F9007F8602 /* ZXPageCollectionView.m in Sources */,
 				F031FA1020580FF8005E70AC /* AAOptionsConstructor.m in Sources */,
 				F031F98620579D6D005E70AC /* UIView+ZLExtension.m in Sources */,
 				5911BC35205389520099D237 /* SelectCollectionReusableView.m in Sources */,
 				F0DA47F9206372E400873DFD /* NewPagedFlowView.m in Sources */,
 				F031FA2320580FF8005E70AC /* AAMarker.m in Sources */,
+				59919D692081B427004775C3 /* StorageHeaderView.m in Sources */,
 				F0DA47CD205BDABE00873DFD /* UIView+customView.m in Sources */,
 				F031FA1D20580FF8005E70AC /* AACrosshair.m in Sources */,
 				F0DA47F320634D1D00873DFD /* CoclumnCollectionViewCell.m in Sources */,
@@ -2020,7 +2109,6 @@
 				F031F99820579D6D005E70AC /* ZLPhotoPickerCollectionViewCell.m in Sources */,
 				59832D1F206F513B0065E8AC /* NewFlashListCell.m in Sources */,
 				F08EA7A020665B9400590467 /* HomeMiddleView.m in Sources */,
-				F028605D205A1D6E007F8602 /* UnitStorageView.m in Sources */,
 				599A19BB2070633300B9A669 /* CardDetailView.m in Sources */,
 				5911BCB0205389780099D237 /* BasePageViewController.m in Sources */,
 				5911BC3E205389520099D237 /* SettingViewController.m in Sources */,
@@ -2030,12 +2118,14 @@
 				5911BC89205389670099D237 /* UILabel+Init.m in Sources */,
 				F031F9BB2057A96A005E70AC /* UITextView+LDPlaceholder.m in Sources */,
 				F03B0727206E09DB006DAFCC /* WXApiRequestHandler.m in Sources */,
+				591175322075A60D00AB77B7 /* DDFlashCache.m in Sources */,
 				F031F98A20579D6D005E70AC /* ZLPhotoPickerBrowserViewController.m in Sources */,
 				F031F98E20579D6D005E70AC /* ZLPhotoPickerCustomToolBarView.m in Sources */,
 				5911BC2B205389520099D237 /* LoginView.m in Sources */,
 				5911BC90205389670099D237 /* UIView+gesture.m in Sources */,
 				F031F99620579D6D005E70AC /* ZLPhotoPickerViewController.m in Sources */,
 				F028606B205A97F9007F8602 /* ZXCategorySliderBar.m in Sources */,
+				59919D742081B446004775C3 /* CoinAllInfoModel.m in Sources */,
 				F031F99B20579D6D005E70AC /* ZLPhotoPickerImageView.m in Sources */,
 				F031FA1C20580FF8005E70AC /* AAColumn.m in Sources */,
 				F03B0726206E09DB006DAFCC /* WXApiManager.m in Sources */,
@@ -2046,6 +2136,7 @@
 				F031F99720579D6D005E70AC /* ZLPhotoPickerCollectionView.m in Sources */,
 				5911BC42205389520099D237 /* MainTabBarController.m in Sources */,
 				F031F93D2057928C005E70AC /* ChangeNickViewController.m in Sources */,
+				59919D682081B427004775C3 /* NormalCoinHeadView.m in Sources */,
 				5911BC9B205389670099D237 /* NodataView.m in Sources */,
 				F031FA2B20580FF8005E70AC /* AAStyle.m in Sources */,
 				5911BC87205389670099D237 /* UIImage+Extension.m in Sources */,
@@ -2061,10 +2152,13 @@
 				5911BC9A205389670099D237 /* LDToast.m in Sources */,
 				F031FA2120580FF8005E70AC /* AALegend.m in Sources */,
 				F03B0735206E0B98006DAFCC /* UIAlertView+WX.m in Sources */,
+				59919D792081B451004775C3 /* UnitInfoModel.m in Sources */,
 				F031FA2220580FF8005E70AC /* AALine.m in Sources */,
 				F031F99920579D6D005E70AC /* ZLPhotoPickerFooterCollectionReusableView.m in Sources */,
 				5911BC2D205389520099D237 /* TagsModel.m in Sources */,
 				F031F98820579D6D005E70AC /* ZLPhotoRect.m in Sources */,
+				59919D752081B446004775C3 /* SituationManager.m in Sources */,
+				5982FC4A2083470400DCF50C /* PushManageViewController.m in Sources */,
 				5911BC33205389520099D237 /* CXSearchModel.m in Sources */,
 				5911BC43205389520099D237 /* SituationViewController.m in Sources */,
 				F031FA1E20580FF8005E70AC /* AADataLabels.m in Sources */,
@@ -2077,6 +2171,7 @@
 				F0C411552067C5F200267BF0 /* PGCustomBannerView.m in Sources */,
 				5911BC3D205389520099D237 /* PersonalViewController.m in Sources */,
 				F02860442058EAAF007F8602 /* SituationHeadView.m in Sources */,
+				59919D6A2081B427004775C3 /* UnitStorageView.m in Sources */,
 				F031F9BE2057AF9D005E70AC /* PushViewController.m in Sources */,
 				5911BC32205389520099D237 /* CXSearchSectionModel.m in Sources */,
 				F0DA47FA206372E400873DFD /* PGIndexBannerSubiew.m in Sources */,
@@ -2113,14 +2208,15 @@
 				F031FA2A20580FF8005E70AC /* AASpline.m in Sources */,
 				F031F9AF2057A1C6005E70AC /* OboutUsViewController.m in Sources */,
 				F031F93720575E3C005E70AC /* RegisterViewController.m in Sources */,
+				5982FC4D2083699200DCF50C /* SituationManager.m in Sources */,
 				5911BCA4205389710099D237 /* main.m in Sources */,
-				F028605A205A1CF4007F8602 /* StorageHeaderView.m in Sources */,
 				F031FA1120580FF8005E70AC /* AASeriesElement.m in Sources */,
 				5911BC3B205389520099D237 /* BottomView.m in Sources */,
 				F031F98D20579D6D005E70AC /* ZLPhotoPickerBrowserPhotoView.m in Sources */,
 				F031F98720579D6D005E70AC /* ZLPhotoPickerBrowserPhoto.m in Sources */,
 				F031FA0F20580FF8005E70AC /* AAJsonConverter.m in Sources */,
 				5911BC38205389520099D237 /* CXSearchCollectionViewCell.m in Sources */,
+				5982FC412082F7CA00DCF50C /* SituationSetViewController.m in Sources */,
 				F0CD91F9206D275E00BF3C95 /* BaseViewController.m in Sources */,
 				5911BC8D205389670099D237 /* UIView+EmptyView.m in Sources */,
 				F0286050205A157D007F8602 /* IconDetailViewController.m in Sources */,
@@ -2299,14 +2395,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 8XV93AUQBS;
-				GCC_PREFIX_HEADER = /Users/wangyangke/Downloads/mac_finace/FinanceApp/Others/FinancePrefixHeader.pch;
+				GCC_PREFIX_HEADER = /Users/wangyangke/Desktop/FinanceApp/FinanceApp/Others/FinancePrefixHeader.pch;
 				INFOPLIST_FILE = FinanceApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/wangyangke/Downloads/mac_finace/FinanceApp/Support/wechatLib,
+					/Users/wangyangke/Desktop/FinanceApp/FinanceApp/Support/wechatLib,
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2331,14 +2427,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 8XV93AUQBS;
-				GCC_PREFIX_HEADER = /Users/wangyangke/Downloads/mac_finace/FinanceApp/Others/FinancePrefixHeader.pch;
+				GCC_PREFIX_HEADER = /Users/wangyangke/Desktop/FinanceApp/FinanceApp/Others/FinancePrefixHeader.pch;
 				INFOPLIST_FILE = FinanceApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/wangyangke/Downloads/mac_finace/FinanceApp/Support/wechatLib,
+					/Users/wangyangke/Desktop/FinanceApp/FinanceApp/Support/wechatLib,
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",

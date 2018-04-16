@@ -16,22 +16,26 @@
 
 @property (nonatomic, strong) UIImageView *iconImg;
 @property (nonatomic, strong) UILabel *numLb;
+
+@property (nonatomic, strong) UIImageView *noticeImg;
 @end
 
 @implementation SituationCell
 
 - (UIImageView *)augurImg {
     if (!_augurImg) {
-        _augurImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_xiaoxi"]];
+        _augurImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_hangqing_lingdang"]];
         
     }
     return _augurImg;
 }
 
+
+
 - (UIImageView *)iconImg {
     if (!_iconImg) {
         _iconImg = [[UIImageView alloc] init];
-        _iconImg.contentMode = UIViewContentModeScaleAspectFill;
+        _iconImg.contentMode = UIViewContentModeScaleToFill;
     }
     return _iconImg;
 }
@@ -121,10 +125,10 @@
             [_augurImg mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.left.offset(k_leftMargin);
                 make.centerY.offset(0);
-                make.size.mas_equalTo(CGSizeMake(CalculateWidth(15), CalculateHeight(18)));
+                make.size.mas_equalTo(CGSizeMake(CalculateWidth(16), CalculateHeight(19)));
             }];
             [_categoryLb mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(_augurImg.mas_right).offset(CalculateWidth(5));
+                make.left.equalTo(_augurImg.mas_right).offset(CalculateWidth(15));
                 make.centerY.offset(0);
                 make.size.mas_equalTo(CGSizeMake(CalculateWidth(90), CalculateHeight(10)));
             }];
@@ -138,6 +142,7 @@
 - (void)setModel:(CoinDetailListModel *)model withType:(CoinShowType)type{
     if (_model != model) {
         _model = model;
+        _leftType = type;
     }
    
     [self.augurImg setHidden:YES];
@@ -148,7 +153,11 @@
         
 }
 
-- (void)setPriceModel:(PricesModel *)priceModel {
+- (void)setPriceModel:(PricesModel *)priceModel withType:(CoinShowType)type{
+    if (_priceModel != priceModel) {
+        _priceModel = priceModel;
+        _leftType = type;
+    }
     [self.numLb setHidden:YES];
     [self.iconImg setHidden:YES];
     [self.nameLb setHidden:YES];

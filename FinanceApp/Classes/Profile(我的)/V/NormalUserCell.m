@@ -15,7 +15,7 @@
 @property (nonatomic, strong) UILabel *nameLb;
 @property (nonatomic, strong) UILabel *contentLb;
 @property (nonatomic, strong) UIImageView *arrowImg;
-
+@property (nonatomic, strong) UISwitch *switchBtn;
 @end
 
 @implementation NormalUserCell
@@ -50,11 +50,20 @@
     return _contentLb;
 }
 
+- (UISwitch *)switchBtn {
+    if (!_switchBtn) {
+        _switchBtn = [[UISwitch alloc] init];
+        
+    }
+    return _switchBtn;
+}
+
 - (void)setupUI {
     [self.contentView addSubview:self.icon];
     [self.contentView addSubview:self.nameLb];
     [self.contentView addSubview:self.arrowImg];
     [self.contentView addSubview:self.contentLb];
+    [self.contentView addSubview:self.switchBtn];
 }
 
 - (void)setFrame:(CGRect)frame{
@@ -66,12 +75,12 @@
     [super layoutSubviews];
     
     [_icon mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.offset(CalculateWidth(15));
+        make.left.offset(_model.icon ? CalculateWidth(15) : 0);
         make.centerY.equalTo(self.contentView);
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(20), CalculateHeight(20)));
+        make.size.mas_equalTo(_model.icon ? CGSizeMake(CalculateWidth(20), CalculateHeight(20)) : CGSizeZero);
     }];
     [_nameLb mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_icon.mas_right).offset([_model.hiddenIcon isEqualToString:@"0"] ? CalculateWidth(5) : CalculateWidth(-25));
+        make.left.equalTo(_icon.mas_right).offset(_model.icon ? CalculateWidth(5) : CalculateWidth(15));
         make.centerY.equalTo(self.contentView);
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(250), CalculateHeight(40)));
     }];
@@ -79,6 +88,10 @@
         make.right.offset(-CalculateWidth(15));
         make.centerY.equalTo(self.contentView);
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(8), CalculateHeight(18)));
+    }];
+    [_switchBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(_arrowImg);
+        make.centerY.equalTo(self.contentView);
     }];
     [_contentLb mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.contentView);
@@ -91,12 +104,18 @@
     if (_model != model) {
         _model = model;
     }
-    if ([model.hiddenIcon isEqualToString:@"0"]) {
+    if ([model.isArrow isEqualToString:@"1"] && [model.isSwitch isEqualToString:@"0"]) {
+        [self.switchBtn setHidden:YES];
+        if (model.icon) {
+            self.icon.image = [UIImage imageNamed:model.icon];
+        } else {
+            [self.icon setHidden:YES];
+        }
         
-        self.icon.image = [UIImage imageNamed:model.icon];
     } else{
-        
+        [self.switchBtn setHidden:NO];
         [self.icon setHidden:YES];
+        [self.arrowImg setHidden:YES];
     }
     self.nameLb.text = model.title;
     

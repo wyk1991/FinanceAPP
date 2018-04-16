@@ -52,7 +52,6 @@
 - (void)setupTab {
     [[UITabBar appearance] setBarTintColor:k_white_color];
     [[UITabBar appearance] setTranslucent:NO];
-    
     // 取消tabBar的透明效果
     [self.viewControllers enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         switch (idx) {

@@ -13,6 +13,8 @@
 #import "DeleteButtonCell.h"
 #import "PersonalViewController.h"
 
+#import "SituationSetViewController.h"
+#import "PushManageViewController.h"
 
 static NSString *backPersonCellIden = @"backPersonCellIden";
 
@@ -77,15 +79,15 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
     
     NSArray *arr = @[
                      @[
-                         @{@"icon": @"icon_shoucang", @"title": @"积分", @"hiddenIcon": @"0"}, @{@"icon": @"icon_shoucang", @"title": @"我的专栏", @"hiddenIcon": @"0"}, @{@"icon": @"icon_shoucang", @"title": @"收藏", @"hiddenIcon": @"0"}, @{@"icon": @"icon_lishi", @"title": @"历史", @"hiddenIcon": @"0"}
+                         @{@"icon": @"icon_shoucang", @"title": @"积分", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_shoucang", @"title": @"我的专栏", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_shoucang", @"title": @"收藏", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_lishi", @"title": @"历史", @"isArrow": @"1", @"isSwitch": @"0"}
                          ],
                      @[
-                         @{@"icon": @"icon_my_hangqing", @"title": @"行情&预警", @"hiddenIcon": @"0"}, @{@"icon": @"icon_push_manager", @"title": @"推送管理", @"hiddenIcon": @"0"}, @{@"icon": @"icon_search_clean",@"title" : @"清理缓存", @"hiddenIcon": @"0", @"content": [NSString stringWithFormat:@"%.2fM", displaysize]}
+                         @{@"icon": @"icon_my_hangqing", @"title": @"行情&预警", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_push_manager", @"title": @"推送管理", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_search_clean",@"title" : @"清理缓存", @"isArrow": @"1", @"content": [NSString stringWithFormat:@"%.2fM", displaysize], @"isSwitch": @"0"}
                          ],
                      @[
-                         @{@"icon": @"icon_share_app", @"title": @"推荐「极链财经」给好友", @"hiddenIcon": @"0"}, @{@"icon": @"icon_good", @"title": @"给极链APP好评", @"hiddenIcon": @"0"}, @{@"icon": @"icon_feedback", @"title" : @"意见反馈", @"hiddenIcon": @"0"} ,@{@"icon": @"icon_about", @"title" : @"关于极链财经", @"hiddenIcon": @"0"}
+                         @{@"icon": @"icon_share_app", @"title": @"推荐「极链财经」给好友", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_good", @"title": @"给极链APP好评", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_feedback", @"title" : @"意见反馈", @"isArrow": @"1", @"isSwitch": @"0"} ,@{@"icon": @"icon_about", @"title" : @"关于极链财经", @"isArrow": @"1", @"isSwitch": @"0"}
                          ],
-                     @[@{@"icon": @"", @"title": @"退出", @"hiddenIcon": @"0"}]
+                     @[@{@"icon": @"", @"title": @"退出", @"isArrow": @"0", @"isSwitch": @"0"}]
                      ];
 
     self.dataArr = [SettingModel mj_objectArrayWithKeyValuesArray:arr];
@@ -196,13 +198,21 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
         }
     } else if(indexPath.section == 1){
         switch (indexPath.row) {
-            case 0:
+            case 0: {
                 // 点击行情
+                SituationSetViewController *vc = [[SituationSetViewController alloc] init];
+                self.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:vc animated:YES];
                 
-                
+            }
                 break;
             case 1:
                 // 点击推送管理
+            {
+                PushManageViewController *vc = [[PushManageViewController alloc] init];
+                self.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
                 
                 break;
             case 2: {

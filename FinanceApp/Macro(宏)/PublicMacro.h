@@ -127,6 +127,13 @@ static NSString *jPushKey = @"";
 static NSString *channel = @"";
 static BOOL isProduction = TRUE;
 
+/** 个人编好设置 */
 #define user_currency @"user_currency"
+#define user_greenRed @"user_greenRed"
+#define user_earlyWaring @"user_waring"
+#define user_noticeVoiceType @"user_voiceType"
+#define user_noticeShackType @"user_shackType"
+
+#define user_pushSwitch @"user_pushSwithc"
 
 #endif /* PublicMacro_h */

@@ -55,7 +55,6 @@ SearchTextClick
 @property (nonatomic,strong) UITableView *leftTableView, *rightTableView;
 @property (nonatomic,strong) UIScrollView *buttomScrollView;
 
-@property (nonatomic, strong) NSMutableArray *leftTitles;
 @property (nonatomic,strong) NSArray *rightTitles;
 @property (nonatomic,strong) NSArray *customStocks;
 @end
@@ -79,16 +78,9 @@ SearchTextClick
 
 -(NSArray *)rightTitles{
     if (!_rightTitles) {
-        _rightTitles = @[@"价格", @"24H涨幅 ▶", @"24H成交额", @"流通市值", @"流通数量", @"成交额", @"流通率", @"发行总量"];
+        _rightTitles = @[].mutableCopy;
     }
     return _rightTitles;
-}
-
-- (NSMutableArray *)leftTitles {
-    if (!_leftTitles) {
-        _leftTitles = [NSMutableArray arrayWithArray:@[@"#", @"名称"]];
-    }
-    return _leftTitles;
 }
 
 - (StorageHeaderView *)coinTopView {
@@ -118,7 +110,7 @@ SearchTextClick
         self.backgroundColor = k_back_color;
         // 请求数据
         [self loadDataWithType:showType index:index];
-        [self loadScrollerTableWith:showType leftTitles:self.leftTitles rightTitles:[SituationManager leftTitleWithType:showType]];
+        [self loadScrollerTableWith:showType leftTitles:[SituationManager leftTitleWithType:showType] rightTitles:[SituationManager rightTitleWithType:showType]];
         
         [self configViewWith:showType];
     }
@@ -126,6 +118,9 @@ SearchTextClick
 }
 
 - (void)loadScrollerTableWith:(CoinShowType)type leftTitles:(NSArray *)leftTitles rightTitles:(NSArray *)rightTitles {
+    if (_rightTitles != rightTitles) {
+        _rightTitles = rightTitles;
+    }
     self.leftTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.leftTableView.frame = CGRectMake(0,type == 0 ? CalculateHeight(15/2) :( type == 1 ? CalculateHeight(211+15/2) : CalculateHeight(250+15)), kScreenWidth*7/18, kScreenHeight);
     self.leftTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -136,7 +131,7 @@ SearchTextClick
     [self.leftTableView registerClass:[SituationCell class] forCellReuseIdentifier:situationCellIden];
     [self addSubview:self.leftTableView];
     
-    self.rightTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.rightTitles.count * RightLabelWidth + 20 + RightLabelMagin*(self.rightTitles.count-1), [UIScreen mainScreen].bounds.size.height) style:UITableViewStylePlain];
+    self.rightTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, type == 0 ? kScreenWidth*11/18: self.rightTitles.count * RightLabelWidth + 20 + RightLabelMagin*(self.rightTitles.count-1), [UIScreen mainScreen].bounds.size.height) style:UITableViewStylePlain];
     self.rightTableView.backgroundColor = k_back_color;
     self.rightTableView.delegate = self;
     self.rightTableView.dataSource = self;
@@ -145,7 +140,7 @@ SearchTextClick
     self.buttomScrollView = [[UIScrollView alloc] init];
     
     self.buttomScrollView.frame = CGRectMake(CGRectGetMaxX(self.leftTableView.frame), type == 0 ? CalculateHeight(15/2) : ( type == 1 ? CalculateHeight(211+15/2) : CalculateHeight(250 + 15)), kScreenWidth*11/18, kScreenHeight);
-    self.buttomScrollView.contentSize = CGSizeMake(self.rightTableView.bounds.size.width, 0);
+    self.buttomScrollView.contentSize = CGSizeMake(type == 0 ? kScreenWidth*11/18 : self.rightTableView.bounds.size.width, 0);
     self.buttomScrollView.backgroundColor = [UIColor clearColor];
     self.buttomScrollView.bounces = NO;
     self.buttomScrollView.showsHorizontalScrollIndicator = NO;
@@ -226,7 +221,7 @@ SearchTextClick
 }
 
 - (void)configCoinDetailData {
-    [self.chartsTopView setupTheChartStyle:self.helper.chartList];
+    [self.chartsTopView setupTheChartStyle:self.helper.chartList withMiddleData:[self.helper.oneDayList firstObject]];
 }
 
 #pragma mark - table view dataSource
@@ -235,7 +230,14 @@ SearchTextClick
     if (tableView == self.leftTableView) {
         SituationCell *cell = [tableView dequeueReusableCellWithIdentifier:situationCellIden];
 
-        [cell setModel:self.helper.coinListData[indexPath.row] withType:self.showType];
+        if (self.showType == 0) {
+            
+        } else if (self.showType == 1) {
+            [cell setModel:self.helper.coinListData[indexPath.row] withType:self.showType];
+        } else {
+            [cell setPriceModel:self.helper.oneDayList[indexPath.row] withType:self.showType];
+        }
+        
         [self resetSeparatorInsetForCell:cell];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
@@ -247,7 +249,7 @@ SearchTextClick
         } else if (self.showType == 1) {
             cell.model = self.helper.coinListData[indexPath.row];
         } else {
-            cell.model = self.helper.oneDayList[indexPath.row];
+            cell.priceModel = self.helper.oneDayList[indexPath.row];
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -281,12 +283,10 @@ SearchTextClick
     }else{
         UIView *leftHeaderView;
         if (self.showType == 1) {
-            leftHeaderView = [self viewWithLeftLabelNumber:self.leftTitles.count];
+            leftHeaderView = [self viewWithLeftLabelNumber:[SituationManager leftTitleWithType:self.showType].count];
         } else {
             
-            [self.leftTitles removeObjectAtIndex:0];
             leftHeaderView = [self viewWithLeftLabelNumber:1];
-            [leftHeaderView.subviews.lastObject setText:@"名称"];
         }
         leftHeaderView.backgroundColor = [UIColor lightGrayColor];
         return leftHeaderView;
@@ -350,7 +350,7 @@ SearchTextClick
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(num==2 ? CalculateWidth(22)+LeftLableMagin*i: CalculateWidth(50),  0, CalculateWidth(60)  , LabelHeight)];
         label.font = k_textB_font_args(CalculateHeight(16));
         label.tag = i;
-        [label setText:self.leftTitles[i]];
+        [label setText:[SituationManager leftTitleWithType:self.showType][i]];
         label.textAlignment = 0;
         [view addSubview:label];
     }

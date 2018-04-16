@@ -10,6 +10,7 @@
 
 @interface SituationManager : NSObject
 
-+ (NSArray *)leftTitleWithType:(NSInteger)showType;
++ (NSArray *)rightTitleWithType:(NSInteger)showType;
 
++ (NSArray *)leftTitleWithType:(NSInteger)showType;
 @end

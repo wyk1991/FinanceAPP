@@ -29,5 +29,5 @@ typedef void(^TapCellClick)(NSIndexPath *indexPath);
 @property (nonatomic, strong) CoinDetailListModel *model;
 - (void)setModel:(CoinDetailListModel *)model withType:(CoinShowType)type;
 
-
+- (void)setPriceModel:(PricesModel *)priceModel withType:(CoinShowType)type;
 @end

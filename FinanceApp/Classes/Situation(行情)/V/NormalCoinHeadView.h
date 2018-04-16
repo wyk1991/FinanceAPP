@@ -7,9 +7,8 @@
 //
 
 #import "BaseView.h"
-
+@class ChartsDetailModel, PricesModel;
 @interface NormalCoinHeadView : BaseView
 
-- (void)setupTheChartStyle:(NSArray *)chartData;
-
+- (void)setupTheChartStyle:(NSArray *)chartData withMiddleData:(PricesModel *)priceModel;
 @end

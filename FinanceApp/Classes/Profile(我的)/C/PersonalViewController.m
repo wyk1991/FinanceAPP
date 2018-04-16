@@ -62,9 +62,9 @@
         [self.dataArr removeAllObjects];
     }
     NSArray *array = @[
-                       @[@{@"icon": @"", @"title": @"昵称", @"content": @"", @"hiddenIcon": @"1"}, @{@"icon": @"",@"title": @"性别", @"content": @"男", @"hiddenIcon": @"1"}],
+                       @[@{@"title": @"昵称", @"content": @"", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"title": @"性别", @"content": @"男", @"isArrow": @"1", @"isSwitch": @"0"}],
                        
-                       @[@{@"icon": @"", @"title": @"账号与安全", @"hiddenIcon": @"1"}]
+                       @[@{@"title": @"账号与安全", @"isArrow": @"1", @"isSwitch": @"0"}]
                        ];
     self.dataArr = [SettingModel mj_objectArrayWithKeyValuesArray:array];
     [self.tableView reloadData];

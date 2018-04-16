@@ -50,6 +50,9 @@
 #define k_siutaion_coloum [UIColor colorWithHex:@"#080808"]
 #define k_siutaion_reduce [UIColor colorWithHex:@"#2abf3b"]
 #define k_siutaion_increase [UIColor colorWithHex:@"#fa322b"]
+
+#define k_siuation_chartLine [UIColor colorWithHex:@"#399bdb"]
+
 #endif /* ColorMacro_h */
 
 
