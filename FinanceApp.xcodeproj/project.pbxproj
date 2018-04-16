@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		288D77E8E89945F7A28F6D2A /* libPods-FinanceApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F99603DF92FD8D4DF779CBB3 /* libPods-FinanceApp.a */; };
-		591175322075A60D00AB77B7 /* DDFlashCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 591175312075A60D00AB77B7 /* DDFlashCache.m */; };
 		5911BBB9205388530099D237 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5911BBB8205388530099D237 /* Assets.xcassets */; };
 		5911BBBC205388530099D237 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5911BBBA205388530099D237 /* LaunchScreen.storyboard */; };
 		5911BBC9205388530099D237 /* FinanceAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5911BBC8205388530099D237 /* FinanceAppTests.m */; };
@@ -63,20 +62,8 @@
 		5911BCB2205389780099D237 /* BaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5911BCAC205389780099D237 /* BaseCell.m */; };
 		5911BCB3205389780099D237 /* BaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5911BCAD205389780099D237 /* BaseView.m */; };
 		5911BCB72053BAA20099D237 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5911BCB62053BAA20099D237 /* AppDelegate.m */; };
-		5982FC412082F7CA00DCF50C /* SituationSetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5982FC402082F7CA00DCF50C /* SituationSetViewController.m */; };
-		5982FC47208326D400DCF50C /* SituationColorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5982FC46208326D400DCF50C /* SituationColorViewController.m */; };
-		5982FC4A2083470400DCF50C /* PushManageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5982FC492083470400DCF50C /* PushManageViewController.m */; };
-		5982FC4D2083699200DCF50C /* SituationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5982FC4C2083699200DCF50C /* SituationManager.m */; };
 		59832D1C206F36A50065E8AC /* BaseSlideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59832D1A206F36A50065E8AC /* BaseSlideViewController.m */; };
 		59832D1F206F513B0065E8AC /* NewFlashListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 59832D1E206F513B0065E8AC /* NewFlashListCell.m */; };
-		59919D682081B427004775C3 /* NormalCoinHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D622081B426004775C3 /* NormalCoinHeadView.m */; };
-		59919D692081B427004775C3 /* StorageHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D662081B427004775C3 /* StorageHeaderView.m */; };
-		59919D6A2081B427004775C3 /* UnitStorageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D672081B427004775C3 /* UnitStorageView.m */; };
-		59919D732081B446004775C3 /* ChartsDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D6B2081B445004775C3 /* ChartsDetailModel.m */; };
-		59919D742081B446004775C3 /* CoinAllInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D6D2081B445004775C3 /* CoinAllInfoModel.m */; };
-		59919D752081B446004775C3 /* SituationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D6E2081B445004775C3 /* SituationManager.m */; };
-		59919D762081B446004775C3 /* SituationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D722081B446004775C3 /* SituationHelper.m */; };
-		59919D792081B451004775C3 /* UnitInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 59919D772081B451004775C3 /* UnitInfoModel.m */; };
 		599A19BB2070633300B9A669 /* CardDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 599A19BA2070633300B9A669 /* CardDetailView.m */; };
 		599A19BE20706CCD00B9A669 /* FlashModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 599A19BD20706CCD00B9A669 /* FlashModel.m */; };
 		59BA44E820707C0300EB5791 /* FlashViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BA44E720707C0300EB5791 /* FlashViewModel.m */; };
@@ -90,6 +77,8 @@
 		F028604D20594BF3007F8602 /* HeadMiddleView.m in Sources */ = {isa = PBXBuildFile; fileRef = F028604C20594BF3007F8602 /* HeadMiddleView.m */; };
 		F0286050205A157D007F8602 /* IconDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F028604F205A157D007F8602 /* IconDetailViewController.m */; };
 		F0286053205A1A7B007F8602 /* IconStorageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0286052205A1A7B007F8602 /* IconStorageViewController.m */; };
+		F028605A205A1CF4007F8602 /* StorageHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0286059205A1CF4007F8602 /* StorageHeaderView.m */; };
+		F028605D205A1D6E007F8602 /* UnitStorageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F028605C205A1D6E007F8602 /* UnitStorageView.m */; };
 		F0286060205A5121007F8602 /* BaseSituationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F028605F205A5121007F8602 /* BaseSituationViewController.m */; };
 		F0286069205A97F9007F8602 /* ZXCategoryItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0286063205A97F9007F8602 /* ZXCategoryItemView.m */; };
 		F028606A205A97F9007F8602 /* ZXCategoryItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F0286064205A97F9007F8602 /* ZXCategoryItemView.xib */; };
