@@ -26,10 +26,22 @@
 /** charts图表详情 */
 @property (nonatomic, strong) NSMutableArray *oneDayList;
 
+/** 保存列表的数据 */
+@property (nonatomic, strong) NSMutableArray *chartCoinList;
+
 /** 图表数据中的最大值和最小值 */
+
+
+/** 自选的币库列表数据 */
+@property (nonatomic, strong) NSMutableArray *optionsCoinList;
+/** 保存section的打开的关闭状态 */
+@property (nonatomic, strong) NSMutableDictionary *optionOpenDict;
 
 /** 当前页面 */
 @property (nonatomic, assign) NSInteger page;
+
+/** coin list data */
+@property (nonatomic, strong) NSMutableArray *coinNameList;
 
 + (instancetype)shareHelper;
 
@@ -40,6 +52,11 @@
 - (void)helperGetListCoinWithPath:(NSString *)path params:(NSDictionary *)params callBack:(UICallback)callback;
 
 - (void)heplerGetCoinDetailWithPath:(NSString *)path params:(NSDictionary *)params callBack:(UICallback)callback;
+
+/** 获取自选列表数据 */
+- (void)helperGetCoinListNameDataWithPath:(NSString *)path params:(NSDictionary *)params callBack:(UICallback)callback;
+
+- (void)helperGetOptionCoinListWithPath:(NSString *)path params:(NSDictionary *)params callBack:(UICallback)callback;
 
 - (NSDictionary *)helpGetCoinAllInfoWith:(CoinAllInfoModel *)model;
 

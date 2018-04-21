@@ -9,6 +9,9 @@
 #import "SituationSetViewController.h"
 #import "SettingModel.h"
 #import "NormalUserCell.h"
+#import "SituationSettingManager.h"
+
+#import "BaseSituationListViewController.h"
 
 @interface SituationSetViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -24,6 +27,7 @@
         _dataList = @[].mutableCopy;
     }
     return _dataList;
+    
 }
 
 
@@ -32,9 +36,9 @@
                   @[
                       @{@"title": @"行情颜色", @"isArrow": @"1", @"isSwitch": @"0"},
                       @{@"title": @"显示价格", @"isArrow": @"1", @"isSwitch": @"0"},
-                      @{@"title": @"预警按钮", @"isArrow": @"0", @"isSwitch": @"1"}],
+                      @{@"title": @"预警按钮", @"isArrow": @"0", @"isSwitch": @"1", @"isSelect":[kNSUserDefaults valueForKey:user_earlyWaring]}],
                   @[
-                      @{@"title": @"预警提醒", @"isArrow": @"1", @"content": @"声音+震动", @"isSwitch": @"0"},
+                      @{@"title": @"预警提醒", @"isArrow": @"1", @"content":[SituationSettingManager settingEarlyWaring] , @"isSwitch": @"0"},
                       @{@"title": @"已触发预警", @"isArrow": @"1", @"isSwitch": @"0"}
                       ]
                   ];
@@ -45,6 +49,7 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [self loadData];
 }
 
 - (UITableView *)tableView {
@@ -67,7 +72,7 @@
 - (void)initUI {
     [super initUI];
     [self.view addSubview:self.tableView];
-    [self loadData];
+//    [self loadData];
     
 }
 
@@ -119,11 +124,15 @@
     if (indexPath.section == 0) {
         switch (indexPath.row) {
             case 0:{
-                
+                BaseSituationListViewController *vc = [[BaseSituationListViewController alloc] init];
+                vc.setType = 0;
+                [self.navigationController pushViewController:vc animated:YES];
             }
                 break;
             case 1: {
-                
+                BaseSituationListViewController *vc = [[BaseSituationListViewController alloc] init];
+                vc.setType = 1;
+                [self.navigationController pushViewController:vc animated:YES];
             }
                 break;
             case 2: {
@@ -136,7 +145,9 @@
     } else {
         switch (indexPath.row) {
             case 0: {
-                
+                BaseSituationListViewController *vc = [[BaseSituationListViewController alloc] init];
+                vc.setType = 2;
+                [self.navigationController pushViewController:vc animated:YES];
             }
                 break;
             case 1: {

@@ -47,6 +47,8 @@
     
     if (_mainImageView == nil) {
         _mainImageView = [[UIImageView alloc] init];
+        _mainImageView.layer.cornerRadius = 5.0f;
+        _mainImageView.layer.masksToBounds = YES;
         _mainImageView.userInteractionEnabled = YES;
     }
     return _mainImageView;

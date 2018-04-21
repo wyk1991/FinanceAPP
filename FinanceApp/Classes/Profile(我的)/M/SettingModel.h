@@ -15,5 +15,6 @@
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *isArrow;
 @property (nonatomic, copy) NSString *isSwitch;
+@property (nonatomic, copy) NSString *isSelect;
 
 @end

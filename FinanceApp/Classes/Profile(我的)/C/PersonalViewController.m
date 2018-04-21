@@ -10,6 +10,9 @@
 #import "SettingModel.h"
 #import "NormalUserCell.h"
 #import "QuickLoginViewController.h"
+#import "ChangeNickViewController.h"
+
+#import "BaseSituationListViewController.h"
 
 @interface PersonalViewController()<UITableViewDelegate, UITableViewDataSource>
 
@@ -144,7 +147,36 @@
 #pragma mark - UITableView Delegate methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            ChangeNickViewController *vc = [[ChangeNickViewController alloc] init];
+            vc.title = @"修改昵称";
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+        if (indexPath.row == 1) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择性别" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            UIAlertAction *man = [UIAlertAction actionWithTitle:@"男" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                // 请求网络数据
+                
+            }];
+            UIAlertAction *woman = [UIAlertAction actionWithTitle:@"女" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                // 请求网络数据
+            }];
+            [alert addAction:cancelAction];
+            [alert addAction:man];
+            [alert addAction:woman];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }
+    if (indexPath.section == 1 && indexPath.row == 0 ) {
+        BaseSituationListViewController *vc = [[BaseSituationListViewController alloc] init];
+        vc.title = @"账号与安全";
+        vc.setType = 4;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 - (void)clickAvator {

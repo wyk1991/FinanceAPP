@@ -61,6 +61,7 @@
 #import "UIViewController+NavigationBar.h"
 #import "UIButton+Block.h"
 #import "UIView+customView.h"
-
+#import "TSScrollStatusBar.h"
+#import "UIScrollView+TSSCrollStatusBar.h"
 
 #endif /* BaseMacro_h */

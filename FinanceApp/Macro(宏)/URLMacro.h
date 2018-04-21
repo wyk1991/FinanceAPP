@@ -52,6 +52,9 @@
 #define situation_coinAllInfo @"coin/allinfo"
 
 #define situation_listCoin @"coin/listcoins"
+#define situation_listCoinName @"coin/usercoin_marketlist"
+
+#define situation_optin_list @"coin/usercoin_simple_details"
 
 // 图表货币详情
 #define situation_coinDetail(obj)  [NSString stringWithFormat:@"coin/details?coin_name=%@", obj]

@@ -9,12 +9,14 @@ typedef enum : NSUInteger {
     settingColorType,
     settingPriceType,
     settingNoticeType,
+    settingPushType,
+    settingSecureType
 } SettingType;
 
 #import "BaseViewController.h"
 
 
-@interface SituationColorViewController : BaseViewController
+@interface BaseSituationListViewController : BaseViewController
 
-@property (nonatomic, assign) SettingType *setType;
+@property (nonatomic, assign) SettingType setType;
 @end

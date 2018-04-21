@@ -8,8 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SituationManager : NSObject
+@interface SituationSettingManager : NSObject
 
-+ (NSArray *)getSettingModelWithType:(NSInteger)type;
++ (NSMutableArray *)getSettingModelWithType:(NSInteger)type;
+
++ (NSMutableArray *)getFeedBackModel;
+
++ (NSString *)settingEarlyWaring;
 
 @end

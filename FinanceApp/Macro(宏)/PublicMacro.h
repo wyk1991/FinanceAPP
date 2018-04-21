@@ -136,4 +136,8 @@ static BOOL isProduction = TRUE;
 
 #define user_pushSwitch @"user_pushSwithc"
 
+#define user_telephoneBinding @"user_telephoneBinding"
+#define user_wechat @"user_wechat"
+#define user_settingPassword @"user_password"
+
 #endif /* PublicMacro_h */

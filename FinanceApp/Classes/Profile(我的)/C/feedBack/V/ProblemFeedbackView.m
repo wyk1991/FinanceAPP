@@ -107,13 +107,13 @@
     _back_view.layer.cornerRadius = 5.f;
     [self addSubview:_back_view];
     
-    _title_label = [[UILabel alloc] initWithText:@"问题反馈类型" textColor:k_text_color textFont:k_text_font_args(CalculateHeight(14))];
+    _title_label = [[UILabel alloc] initWithText:@"反馈类型" textColor:k_text_color textFont:k_text_font_args(CalculateHeight(14))];
     [_back_view addSubview:_title_label];
     
-    NSArray *titles = @[@"订单问题",
-                        @"功能异常",
-                        @"体验问题",
-                        @"好建议",
+    NSArray *titles = @[
+                        @"功能建议",
+                        @"体验建议",
+                        @"内容建议",
                         @"其他"];
     CGFloat width = (kScreenWidth - CalculateWidth(66)) / 4.f;
     CGFloat height = CalculateHeight(38);

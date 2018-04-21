@@ -284,6 +284,7 @@
 }
 
 - (void)timeClickButtonAction {
+    [self.timeBtn start];
     if (_delegate && [_delegate respondsToSelector:@selector(clickTimeBtnClickWith:)]) {
         [_delegate clickTimeBtnClickWith:self];
     }
@@ -308,6 +309,19 @@
     if (_delegate && [_delegate respondsToSelector:@selector(clickChatImgClickWith:)]) {
         [_delegate clickChatImgClickWith:self];
     }
+}
+
+- (void)setType:(LoginViewType)type {
+    if (_type != type) {
+        _type = type;
+    }
+    [self.goBtn setHidden:type == 0 ? YES : NO];
+    [self.loginBtn setTitle:type == 0 ? @"登录" : @"绑定" forState:UIControlStateNormal];
+    [self.wechatImg setHidden:type == 0 ? NO : YES];
+    [self.line3 setHidden:type == 0 ? NO : YES];
+    [self.line4 setHidden:type == 0 ? NO : YES];
+    [self.bottomLb setHidden:type == 0 ? NO : YES];
+    
 }
 
 @end

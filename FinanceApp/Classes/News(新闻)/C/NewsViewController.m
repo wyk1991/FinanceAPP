@@ -24,6 +24,8 @@ static NSString * const reuseID  = @"DDChannelCell";
  */
 @property (nonatomic, assign) BOOL *saveChange;
 
+@property (nonatomic, strong) UIView *navBackView;
+
 @property (nonatomic, strong) HomeHelper *homeHelper;
 /** 频道数据模型 */
 @property (nonatomic, strong) NSMutableArray *channelList;
@@ -66,6 +68,14 @@ static NSString * const reuseID  = @"DDChannelCell";
         
     }
     return _smallScrollView;
+}
+
+- (UIView *)navBackView {
+    if (!_navBackView) {
+        _navBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth - CalculateWidth(80), CalculateHeight(44))];
+        _navBackView.backgroundColor = [UIColor clearColor];
+    }
+    return _navBackView;
 }
 
 - (UICollectionView *)bigCollectionView
@@ -111,11 +121,12 @@ static NSString * const reuseID  = @"DDChannelCell";
 
 - (void)initUI {
     [super initUI];
-    [self.navigationController.navigationBar setBarTintColor:RGB(78, 161, 225)];
+    [self.navigationController.navigationBar setBarTintColor:k_home_barColor];
     //设置右边按钮
     [self buildBarButtonItem];
     // 设置smallScrollview 为titleView
-    self.navigationItem.titleView = self.smallScrollView;
+    [self.navBackView addSubview:self.smallScrollView];
+    self.navigationItem.titleView = self.navBackView;
     
     [self.view addSubview:self.bigCollectionView];
     
@@ -196,7 +207,7 @@ static NSString * const reuseID  = @"DDChannelCell";
     
     DDChannelLabel *firstLabel = [self getLabelArrayFromSubviews][0];
     firstLabel.textColor = k_tagSelected;
-    
+    firstLabel.font = k_text_font_args(CalculateHeight(20));
 }
 
 /** 排序按钮点击事件 */
@@ -276,10 +287,6 @@ static NSString * const reuseID  = @"DDChannelCell";
     labelLeft.scale  = scaleLeft;
     labelRight.scale = scaleRight;
     
-    //     NSLog(@"value = %f leftIndex = %zd, rightIndex = %zd", value, leftIndex, rightIndex);
-    //     NSLog(@"左%f 右%f", scaleLeft, scaleRight);
-    //     NSLog(@"左：%@ 右：%@", labelLeft.text, labelRight.text);
-    
     // 点击label会调用此方法1次，会导致【scrollViewDidEndScrollingAnimation】方法中的动画失效，这时直接return。
     if (scaleLeft == 1 && scaleRight == 0) {
         return;
@@ -309,10 +316,12 @@ static NSString * const reuseID  = @"DDChannelCell";
     // 先把之前着色的去色：（快速滑动会导致有些文字颜色深浅不一，点击label会导致之前的标题不变回黑色）
     for (DDChannelLabel *label in [self getLabelArrayFromSubviews]) {
         label.textColor = k_tagUnselected;
+        label.font = k_text_font_args(CalculateHeight(18));
     }
     // 下划线滚动并着色
     [UIView animateWithDuration:0.5 animations:^{
         titleLable.textColor = k_tagSelected;
+        titleLable.font = k_text_font_args(CalculateHeight(20));
     }];
 }
 

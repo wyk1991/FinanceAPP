@@ -71,13 +71,13 @@ static void *UITEXTVIEW_PLACEHOLDER_TEXTCOLOR_KEY = (void *)@"UITEXTVIEW_PLACEHO
 {
     if (!self.placeholderLabel) {
         self.placeholderLabel = [[UILabel alloc] init];
-        self.placeholderLabel.font = k_text_font_args(CalculateHeight(14));
+        self.placeholderLabel.font = k_text_font_args(CalculateHeight(15));
         self.placeholderLabel.numberOfLines = 0;
         self.placeholderLabel.textColor = [UIColor colorWithHex:@"898989"];
         [self addSubview:self.placeholderLabel];
         [self.placeholderLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.offset(5);
-            make.right.offset(-5);
+            make.right.offset(-15);
             make.top.offset(6);
         }];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChange) name:UITextViewTextDidChangeNotification object:self];

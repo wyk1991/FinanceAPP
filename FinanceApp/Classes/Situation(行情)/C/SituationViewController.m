@@ -9,8 +9,7 @@
 #import "SituationViewController.h"
 
 #import "IconDetailViewController.h"
-#import "optionalViewController.h"
-#import "IconStorageViewController.h"
+#import "AddCoinViewController.h"
 
 #import "SituationHelper.h"
 #import "NormalCoinHeadView.h"
@@ -141,7 +140,11 @@
     
 }
 - (void)addClick {
-    
+    AddCoinViewController *vc = [[AddCoinViewController alloc] init];
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.helper.tagList removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 2)]];
+     vc.itemArr = self.helper.tagList;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)ZXPageViewWillBeginDragging:(ZXPageCollectionView *)pageView

@@ -25,6 +25,7 @@
 - (UIImageView *)companyLogo {
     if (!_companyLogo) {
         _companyLogo = [[UIImageView alloc] init];
+        _companyLogo.image = [UIImage imageNamed:@"jilian_about_icon"];
         _companyLogo.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _companyLogo;
@@ -32,28 +33,28 @@
 
 - (UILabel *)content1 {
     if (!_content1) {
-        _content1 = [[UILabel alloc] initWithText:@"" textColor:k_black_color textFont:k_text_font_args(CalculateHeight(14)) textAlignment:1];
+        _content1 = [[UILabel alloc] initWithText:@"媒体合作: media@jinse.com" textColor:k_black_color textFont:k_text_font_args(CalculateHeight(14)) textAlignment:1];
     }
     return _content1;
 }
 
 - (UILabel *)content2 {
     if (!_content2) {
-        _content2 = [[UILabel alloc] initWithText:@"" textColor:k_black_color textFont:k_text_font_args(CalculateHeight(14)) textAlignment:1];
+        _content2 = [[UILabel alloc] initWithText:@"市场合作: marketing@jinse.com" textColor:k_black_color textFont:k_text_font_args(CalculateHeight(14)) textAlignment:1];
     }
     return _content2;
 }
 
 - (UILabel *)content3 {
     if (!_content3) {
-        _content3 = [[UILabel alloc] initWithText:@"" textColor:k_black_color textFont:k_text_font_args(14) textAlignment:1];
+        _content3 = [[UILabel alloc] initWithText:@"广告合作  QQ:282839233" textColor:k_black_color textFont:k_text_font_args(14) textAlignment:1];
     }
     return _content3;
 }
 
 - (UILabel *)versionLb {
     if (!_versionLb) {
-        _versionLb = [[UILabel alloc] initWithText:@"" textColor:k_black_color textFont:k_text_font_args(14) textAlignment:1];
+        _versionLb = [[UILabel alloc] initWithText:[NSString stringWithFormat:@"极链财经 V%@",[MJYUtils mjy_checkAPPVersion]] textColor:k_black_color textFont:k_text_font_args(14) textAlignment:1];
     }
     return _versionLb;
 }
@@ -70,11 +71,16 @@
     [self addMasnory];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
 - (void)addMasnory {
     [_companyLogo mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.offset(CalculateHeight(60));
         make.centerX.offset(0);
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(200), CalculateHeight(90)));
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(80), CalculateHeight(80)));
     }];
     
     [_content1 mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -94,7 +100,10 @@
         make.centerX.offset(0);
         make.size.equalTo(_content1);
     }];
-    
+    [_versionLb mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.offset(-CalculateHeight(30));
+        make.centerX.offset(0);
+    }];
     
 }
 

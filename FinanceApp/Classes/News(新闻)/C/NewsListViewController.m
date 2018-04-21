@@ -87,7 +87,7 @@ static NSString *newListIdentifier = @"newListIdentifier";
 - (UIView *)searchBackView {
     if (!_searchBackView) {
         _searchBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, CalculateHeight(44))];
-        _searchBackView.backgroundColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"searchBar_background"]];
+        _searchBackView.backgroundColor = [UIColor clearColor];
         
         UITextField *searchTf = [[UITextField alloc] init];
         [searchTf setEnabled:YES];
@@ -133,6 +133,8 @@ static NSString *newListIdentifier = @"newListIdentifier";
 
 - (instancetype)init {
     if (self = [super init]) {
+        
+        self.tableView.ts_scrollStatusBar = [TSScrollStatusBar scrollStatusBarWithString:@"111111" andIndexY:64];;
         [self initUI];
     }
     return self;
@@ -219,6 +221,7 @@ static NSString *newListIdentifier = @"newListIdentifier";
 - (void)refreshData {
     [[HomeHelper shareHelper] helperGetDataListWithPath:newsList WithTag:self.pageType callBack:^(id obj, NSError *error) {
         [self.tableView reloadData];
+        
         [self.tableView.mj_header endRefreshing];
     }];
 }
@@ -226,12 +229,13 @@ static NSString *newListIdentifier = @"newListIdentifier";
 - (void)loadMoreData {
     [[HomeHelper shareHelper] helperGetDataListWithPath:newsList WithTag:self.pageType callBack:^(id obj, NSError *error) {
         [self.tableView reloadData];
+        
+        
         [self.tableView.mj_footer endRefreshing];
     }];
 }
 
 #pragma mark - UITableView Datasource
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -269,7 +273,7 @@ static NSString *newListIdentifier = @"newListIdentifier";
 
 #pragma mark - NewPagedFlowView Delegate
 - (CGSize)sizeForPageInFlowView:(NewPagedFlowView *)flowView {
-    return CGSizeMake(kScreenWidth - 30, (kScreenWidth - 60) * 9 / 16);
+    return CGSizeMake(kScreenWidth - 30, (kScreenWidth - 90) * 9 / 16);
 }
 
 - (void)didSelectCell:(PGIndexBannerSubiew *)subView withSubViewIndex:(NSInteger)subIndex {
@@ -294,8 +298,8 @@ static NSString *newListIdentifier = @"newListIdentifier";
         bannerView.layer.masksToBounds = YES;
     }
     // 下载网络图片
-    [bannerView.mainImageView sd_setImageWithURL:[NSURL URLWithString:[[self.helper scrollList][index] valueForKey:@"urlToImage"]] placeholderImage:[UIImage imageNamed:@"test1.jpeg"]];
-    bannerView.indexLabel.text = [[self.helper scrollList][index] valueForKey:@"description"];
+    [bannerView.mainImageView sd_setImageWithURL:[NSURL URLWithString:[[self.helper scrollList][index] valueForKey:@"urlToImage"]] placeholderImage:nil];
+    bannerView.indexLabel.text = [[self.helper scrollList][index] valueForKey:@"title"];
     
     return bannerView;
 }
@@ -341,6 +345,7 @@ static NSString *newListIdentifier = @"newListIdentifier";
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.scrollView stopTimer];
 }
 
 

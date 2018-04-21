@@ -30,8 +30,29 @@
     
     [self initMain];
     
-    
+    [self initUserSettingConfig];
     return YES;
+}
+
+- (void)initUserSettingConfig {
+    if (![kNSUserDefaults valueForKey:user_currency]) {
+        [kNSUserDefaults setValue:@"cny" forKey:user_currency];
+    }
+    if (![kNSUserDefaults valueForKey:user_greenRed]) {
+        [kNSUserDefaults setValue:@"redRise" forKey:user_greenRed];
+    }
+    if (![kNSUserDefaults valueForKey:user_pushSwitch]) {
+        [kNSUserDefaults setValue:@"0" forKey:user_pushSwitch];
+    }
+    if (![kNSUserDefaults valueForKey:user_noticeShackType]) {
+        [kNSUserDefaults setValue:@"1" forKey:user_noticeShackType];
+    }
+    if (![kNSUserDefaults valueForKey:user_noticeVoiceType]) {
+        [kNSUserDefaults setValue:@"1" forKey:user_noticeVoiceType];
+    }
+    if (![kNSUserDefaults valueForKey:user_earlyWaring]) {
+        [kNSUserDefaults setValue:@"1" forKey:user_earlyWaring];
+    }
 }
 
 - (void)initMain {

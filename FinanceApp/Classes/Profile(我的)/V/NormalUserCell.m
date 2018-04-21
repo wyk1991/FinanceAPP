@@ -16,6 +16,8 @@
 @property (nonatomic, strong) UILabel *contentLb;
 @property (nonatomic, strong) UIImageView *arrowImg;
 @property (nonatomic, strong) UISwitch *switchBtn;
+
+@property (nonatomic, strong) UIImageView *checkImg;
 @end
 
 @implementation NormalUserCell
@@ -53,7 +55,7 @@
 - (UISwitch *)switchBtn {
     if (!_switchBtn) {
         _switchBtn = [[UISwitch alloc] init];
-        
+        [_switchBtn addTarget:self action:@selector(switchBtnClick:) forControlEvents:UIControlEventValueChanged];
     }
     return _switchBtn;
 }
@@ -98,6 +100,7 @@
         make.right.equalTo(_arrowImg.mas_left).offset(CalculateWidth(-5));
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(200), CalculateHeight(20)));
     }];
+
 }
 
 - (void)setModel:(SettingModel *)model {
@@ -112,8 +115,15 @@
             [self.icon setHidden:YES];
         }
         
-    } else{
+    } else if([model.isArrow isEqualToString:@"0"] && [model.isSwitch isEqualToString:@"0"]){
+        [self.switchBtn setHidden:YES];
+        [self.icon setHidden:YES];
+        [self.arrowImg setHidden:YES];
+//        [self.checkImg setHidden:[model.isSelect isEqualToString:@"1"] ? NO : YES];
+        self.accessoryType = [model.isSelect isEqualToString:@"1"] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    } else {
         [self.switchBtn setHidden:NO];
+        [self.switchBtn setOn:[model.isSelect isEqualToString:@"1"] ? YES :NO];
         [self.icon setHidden:YES];
         [self.arrowImg setHidden:YES];
     }
@@ -122,6 +132,17 @@
     self.contentLb.text = model.content;
 
     [self setNeedsDisplay];
+}
+
+- (void)switchBtnClick:(UISwitch *)sw {
+    if ([self.model.title isEqualToString:@"声音"]) {
+        [MJYUtils saveToUserDefaultWithKey:user_noticeVoiceType withValue:sw.isOn ? @"1" : @"0"];
+    } else if([self.model.title isEqualToString:@"震动"]){
+        [MJYUtils saveToUserDefaultWithKey:user_noticeShackType withValue:sw.isOn ? @"1" : @"0"];
+    } else if([self.model.title isEqualToString:@"预警按钮"]) {
+        [MJYUtils saveToUserDefaultWithKey:user_earlyWaring withValue:sw.isOn ? @"1" : @"0"];
+    }
+    
 }
 
 - (void)awakeFromNib {
@@ -134,5 +155,6 @@
 
     // Configure the view for the selected state
 }
+
 
 @end

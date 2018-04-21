@@ -9,6 +9,7 @@
 #import "SituationCell.h"
 #import "CoinAllInfoModel.h"
 #import "ChartsDetailModel.h"
+#import "OptionCoinModel.h"
 
 @interface SituationCell()<UIScrollViewDelegate>
 
@@ -29,8 +30,6 @@
     }
     return _augurImg;
 }
-
-
 
 - (UIImageView *)iconImg {
     if (!_iconImg) {
@@ -92,8 +91,8 @@
                 make.size.mas_equalTo(CGSizeMake(CalculateWidth(15), CalculateHeight(18)));
             }];
             [_nameLb mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(self).offset(CalculateHeight(5));
-                make.left.equalTo(_augurImg.mas_right).offset(CalculateWidth(5));
+                make.top.equalTo(self).offset(CalculateHeight(10));
+                make.left.equalTo(_augurImg.mas_right).offset(CalculateWidth(15));
                 make.size.mas_equalTo(CGSizeMake(CalculateWidth(80), CalculateHeight(15)));
             }];
             [_categoryLb mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -164,6 +163,21 @@
     [self.augurImg setHidden:NO];
     
     self.categoryLb.text = priceModel.trading_market_name;
+}
+
+- (void)setOptinModel:(OptionCoinModel *)optionModel withTypt:(CoinShowType)type {
+    if (_optionModel != optionModel) {
+        _optionModel = optionModel;
+        _leftType = type;
+    }
+    [self.numLb setHidden:YES];
+    [self.iconImg setHidden:YES];
+    [self.nameLb setHidden:NO];
+    [self.augurImg setHidden:NO];
+    [self.categoryLb setHidden:NO];
+    
+    self.nameLb.text = optionModel.coin_name;
+    self.categoryLb.text = optionModel.market;
 }
 
 

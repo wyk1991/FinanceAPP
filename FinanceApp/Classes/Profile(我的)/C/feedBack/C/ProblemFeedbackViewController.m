@@ -1,166 +1,239 @@
 //
 //  ProblemFeedbackViewController.m
 //  SSS_MALL
-//  迎面走来的是三只草泥马方队
-//  ┏━┛ ┻━━━━━┻ ┗━┓         ┏━┛ ┻━━━━━┻ ┗━┓         ┏━┛ ┻━━━━━┻ ┗━┓
-//  ┃ ||||||||||| ┃         ┃ ||||||||||| ┃         ┃ ||||||||||| ┃
-//  ┃      ━      ┃         ┃      ━      ┃         ┃      ━      ┃
-//  ┃  ┳┛     ┗┳  ┃         ┃  ┳┛     ┗┳  ┃         ┃  ┳┛     ┗┳  ┃
-//  ┃             ┃         ┃             ┃         ┃             ┃
-//  ┃      ┻      ┃         ┃      ┻      ┃         ┃      ┻      ┃
-//  ┃             ┃         ┃             ┃         ┃             ┃
-//  ┃             ┃         ┃             ┃         ┃             ┃
-//  ┗━━━┓     ┏━━━┛         ┗━━━┓     ┏━━━┛         ┗━━━┓     ┏━━━┛
-//      ┃     ┃                 ┃     ┃                 ┃     ┃
-//      ┃     ┃                 ┃     ┃                 ┃     ┃
-//      ┃     ┃                 ┃     ┃                 ┃     ┃
-//      ┃     ┃                 ┃     ┃                 ┃     ┃
-//      ┃     ┃                 ┃     ┃                 ┃     ┃
-//      ┃     ┃                 ┃     ┃                 ┃     ┃
-//      ┃     ┃                 ┃     ┃                 ┃     ┃
-//      ┃     ┗━━━━━━━━┓        ┃     ┗━━━━━━━━┓        ┃     ┗━━━━━━━━┓
-//      ┃              ┣━┓      ┃              ┣━┓      ┃              ┣━┓
-//      ┃              ┃        ┃              ┃        ┃              ┃
-//      ┃              ┃        ┃              ┃        ┃              ┃
-//      ┗━┓┓┏━━━━━┓┓┏━━┛        ┗━┓┓┏━━━━━┓┓┏━━┛        ┗━┓┓┏━━━━━┓┓┏━━┛
-//        ┃┫┫     ┃┫┫             ┃┫┫     ┃┫┫             ┃┫┫     ┃┫┫
-//
-//                                         ,s555SB@@&
-//                                      :9H####@@@@@Xi
-//                                     1@@@@@@@@@@@@@@8
-//                                   ,8@@@@@@@@@B@@@@@@8
-//                                  :B@@@@X3hi8Bs;B@@@@@Ah,
-//             ,8i                  r@@@B:     1S ,M@@@@@@#8;
-//            1AB35.i:               X@@8 .   SGhr ,A@@@@@@@@S
-//            1@h31MX8                18Hhh3i .i3r ,A@@@@@@@@@5
-//            ;@&i,58r5                 rGSS:     :B@@@@@@@@@@A
-//             1#i  . 9i                 hX.  .: .5@@@@@@@@@@@1
-//              sG1,  ,G53s.              9#Xi;hS5 3B@@@@@@@B1
-//               .h8h.,A@@@MXSs,           #@H1:    3ssSSX@1
-//               s ,@@@@@@@@@@@@Xhi,       r#@@X1s9M8    .GA981
-//               ,. rS8H#@@@@@@@@@@#HG51;.  .h31i;9@r    .8@@@@BS;i;
-//                .19AXXXAB@@@@@@@@@@@@@@#MHXG893hrX#XGGXM@@@@@@@@@@MS
-//                s@@MM@@@hsX#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&,
-//              :GB@#3G@@Brs ,1GM@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@B,
-//            .hM@@@#@@#MX 51  r;iSGAM@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8
-//          :3B@@@@@@@@@@@&9@h :Gs   .;sSXH@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@:
-//      s&HA#@@@@@@@@@@@@@@M89A;.8S.       ,r3@@@@@@@@@@@@@@@@@@@@@@@@@@@r
-//   ,13B@@@@@@@@@@@@@@@@@@@5 5B3 ;.         ;@@@@@@@@@@@@@@@@@@@@@@@@@@@i
-//  5#@@#&@@@@@@@@@@@@@@@@@@9  .39:          ;@@@@@@@@@@@@@@@@@@@@@@@@@@@;
-//  9@@@X:MM@@@@@@@@@@@@@@@#;    ;31.         H@@@@@@@@@@@@@@@@@@@@@@@@@@:
-//   SH#@B9.rM@@@@@@@@@@@@@B       :.         3@@@@@@@@@@@@@@@@@@@@@@@@@@5
-//     ,:.   9@@@@@@@@@@@#HB5                 .M@@@@@@@@@@@@@@@@@@@@@@@@@B
-//           ,ssirhSM@&1;i19911i,.             s@@@@@@@@@@@@@@@@@@@@@@@@@@S
-//              ,,,rHAri1h1rh&@#353Sh:          8@@@@@@@@@@@@@@@@@@@@@@@@@#:
-//            .A3hH@#5S553&@@#h   i:i9S          #@@@@@@@@@@@@@@@@@@@@@@@@@A.
-//
-//    又看源码，看你妹妹呀！
-//
-//  Created by 徐洋 on 2017/8/3.
-//  Copyright © 2017年 Losdeoro24K. All rights reserved.
-//
-//  洋爸爸 威武
 
 #import "ProblemFeedbackViewController.h"
 #import "ProblemFeedbackView.h"
+#import "FeedBackCell.h"
+#import "SituationSettingManager.h"
 
-@interface ProblemFeedbackViewController ()
+static NSString *feedBackIdentifier = @"feedBackIdentifier";
+#define k_feedBackTitles @[@"反馈类型", @"反馈内容", @"联系方式"]
 
-@property (nonatomic, strong) ProblemFeedbackView *pf_view;
+@interface ProblemFeedbackViewController ()<UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) NSMutableArray <ZLPhotoAssets *>*assets;
+@property (nonatomic, strong) UITableView *tableView;
+
+@property (nonatomic, strong) NSMutableArray *dataList;
+
+@property (nonatomic, strong) UIButton *commitBtn;
 
 @end
 
 @implementation ProblemFeedbackViewController
 
+- (NSMutableArray *)dataList {
+    if (!_dataList) {
+        _dataList = @[].mutableCopy;
+    }
+    return _dataList;
+}
+
+- (UIButton *)commitBtn {
+    if (!_commitBtn) {
+        _commitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _commitBtn.frame = CGRectMake(CalculateWidth(20), CalculateHeight(6), kScreenWidth - CalculateHeight(40), CalculateHeight(44));
+        _commitBtn.layer.cornerRadius = 5.0f;
+        _commitBtn.layer.masksToBounds = YES;
+        [_commitBtn setTitle:@"提交" forState:UIControlStateNormal];
+        [_commitBtn setBackgroundColor:[UIColor orangeColor]];
+        [_commitBtn setTitleColor:k_white_color forState:UIControlStateNormal];
+        
+        [_commitBtn addTarget:self action:@selector(commitBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _commitBtn;
+}
+
+- (UITableView *)tableView {
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:(UITableViewStylePlain)];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.tableFooterView  =[UIView new];
+        _tableView.tableHeaderView = [UIView new];
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.showsHorizontalScrollIndicator = NO;
+        _tableView.showsVerticalScrollIndicator = NO;
+        
+        [_tableView registerClass:[FeedBackCell class] forCellReuseIdentifier:feedBackIdentifier];
+    }
+    return _tableView;
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    _pf_view.textView.text =@"";
-    _pf_view.phoneText.text =@"";
-}
 
 #pragma mark Life Cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    //监听当键将要退出时
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
-//- (NSMutableArray <ZLPhotoAssets *>*)assets{
-//    if (!_assets) {
-//        _assets = [NSMutableArray array];
-//    }
-//    return _assets;
-//}
-#pragma mark Action
-//- (void)selectPhotoAction:(UITapGestureRecognizer *)tap {
-//    [self.view endEditing:YES];
-//    ZLPhotoPickerViewController *pickerVc = [[ZLPhotoPickerViewController alloc] init];
-//    pickerVc.maxCount = 3;
-//    pickerVc.status = PickerViewShowStatusCameraRoll;
-//    pickerVc.photoStatus = PickerPhotoStatusPhotos;
-//    pickerVc.topShowPhotoPicker = YES;
-//    pickerVc.isShowCamera = YES;
-//    WS(weakSelf);
-//    pickerVc.callBack = ^(NSArray<ZLPhotoAssets *> *status){
-//        weakSelf.assets = status.mutableCopy;
-//        weakSelf.pf_view.problem_img.image = [status.firstObject thumbImage];
-//    };
-//    [pickerVc showPickerVc:self];
-//}
-- (void)commitProblemButtonAction:(UIButton *)sender {
-    [self.view endEditing:YES];
-    NSString *problem = _pf_view.textView.text;
-    NSString *phone = _pf_view.phoneText.text;
-   
-    if ([[NSString alloc]initWithString:[problem stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]].length == 0) {
-        [LDToast showToastWith:@"说点什么吧~"];
-        return;
-    }
-    if ([[NSString alloc]initWithString:[phone stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]].length != 0) {
-        if (![MJYUtils mjy_checkTel:phone]) {
-            [LDToast showToastWith:@"请填写正确的手机号码格式"];
-            return;
+
+//当键盘出现
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    //获取键盘的高度
+    NSDictionary *userInfo = [notification userInfo];
+    NSValue *value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [value CGRectValue];
+    int height = keyboardRect.size.height;
+    for (UITableViewCell *cell in self.tableView.subviews) {
+        if ([cell isKindOfClass:[FeedBackCell class]]) {
+            FeedBackCell *backcell = (FeedBackCell *)cell;
+            if ([backcell.tv isFirstResponder]) {
+                return;
+            }
         }
     }
-    NSDictionary *dic = @{@"type":  _pf_view.problemType, @"content": _pf_view.textView.text, @"telephone": _pf_view.phoneText.text};
-    
-//    [GSHttpManager afnNetworkPostParameter:dic toPath:feedBack_post success:^(id result) {
-//        if ([result[@"code"] longValue] == 200) {
-//            // 提交成功
-//            NSLog(@"%@\n%@image:%@", _pf_view.problemType, problem, self.assets.firstObject);
-//            SuccessViewController *vc = [[SuccessViewController alloc] init];
-//            vc.successType = SuccessTypeProblemFeedback;
-//            [self.navigationController pushViewController:vc animated:YES];
-//        }
-//    } orFail:^(NSError *error) {
-//        [LDToast showToastWith:@"问题反馈失败"];
-//    }];
+    self.tableView.contentOffset = CGPointMake(0, height - CalculateHeight(44));
+}
+
+//当键退出
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    //获取键盘的高度
+    NSDictionary *userInfo = [notification userInfo];
+    NSValue *value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [value CGRectValue];
+    self.tableView.contentOffset = CGPointMake(0, 0);
+}
+
+#pragma mark Action
+- (void)commitProblemButtonAction:(UIButton *)sender {
+    [self.view endEditing:YES];
 }
 #pragma mark Data
 
 #pragma mark UI
 - (void)initUI {
     [super initUI];
-    self.title = @"问题反馈";
-    [self.view addSubview:self.pf_view];
-    [_pf_view mas_remakeConstraints:^(MASConstraintMaker *make) {
+    self.title = @"意见反馈";
+    [self.view addSubview:self.tableView];
+    
+    [_tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.edges.insets(UIEdgeInsetsMake(0, 0, 0, 0));
     }];
+    [self loadData];
 }
 
-#pragma mark Lazy Loading
-- (ProblemFeedbackView *)pf_view {
-    if (!_pf_view) {
-        _pf_view = [[ProblemFeedbackView alloc] init];
-//        [_pf_view.problem_img addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectPhotoAction:)]];
-        [_pf_view.commit_btn addTarget:self action:@selector(commitProblemButtonAction:) forControlEvents:64];
+- (void)loadData {
+    self.dataList = [SituationSettingManager getFeedBackModel];
+    
+    [self.tableView reloadData];
+}
+
+#pragma mark - UITableView Datasource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 3;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == 0) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CELL"];
+        
+        if(!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CELL"];
+        }
+        
+        cell.textLabel.text = k_feedBackTitles[indexPath.section];
+        cell.textLabel.textAlignment = 0;
+        cell.textLabel.font = k_text_font_args(CalculateHeight(15));
+        return cell;
     }
-    return _pf_view;
+    FeedBackCell *cell = [tableView dequeueReusableCellWithIdentifier:feedBackIdentifier];
+    if (!cell) {
+        cell = [[FeedBackCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:feedBackIdentifier];
+    }
+    cell.model = self.dataList[indexPath.section];
+    return cell;
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == 0) {
+        return CalculateHeight(44);
+    } else if (indexPath.row == 1 && indexPath.section == 1) {
+        return CalculateHeight(250);
+    } else if (indexPath.row == 1 && indexPath.section == 0) {
+        return CalculateHeight(50);
+    }
+    return CalculateHeight(44);
+}
+
+#pragma mark - UITableView Delegate methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.view endEditing:YES];
+}
+
+//代理方法 设置分割线的间距
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsMake(0, CalculateWidth(10), 0, CalculateWidth(10))];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsMake(0, CalculateWidth(10), 0, CalculateWidth(10))];
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return CalculateHeight(15/2);
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, CalculateHeight(15/2))];
+    view.backgroundColor = [UIColor clearColor];
+    
+    return view;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if (section == 2) {
+        UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, CalculateHeight(50))];
+        backView.backgroundColor = [UIColor clearColor];
+        
+        [backView addSubview:self.commitBtn];
+        
+        return backView;
+    }
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    if (section == 2) {
+        return CalculateHeight(50);
+    }
+    return CalculateHeight(0);
+}
+
+#pragma mark - commitBtnClick
+- (void)commitBtnClick:(UIButton *)sender {
+    
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 @end

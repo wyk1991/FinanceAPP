@@ -12,7 +12,7 @@
 #import "SettingViewController.h"
 #import "SituationViewController.h"
 
-@interface MainTabBarController ()
+@interface MainTabBarController ()<UITabBarControllerDelegate>
 {
     NewsViewController *_newsVc;
     NewFlashViewController *_newFlashVc;
@@ -29,9 +29,12 @@
     
     [self initSubViews];
     [self setupTab];
+    self.delegate = self;
 }
 
 - (void)initSubViews {
+    
+    
     
     _newsVc = [[NewsViewController alloc] init];
     UINavigationController *newNav = [[UINavigationController alloc] initWithRootViewController:_newsVc];
@@ -59,6 +62,7 @@
                 obj.tabBarItem.image = [[UIImage imageNamed:@"news_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
                 obj.tabBarItem.selectedImage = [[UIImage imageNamed:@"new_pressed"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
                 obj.tabBarItem.title = @"新闻";
+                obj.tabBarItem.imageInsets = UIEdgeInsetsMake(-6, 0, 6, 0);
             }
                 break;
             case 1: {
@@ -84,11 +88,24 @@
     }];
     
     //修改文字颜色
-    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[k_main_color colorWithAlphaComponent:0.9], NSForegroundColorAttributeName,
+    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:k_navbar_itemUnSelect, NSForegroundColorAttributeName,
                                                        nil] forState:UIControlStateNormal];
-    UIColor *titleHighlightedColor = k_loginmain_color;
+    UIColor *titleHighlightedColor = k_navbar_itemSelect;
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: titleHighlightedColor, NSForegroundColorAttributeName,
                                                        nil] forState:UIControlStateSelected];
+}
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    
+    
+    
+    for (UITabBarItem *item1 in self.tabBar.items) {
+        if (item1 == item) {
+            item1.imageInsets = UIEdgeInsetsMake(-6, 0, 6, 0);
+        } else {
+            item1.imageInsets = UIEdgeInsetsZero;
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {

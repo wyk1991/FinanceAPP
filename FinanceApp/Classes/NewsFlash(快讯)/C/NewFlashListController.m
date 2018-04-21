@@ -49,7 +49,7 @@ static NSString *flashListCellIden = @"flashListCellIden";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.tableView.ts_scrollStatusBar = [TSScrollStatusBar scrollStatusBarWithString:@"111" andIndexY:0];
     
     // 设置加载
     WS(weakSelf);
@@ -85,6 +85,8 @@ static NSString *flashListCellIden = @"flashListCellIden";
 - (void)refreshData {
     [_helper helperGetFlashListDataWithPath:newFlashList withTags:self.cateType callback:^(id obj, NSError *error) {
         [self.tableView reloadData];
+        [self.tableView.ts_scrollStatusBar configWithString:@"+ 2 篇新内容"];
+        [self.tableView.ts_scrollStatusBar show];
         [self.tableView.mj_header endRefreshing];
     }];
 }

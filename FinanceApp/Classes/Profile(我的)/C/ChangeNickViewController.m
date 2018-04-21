@@ -42,9 +42,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"修改昵称";
     self.view.backgroundColor = k_back_color;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStyleDone target:self action:@selector(changeNicknameButtonAction)];
+    [self.nickTf becomeFirstResponder];
 }
 
 - (void)initUI {
@@ -58,7 +58,7 @@
 
 - (void)addMasnory {
     [_backView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.offset(CalculateHeight(20));
+        make.top.offset(CalculateHeight(15/2));
         make.left.right.offset(0);
         make.height.mas_equalTo(CalculateHeight(44));
     }];

@@ -14,7 +14,9 @@
 #import "PersonalViewController.h"
 
 #import "SituationSetViewController.h"
-#import "PushManageViewController.h"
+#import "BaseSituationListViewController.h"
+#import "ProblemFeedbackViewController.h"
+#import "OboutUsViewController.h"
 
 static NSString *backPersonCellIden = @"backPersonCellIden";
 
@@ -24,7 +26,6 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray *dataArr;
-
 @end
 
 @implementation SettingViewController
@@ -201,7 +202,7 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
             case 0: {
                 // 点击行情
                 SituationSetViewController *vc = [[SituationSetViewController alloc] init];
-                self.hidesBottomBarWhenPushed = YES;
+                vc.hidesBottomBarWhenPushed = YES;
                 [self.navigationController pushViewController:vc animated:YES];
                 
             }
@@ -209,8 +210,10 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
             case 1:
                 // 点击推送管理
             {
-                PushManageViewController *vc = [[PushManageViewController alloc] init];
-                self.hidesBottomBarWhenPushed = YES;
+                BaseSituationListViewController *vc = [[BaseSituationListViewController alloc] init];
+                vc.title = @"推送管理";
+                vc.setType = 3;
+                vc.hidesBottomBarWhenPushed = YES;
                 [self.navigationController pushViewController:vc animated:YES];
             }
                 
@@ -243,11 +246,21 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
                 break;
             case 2:
                 // 意见反馈
+            {
+                ProblemFeedbackViewController *vc = [[ProblemFeedbackViewController alloc] init];
+                vc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
                 
                 break;
             case 3:
                 // 关于极链
-                
+            {
+                OboutUsViewController *vc = [[OboutUsViewController alloc] init];
+                vc.title = @"关于我们";
+                vc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
                 break;
                 
             default:

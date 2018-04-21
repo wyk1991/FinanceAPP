@@ -8,6 +8,10 @@
 
 #import "BaseView.h"
 
+typedef enum : NSUInteger {
+    BindingType,
+    LoginType,
+} LoginViewType;
 
 
 @class LoginView;
@@ -27,4 +31,5 @@
 @interface LoginView : BaseView
 @property (nonatomic, weak) id<LoginViewDelegate> delegate;
 
+@property (nonatomic, assign) LoginViewType type;
 @end

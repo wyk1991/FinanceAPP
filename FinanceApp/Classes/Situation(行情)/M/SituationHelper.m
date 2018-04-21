@@ -10,6 +10,13 @@
 #import "CoinAllInfoModel.h"
 #import "UnitInfoModel.h"
 #import "ChartsDetailModel.h"
+#import "CoinListModel.h"
+#import "OptionCoinModel.h"
+//自定义一个类型，用于表示列表的展开／缩回状态
+typedef NS_ENUM(NSUInteger,MCDropdownListSectionStatu) {
+    MCDropdownListSectionStatuOpen = 1,
+    MCDropdownListSectionStatuClose = 0,
+};
 
 @implementation SituationHelper
 
@@ -158,7 +165,7 @@ static SituationHelper *_instance;
     
     
     for (ChartsTrackModel *trackM in model.oneday_track) {
-        [cnyArr addObject:[NSNumber numberWithLong:[trackM.price_cny longLongValue]]];
+        [cnyArr addObject:[NSNumber numberWithLongLong:[trackM.price_cny longLongValue]]];
         [usdArr addObject:[NSNumber numberWithDouble:[trackM.price_usd doubleValue]]];
         [dateArr addObject:[[MJYUtils mjy_timeChangeWith:trackM.time] substringFromIndex:10]];
     }
@@ -168,6 +175,8 @@ static SituationHelper *_instance;
     for (PricesModel *priceM in model.prices) {
         [self.oneDayList addObject:priceM];
     }
+    self.chartCoinList = self.oneDayList.mutableCopy;
+    [self.chartCoinList removeObjectAtIndex:0];
 }
 
 - (NSMutableArray *)chartList {
@@ -182,6 +191,74 @@ static SituationHelper *_instance;
         _oneDayList = @[].mutableCopy;
     }
     return _oneDayList;
+}
+
+- (NSMutableArray *)chartCoinList {
+    if (!_chartCoinList) {
+        _chartCoinList = @[].mutableCopy;
+    }
+    return _chartCoinList;
+}
+/**
+ 获取自选coin列表数据
+
+ @param path path
+ @param params params
+ @param callback huidiao
+ */
+- (void)helperGetCoinListNameDataWithPath:(NSString *)path params:(NSDictionary *)params callBack:(UICallback)callback {
+    WS(weakSelf);
+    [weakSelf startGETRequest:path inParam:params outParse:^(id retData, NSError *error) {
+        if ([retData[@"status"] integerValue] == 100) {
+            self.coinNameList = [CoinListModel mj_objectArrayWithKeyValuesArray:retData[@"markets"]];
+        }
+        callback(retData, nil);
+    } callback:^(id obj, NSError *error) {
+        callback(nil, error);
+    }];
+}
+
+- (NSMutableArray *)coinNameList {
+    if (!_coinNameList) {
+        _coinNameList = @[].mutableCopy;
+    }
+    return _coinNameList;
+}
+
+
+/**
+    获取自选的列表数据
+
+ @param path path
+ @param params params
+ @param callback callback
+ */
+- (void)helperGetOptionCoinListWithPath:(NSString *)path params:(NSDictionary *)params callBack:(UICallback)callback {
+    WS(weakSelf);
+    [weakSelf startGETRequest:path inParam:params outParse:^(id retData, NSError *error) {
+        
+        [weakSelf dealOptionData:retData];
+        callback(retData, nil);
+    } callback:^(id obj, NSError *error) {
+        callback(error, nil);
+    }];
+}
+
+- (void)dealOptionData:(id)retData {
+    _optionOpenDict = @{}.mutableCopy;
+    if ([retData[@"status"] integerValue] == 100) {
+        self.optionsCoinList = [OptionCoinModel mj_objectArrayWithKeyValuesArray:retData[@"coinlist"]];
+    }
+    for (OptionCoinModel *model in self.optionsCoinList) {
+        [_optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuClose] forKey:model.market];
+    }
+}
+
+- (NSMutableArray *)optionsCoinList {
+    if (!_optionsCoinList) {
+        _optionsCoinList = @[].mutableCopy;
+    }
+    return _optionsCoinList;
 }
 
 @end

@@ -11,7 +11,7 @@
 static NSString *situationCellIden = @"situationCellIden";
 typedef void(^TapCellClick)(NSIndexPath *indexPath);
 
-@class CoinDetailListModel, ChartsDetailModel, PricesModel;
+@class CoinDetailListModel, ChartsDetailModel, PricesModel, OptionCoinModel;
 @interface SituationCell : BaseCell
 
 @property (nonatomic, strong) UIImageView *augurImg;
@@ -27,7 +27,10 @@ typedef void(^TapCellClick)(NSIndexPath *indexPath);
 
 @property (nonatomic, strong) PricesModel *priceModel;
 @property (nonatomic, strong) CoinDetailListModel *model;
+@property (nonatomic, strong) OptionCoinModel *optionModel;
 - (void)setModel:(CoinDetailListModel *)model withType:(CoinShowType)type;
 
 - (void)setPriceModel:(PricesModel *)priceModel withType:(CoinShowType)type;
+
+- (void)setOptinModel:(OptionCoinModel *)optionModel withTypt:(CoinShowType)type;
 @end

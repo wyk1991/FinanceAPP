@@ -22,11 +22,13 @@
 #define k_themeblue_color [UIColor colorWithHex:@"#49A3EC"]
 
 #pragma mark - 标签颜色
-
+#define k_navbar_itemSelect [UIColor colorWithHex:@"#2ea1dd"]
+#define k_navbar_itemUnSelect [UIColor colorWithHex:@"#b8b8b8"]
 #define k_home_search [UIColor colorWithHex:@"#a29fa0"]
 #define k_line_color [UIColor colorWithHex:@"#cacaca"]
 #define k_flash_slideSelect [UIColor colorWithHex:@"#151414"]
 #define k_flash_slideUnselect [UIColor colorWithHex:@"#5f5b5b"]
+#define k_home_barColor [UIColor colorWithHex:@"#59abe5"]
 
 #define k_tagSelected [UIColor colorWithHex:@"#fffdff"]
 #define k_tagUnselected [UIColor colorWithHex:@"#b5bcc5"]
