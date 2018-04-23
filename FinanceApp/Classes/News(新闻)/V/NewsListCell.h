@@ -8,6 +8,7 @@
 
 #import "BaseCell.h"
 
+static NSString *newListIdentifier = @"newListIdentifier";
 @class RollModel;
 @interface NewsListCell : BaseCell
 

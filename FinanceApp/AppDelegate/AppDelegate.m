@@ -122,12 +122,15 @@
 
 #pragma mark ------------- UShare -------------
 - (void)configUSharePlatforms {
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"" appSecret:@"" redirectURL:@"http://mobile.umeng.com/social"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:wechatAppkey appSecret:wechatSecret redirectURL:@"http://mobile.umeng.com/social"];
     
     /* 设置分享到QQ互联的appID
      * U-Share SDK为了兼容大部分平台命名，统一用appKey和appSecret进行参数设置，而QQ平台仅需将appID作为U-Share的appKey参数传进即可。
      */
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"1105821097"/*设置QQ平台的appID*/  appSecret:nil redirectURL:@"http://mobile.umeng.com/social"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:qqAppKey/*设置QQ平台的appID*/  appSecret:nil redirectURL:@"http://mobile.umeng.com/social"];
+    
+    //** 设置新浪的appKey和appSecret */
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:wechatAppkey appSecret:wechatSecret redirectURL:@"https://sns.whalecloud.com/sina2/callback"];
 }
 
 #pragma mark - --------  JPush  ----------
@@ -143,6 +146,7 @@
     
     [JPUSHService registrationIDCompletionHandler:^(int resCode, NSString *registrationID) {
         if (resCode == 0) {
+            UMSocialPlatformType_QQ
             NSLog(@"registrationID获取成功：%@",registrationID);
             self.registrationID = registrationID;
         } else {

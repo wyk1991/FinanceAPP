@@ -19,7 +19,6 @@
 #import "ArticleWebViewController.h"
 #import "PGCustomBannerView.h"
 
-static NSString *newListIdentifier = @"newListIdentifier";
 
 @interface NewsListViewController()<NewPagedFlowViewDelegate, NewPagedFlowViewDataSource, UITextFieldDelegate>
 

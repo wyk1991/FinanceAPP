@@ -61,6 +61,8 @@
 
 
 /**  -----------  login and register  --------   */
+#define myColleciton @"me/collections"
+
 #define register @"register"
 #define verify @"verify"
 

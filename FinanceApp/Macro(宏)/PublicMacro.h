@@ -122,6 +122,17 @@ static NSString *kAuthScope = @"snsapi_message,snsapi_userinfo,snsapi_friend,sns
 static NSString *kAuthOpenID = @"0c806938e2413ce73eef92cc3";
 static NSString *kAuthState = @"xxx";
 
+/** wechat */
+static NSString *wechatAppkey = @"";
+static NSString *wechatSecret = @"";
+
+/** QQ 配置账号 */
+static NSString *qqAppKey = @"";
+
+/** sina 配置账号 */
+static NSString *sinaAppKey = @"";
+static NSString *sinaSecret = @"";
+
 /** jPush账号配置 */
 static NSString *jPushKey = @"";
 static NSString *channel = @"";

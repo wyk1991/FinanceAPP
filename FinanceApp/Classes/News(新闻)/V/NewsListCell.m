@@ -37,6 +37,8 @@
 - (UIImageView *)image {
     if (!_image) {
         _image = [[UIImageView alloc] init];
+        _image.layer.cornerRadius = 5.0f;
+        _image.layer.masksToBounds = true;
         _image.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _image;
