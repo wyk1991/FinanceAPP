@@ -11,6 +11,29 @@
 //#import "AddressJSONModel.h"
 
 @implementation MJYUtils
++ (void)ysy_hasNetwork:(void(^)(bool has))hasNet
+{
+    //创建网络监听对象
+    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
+    //开始监听
+    [manager startMonitoring];
+    //监听改变
+    [manager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        switch (status) {
+            case AFNetworkReachabilityStatusUnknown:
+            case AFNetworkReachabilityStatusNotReachable:
+                hasNet(NO);
+                break;
+            case AFNetworkReachabilityStatusReachableViaWWAN:
+            case AFNetworkReachabilityStatusReachableViaWiFi:
+                hasNet(YES);
+                break;
+        }
+    }];
+    //结束监听
+    [manager stopMonitoring];
+}
+
 + (NSString *)transform:(NSString *)chinese{
     //将NSString装换成NSMutableString
     NSMutableString *pinyin = [chinese mutableCopy];
@@ -98,6 +121,17 @@
     return 0;
 }
 
+//判断document文件是否已经在沙盒中已经存在？
++(BOOL) isFileExist:(NSString *)fileName
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [paths objectAtIndex:0];
+    NSString *filePath = [path stringByAppendingPathComponent:fileName];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL result = [fileManager fileExistsAtPath:filePath];
+    NSLog(@"这个文件已经存在：%@",result?@"是的":@"不存在");
+    return result;
+}
 
 //遍历文件夹获得文件夹大小，返回多少M
 + (float )mjy_folderSizeAtPath:(NSString*) folderPath

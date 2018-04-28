@@ -33,6 +33,7 @@
 }
 
 - (void)startPostRequest:(NSString *)url inParam:(id)inParam outParse:(DataParse)outParse callback:(UICallback)callback {
+    [kApplicationDelegate monitorNetworking];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json", @"text/javascript",@"text/html",@"text/plain",nil];
     
@@ -52,5 +53,7 @@
         
     }];
 }
+
+
 
 @end

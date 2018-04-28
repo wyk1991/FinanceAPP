@@ -100,7 +100,7 @@
     if(!cell) {
         cell = [[NormalUserCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:normalPersonCellIden];
     }
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.model = _dataArr[indexPath.section][indexPath.row];
     
     return cell;
@@ -147,6 +147,7 @@
 #pragma mark - UITableView Delegate methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             ChangeNickViewController *vc = [[ChangeNickViewController alloc] init];

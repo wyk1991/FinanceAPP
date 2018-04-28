@@ -10,6 +10,18 @@
 
 @implementation TagsModel
 
+/** 解档 */
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super init]) {
+        self.id = [aDecoder decodeObjectForKey:@"id"];
+        self.name = [aDecoder decodeObjectForKey:@"name"];
+    }
+    return self;
+}
 
-
+/** 归档 */
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.id forKey:@"id"];
+    [aCoder encodeObject:self.name forKey:@"name"];
+}
 @end

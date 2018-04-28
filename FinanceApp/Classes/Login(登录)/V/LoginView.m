@@ -284,11 +284,18 @@
 }
 
 - (void)timeClickButtonAction {
+    if (!self.phoneTf.text.length) {
+        [LDToast showToastWith:@"请填写验证码"];
+        return;
+    }
+    if (![MJYUtils mjy_checkTel:self.phoneTf.text]) {
+        [LDToast showToastWith:@"请填写正确格式的手机号码"];
+        return;
+    }
     [self.timeBtn start];
     if (_delegate && [_delegate respondsToSelector:@selector(clickTimeBtnClickWith:)]) {
-        [_delegate clickTimeBtnClickWith:self];
+        [_delegate clickTimeBtnClickWith:self.phoneTf.text];
     }
-    NSLog(@"点击了验证码");
 }
 
 - (void)goBtnClick:(UIButton *)btn {
@@ -298,9 +305,22 @@
 }
 
 - (void)loginBtnClick:(UIButton *)btn {
+    if (!self.phoneTf.text.length) {
+        [LDToast showToastWith:@"请填写手机号码"];
+        return;
+    }
+    if (!self.phoneTf.text.length) {
+        [LDToast showToastWith:@"请填写短信验证码"];
+        return;
+    }
     
-    if (_delegate && [_delegate respondsToSelector:@selector(clickLoginBtnClickWith:)]) {
-        [_delegate clickLoginBtnClickWith:self];
+    NSDictionary *dic = @{
+                          @"phone": self.phoneTf.text,
+                          @"code": self.codeTf.text
+                          };
+    
+    if (_delegate && [_delegate respondsToSelector:@selector(clickLoginBtnClickWith:withInfo:)]) {
+        [_delegate clickLoginBtnClickWith:self withInfo:dic];
     }
     NSLog(@"点击了登录");
 }
@@ -316,11 +336,11 @@
         _type = type;
     }
     [self.goBtn setHidden:type == 0 ? YES : NO];
-    [self.loginBtn setTitle:type == 0 ? @"登录" : @"绑定" forState:UIControlStateNormal];
-    [self.wechatImg setHidden:type == 0 ? NO : YES];
-    [self.line3 setHidden:type == 0 ? NO : YES];
-    [self.line4 setHidden:type == 0 ? NO : YES];
-    [self.bottomLb setHidden:type == 0 ? NO : YES];
+    [self.loginBtn setTitle:type == 1 ? @"登录" : @"绑定" forState:UIControlStateNormal];
+    [self.wechatImg setHidden:type == 1 ? NO : YES];
+    [self.line3 setHidden:type == 1 ? NO : YES];
+    [self.line4 setHidden:type == 1 ? NO : YES];
+    [self.bottomLb setHidden:type == 1 ? NO : YES];
     
 }
 

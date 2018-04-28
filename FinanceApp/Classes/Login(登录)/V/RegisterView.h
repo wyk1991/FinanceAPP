@@ -19,7 +19,7 @@ typedef enum : NSUInteger {
 
 -(void)clickSureBtn:(RegisterView *)registerView withInfo:(NSDictionary *)infoDic;
 
-- (void)clickTimeBtn:(RegisterView *)registerView;
+- (void)clickTimeBtn:(RegisterView *)registerView withTel:(NSString *)telStr ;
 @end
 
 @interface RegisterView : BaseView

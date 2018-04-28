@@ -10,11 +10,12 @@
 
 #import "IconDetailViewController.h"
 #import "AddCoinViewController.h"
+#import "EarlyWarnViewController.h"
 
 #import "SituationHelper.h"
 #import "NormalCoinHeadView.h"
 
-@interface SituationViewController ()<ZXCategorySliderBarDelegate, ZXPageCollectionViewDelegate, ZXPageCollectionViewDataSource>
+@interface SituationViewController ()<ZXCategorySliderBarDelegate, ZXPageCollectionViewDelegate, ZXPageCollectionViewDataSource, WarnCellImgActionDelegate>
 
 // 标题数组
 @property (nonatomic, strong) NSArray *itemArray;
@@ -44,6 +45,10 @@
     return _sliderBar;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
 
 - (ZXPageCollectionView *)pageVC
 {
@@ -54,10 +59,6 @@
         _pageVC.mainScrollView.bounces = NO;
     }
     return _pageVC;
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
 }
 
 - (void)loadTagData {
@@ -117,18 +118,13 @@
         IconDetailViewController *childView1 = (IconDetailViewController *)[ZXPageCollectionView dequeueReuseViewWithReuseIdentifier:reuseIdentifier forIndex:index];
         if (!childView1) {
             childView1 = [[IconDetailViewController alloc] initWithFrame:CGRectMake(0, 0, ZXPageCollectionView.frame.size.width, ZXPageCollectionView.frame.size.height) withShowType:index == 0 ? 0 : index == 1 ? 1 : 2 withIndex:index];
+            childView1.delegate = self;
             childView1.reuseIdentifier = reuseIdentifier;
         }
         return childView1;
 }
 
 - (void)ZXPageViewDidEndChangeIndex:(ZXPageCollectionView *)pageView currentView:(UIView *)view{
-    NSLog(@"=====%s=====", __func__);
-    //滚动结束后加载页面
-    //    childVIew *cv = (childVIew *)view;
-    //    if (cv.dataArray.count == 0) {
-    //        [cv fetchData];
-    //    }
     [self.sliderBar setSelectIndex:pageView.currentIndex];
 }
 
@@ -152,6 +148,15 @@
     NSLog(@"%@", pageView.subviews);
     self.sliderBar.isMoniteScroll = NO;
     self.sliderBar.scrollViewLastContentOffset = pageView.mainScrollView.contentOffset.x;
+}
+
+#pragma mark - warnCellAction
+- (void)didClickWarnImgWith:(IconDetailViewController *)subView withInfo:(PricesModel *)model coinName:(NSString *)coinName {
+    EarlyWarnViewController *vc = [[EarlyWarnViewController alloc] init];
+    vc.coinName = coinName;
+    vc.model = model;
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

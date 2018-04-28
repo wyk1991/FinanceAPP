@@ -8,11 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TagsModel : NSObject
-
-@property (nonatomic, copy) NSString *title;
-
-@property (nonatomic, copy) NSString *color;
+@interface TagsModel : NSObject<NSCoding>
 
 @property (nonatomic, copy) NSString *id;
 @property (nonatomic, copy) NSString *name;

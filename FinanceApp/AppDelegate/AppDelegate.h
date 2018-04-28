@@ -12,8 +12,11 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate, WXApiDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
 /** 极光注册id */
 @property (nonatomic, copy) NSString *registrationID;
+/** 当前的网络状况 */
+@property (nonatomic, strong) NSString *netState;
+
+- (void)monitorNetworking;
 @end
 

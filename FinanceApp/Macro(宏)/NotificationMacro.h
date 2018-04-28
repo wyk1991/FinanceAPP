@@ -11,6 +11,12 @@
 
 #define kUseisLoginWithToke @"userIsLoginToken"
 
+#define kUserLoginSuccessNotification @"userLoginSuccessNotification"
+/** 修改货币的设置通知 */
+#define kUserChangeCurrencyNotification @"userChangeCurrencyNotificatin"
+/** 修改红涨绿跌 */
+#define kUserChangePriceColorNotification @"userChangePriceColorNotification"
+
 /** 滑动监听通知 */
 #define tapCellScrollNotification @"tapCellScrollNotification"
 

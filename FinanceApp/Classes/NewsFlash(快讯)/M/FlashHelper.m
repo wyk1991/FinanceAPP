@@ -48,18 +48,24 @@ static FlashHelper *_instance;
 
 - (void)helperGetFlashTagWithPath:(NSString *)path callback:(UICallback)callback {
     WS(weakSelf);
-    [weakSelf startGETRequest:flash_tag inParam:nil outParse:^(id retData, NSError *error) {
-        if (!error) {
-            NSArray *arr = retData[@"cate"];
-            [weakSelf detalTagWithArr:arr];
-        }
-        callback(retData, nil);
+//    [weakSelf startGETRequest:flash_tag inParam:nil outParse:^(id retData, NSError *error) {
+//        if (!error) {
+//            NSArray *arr = retData[@"cate"];
+//            [weakSelf detalTagWithArr:arr];
+//        }
+//        callback(retData, nil);
+//    } callback:^(id obj, NSError *error) {
+//        callback(nil, error);
+//    }];
+    [HttpTool getRequestCacheURLStr:path dataField:@"cate" inParam:nil outParse:^(id retData, NSError *error) {
+        
     } callback:^(id obj, NSError *error) {
-        callback(nil, error);
+        [weakSelf detalTagWithArr:obj];
+        callback(obj, nil);
     }];
 }
 
-- (void)detalTagWithArr:(NSArray *)arr {
+- (void)detalTagWithArr:(id)arr {
     if (self.flashTag.count) {
         [self.flashTag removeAllObjects];
     }

@@ -20,6 +20,9 @@
 #import "StorageHeaderView.h"
 #import "SituationHelper.h"
 #import "SituationManager.h"
+#import "EarlyWarnViewController.h"
+#import "SituationViewController.h"
+#import "CoinAllInfoModel.h"
 
 #define RightLabelWidth CalculateWidth(70)
 #define RightLabelMagin CalculateWidth(45)
@@ -68,7 +71,6 @@ SearchTextClick
 @property (nonatomic, strong) UITableView *optionTableView;
 
 @property (nonatomic,strong) NSArray *rightTitles;
-@property (nonatomic,strong) NSArray *customStocks;
 @end
 
 @implementation IconDetailViewController
@@ -79,13 +81,6 @@ SearchTextClick
         _helper = [SituationHelper shareHelper];
     }
     return _helper;
-}
-
-- (NSArray *)customStocks{
-    if (!_customStocks) {
-        _customStocks = [MetaDataTool customStocks];
-    }
-    return _customStocks;
 }
 
 -(NSArray *)rightTitles{
@@ -129,8 +124,24 @@ SearchTextClick
         }
         // 加载头部视图
         [self configViewWith:showType];
+        
+        [self addNotification];
     }
     return self;
+}
+
+- (void)addNotification {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:kUserChangeCurrencyNotification object:nil];
+}
+
+- (void)reloadData {
+    [self loadDataWithType:self.showType index:self.selectedIndex];
+}
+
+- (void)setSelectedIndex:(NSInteger)selectedIndex {
+    if (_selectedIndex != selectedIndex) {
+        _selectedIndex = selectedIndex;
+    }
 }
 
 - (void)configOptionTableViewWith:(CoinShowType)type rightTitles:(NSArray *)rightTitles {
@@ -295,7 +306,11 @@ SearchTextClick
         } else {
             [cell setPriceModel:self.helper.chartCoinList[indexPath.row] withType:self.showType];
         }
-        
+        cell.warnBlock = ^{
+            if (_delegate && [_delegate respondsToSelector:@selector(didClickWarnImgWith:withInfo:coinName:)]) {
+                [_delegate didClickWarnImgWith:self withInfo:self.showType == 1 ? self.helper.coinListData[indexPath.row]   : self.helper.chartCoinList[indexPath.row] coinName:self.showType == 1 ? [(CoinDetailListModel *)self.helper.coinListData[indexPath.row] name]: self.helper.tagList[indexPath.row+2]];
+            }
+        };
         [self resetSeparatorInsetForCell:cell];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;

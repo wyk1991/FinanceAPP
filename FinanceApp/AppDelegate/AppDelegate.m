@@ -20,6 +20,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    [self monitorNetworking];
     
     // 注册wechat author登录授权
     [self wechatAuthor];
@@ -146,7 +147,6 @@
     
     [JPUSHService registrationIDCompletionHandler:^(int resCode, NSString *registrationID) {
         if (resCode == 0) {
-            UMSocialPlatformType_QQ
             NSLog(@"registrationID获取成功：%@",registrationID);
             self.registrationID = registrationID;
         } else {
@@ -178,6 +178,42 @@
 - (void)application:(UIApplication *)application
 didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"did Fail To Register For Remote Notifications With Error: %@", error);
+}
+
+- (void)monitorNetworking
+{
+    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+    [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        switch (status) {
+            case -1:
+                NSLog(@"未知网络");
+                break;
+            case 0:
+                NSLog(@"网络不可达");
+                break;
+            case 1:
+            {
+                NSLog(@"GPRS网络");
+                //发通知，带头搞事
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"monitorNetworking" object:@"1" userInfo:nil];
+            }
+                break;
+            case 2:
+            {
+                NSLog(@"wifi网络");
+                //发通知，搞事情
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"monitorNetworking" object:@"2" userInfo:nil];
+            }
+                break;
+            default:
+                break;
+        }
+        if (status == AFNetworkReachabilityStatusReachableViaWWAN || status == AFNetworkReachabilityStatusReachableViaWiFi) {
+            NSLog(@"有网");
+        }else{
+            NSLog(@"没网");
+        }
+    }];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {

@@ -9,7 +9,7 @@
 #import "TelBindingViewController.h"
 #import "LoginView.h"
 
-@interface TelBindingViewController ()
+@interface TelBindingViewController ()<LoginViewDelegate>
 
 @property (nonatomic, strong) LoginView *bindView;
 
@@ -21,6 +21,7 @@
     if (!_bindView) {
         _bindView = [[LoginView alloc] init];
         _bindView.backgroundColor = k_white_color;
+        _bindView.type = BindingType;
         _bindView.delegate = self;
     }
     return _bindView;
@@ -43,6 +44,16 @@
         make.top.offset(CalculateHeight(5));
         make.left.right.bottom.offset(0);
     }];
+}
+
+// 获取验证码
+- (void)clickTimeBtnClickWith:(LoginView *)loginView {
+    
+}
+
+// 点击绑定按钮
+- (void)clickLoginBtnClickWith:(LoginView *)loginView {
+    
 }
 
 - (void)didReceiveMemoryWarning {

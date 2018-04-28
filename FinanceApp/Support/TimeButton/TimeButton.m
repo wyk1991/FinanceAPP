@@ -46,7 +46,7 @@
 {
     _button.enabled = YES;
     [_timer setFireDate:[NSDate distantFuture]];
-    [_button setTitleColor:k_white_color forState:normal];
+    [_button setTitleColor:k_main_color forState:normal];
     [_button setTitle:@"重新获取" forState:normal];
 }
 - (void)getMessage
@@ -64,7 +64,7 @@
 }
 - (NSString *)getTimeStr
 {
-    return [NSString stringWithFormat:@"(%ds)后重新获取", _t];
+    return [NSString stringWithFormat:@"(%lds)后重新获取", (long)_t];
 }
 #pragma mark UI
 - (void)setSubViews
@@ -75,7 +75,7 @@
 //    _button.layer.cornerRadius = CalculateHeight(3);
 //    _button.layer.masksToBounds = YES;
     _button.backgroundColor = k_white_color;
-    _button.titleLabel.font = [UIFont systemFontOfSize:CalculateHeight(15)];
+    _button.titleLabel.font = [UIFont systemFontOfSize:CalculateHeight(12)];
     [_button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_button];
     _timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getMessage) userInfo:nil repeats:YES];

@@ -18,9 +18,10 @@ typedef enum : NSUInteger {
 
 @protocol  LoginViewDelegate <NSObject>
 
-- (void)clickTimeBtnClickWith:(LoginView *)loginView;
+@optional
+- (void)clickTimeBtnClickWith:(NSString *)telStr;
 
-- (void)clickLoginBtnClickWith:(LoginView *)loginView;
+- (void)clickLoginBtnClickWith:(LoginView *)loginView withInfo:(NSDictionary *)postInfo;
 
 - (void)clickGoLoginPageClick;
 

@@ -95,6 +95,7 @@
 // cell identifier
 static NSString *normalPersonCellIden = @"normalPersonCellIden";
 
+
 //数据验证
 
 #define StrValid(f)(f!=nil &&[f isKindOfClass:[NSString class]]&& ![f isEqualToString:@""])
@@ -139,6 +140,7 @@ static NSString *channel = @"";
 static BOOL isProduction = TRUE;
 
 /** 个人编好设置 */
+#define user_isLogin @"user_isLogin"
 #define user_currency @"user_currency"
 #define user_greenRed @"user_greenRed"
 #define user_earlyWaring @"user_waring"
@@ -151,4 +153,19 @@ static BOOL isProduction = TRUE;
 #define user_wechat @"user_wechat"
 #define user_settingPassword @"user_password"
 
+/*!
+ *  缓存的策略：(如果 cacheTime == 0，将永久缓存数据) 也就是缓存的时间 以 秒 为单位计算
+ *  分钟 ： 60
+ *  小时 ： 60 * 60
+ *  一天 ： 60 * 60 * 24
+ *  星期 ： 60 * 60 * 24 * 7
+ *  一月 ： 60 * 60 * 24 * 30
+ *  一年 ： 60 * 60 * 24 * 365
+ *  永远 ： 0
+ */
+static NSInteger const cacheTime = 0 ;
+#define cachePath  [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject]
+#define documentPath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
+
+#define historyFile @"history.plist"
 #endif /* PublicMacro_h */

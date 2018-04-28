@@ -6,11 +6,21 @@
 //  Copyright © 2018年 wyk. All rights reserved.
 //
 
+
+
 typedef enum : NSUInteger {
     OptionCoinType,
     StroageCoinType,
     ChartsCoinType,
 } CoinShowType;
+
+@class IconDetailViewController, PricesModel;
+@protocol  WarnCellImgActionDelegate <NSObject>
+
+- (void)didClickWarnImgWith:(IconDetailViewController *)subView withInfo:(PricesModel *)model coinName:(NSString *)coinName;
+
+
+@end
 
 #import "BaseView.h"
 
@@ -20,6 +30,10 @@ typedef enum : NSUInteger {
 - (void)fetchData;
 
 @property (nonatomic, assign) CoinShowType showType;
+
+@property (nonatomic, assign) id<WarnCellImgActionDelegate> delegate;
+
+@property (nonatomic, assign) NSInteger selectedIndex;
 
 - (instancetype)initWithFrame:(CGRect)frame withShowType:(CoinShowType)showType withIndex:(NSInteger)index;
 

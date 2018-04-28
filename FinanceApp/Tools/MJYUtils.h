@@ -15,6 +15,10 @@
 //*******************************************
 //和UI无关的方法
 //*******************************************
+/**
+    检测网络状况
+ */
++ (void)ysy_hasNetwork:(void(^)(bool has))hasNet;
 
 /**
  中文转拼音
@@ -62,6 +66,13 @@
 + (float )mjy_folderSizeAtPath:(NSString*) folderPath;
 
 
+/**
+ 判断doucment目录是否存在该文件
+
+ @param fileName
+ @return
+ */
++(BOOL)isFileExist:(NSString *)fileName;
 /**
  *  消息推送是否开启
  *

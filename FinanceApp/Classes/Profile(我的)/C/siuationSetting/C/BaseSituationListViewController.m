@@ -11,6 +11,7 @@
 #import "NormalUserCell.h"
 #import "PreviewCell.h"
 #import "SituationSettingManager.h"
+#import "TelBindingViewController.h"
 
 @interface BaseSituationListViewController ()<UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -65,8 +66,10 @@
     
     if (self.setType == 0) {
         [MJYUtils saveToUserDefaultWithKey:user_greenRed withValue:self.redColorSelected.row == 0 ? @"redReduce" : @"redRise"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUserChangePriceColorNotification object:nil];
     } else if (self.setType == 1) {
         [MJYUtils saveToUserDefaultWithKey:user_currency withValue:self.currencySelected.row == 0 ? @"cny" : @"usd"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUserChangeCurrencyNotification object:nil];
     }
 }
 
@@ -162,6 +165,15 @@
     if (self.setType == 4) {
         if (indexPath.row == 0) {
             // 点击跳转手机号
+            TelBindingViewController *vc = [[TelBindingViewController alloc] init];
+            vc.title = @"绑定手机号";
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+        if (indexPath.section == 1 && indexPath.row == 0) {
+            if ([[kNSUserDefaults valueForKey:user_telephoneBinding] isEqualToString:@"0"]) {
+                [SVProgressHUD showWithStatus:@"请先绑定手机号"];
+                return;
+            }
             
         }
     }

@@ -120,13 +120,11 @@ static SituationHelper *_instance;
     NSArray *tmp;
     if ([result[@"status"] integerValue] == 100) {
         CoinAllInfoModel *model = [CoinAllInfoModel mj_objectWithKeyValues:result];
-//        NSUserDefaults *defalut = [[NSUserDefaults standardUserDefaults] valueForKey:@"usd_cny"];
-#warning 判断当前设置的是美元还是 人民币
         tmp = @[
                               @{@"icon_img": @"ic_monetary_aggregates", @"coin_count": model.num_coins, @"title": @"货币总量"},
-                              @{@"icon_img": @"ic_arrow_total_value", @"coin_count": model.circulate_money_cny, @"title":@"流通总市值"},
+                              @{@"icon_img": @"ic_arrow_total_value", @"coin_count":[[kNSUserDefaults valueForKey:user_currency] isEqualToString:@"cny"]? model.circulate_money_cny : model.circulate_money_usd, @"title":@"流通总市值"},
                               @{@"icon_img": @"ic_exchange", @"coin_count": [NSString stringWithFormat:@"%@个", model.num_trading_market], @"title": @"交易所"},
-                              @{@"icon_img": @"ic_24h", @"coin_count": [NSString stringWithFormat:@"%@亿",model.oneday_money_cny], @"title": @"24H交易额"}
+                              @{@"icon_img": @"ic_24h", @"coin_count": [[kNSUserDefaults valueForKey:user_currency] isEqualToString:@"cny"] ? model.oneday_money_cny : model.oneday_money_usd, @"title": @"24H交易额"}
                               ];
         NSArray *arr = [UnitInfoModel mj_objectArrayWithKeyValuesArray:tmp];
         self.coinInfoData = [NSMutableArray arrayWithArray:arr];

@@ -8,6 +8,7 @@
 
 #import "BaseViewController.h"
 
+
 @interface QuickLoginViewController : BaseViewController
 
 @end

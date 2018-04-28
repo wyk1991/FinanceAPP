@@ -41,8 +41,7 @@
 - (void)initUI {
     [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
     [SVProgressHUD setMinimumDismissTimeInterval:1];
-    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor clearColor]} forState:UIControlStateNormal];
-    [UIBarButtonItem.appearance setBackButtonTitlePositionAdjustment:UIOffsetMake(-100, 0) forBarMetrics:UIBarMetricsDefault];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:self.navigationItem.backBarButtonItem.style target:nil action:nil];
     self.navColor = k_white_color;
     self.navigationController.navigationBar.translucent  = NO;
     self.view.backgroundColor = k_back_color;
@@ -50,7 +49,6 @@
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
         // 设置导航栏字体大小和颜色
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor]}];
-
 }
 
 /**

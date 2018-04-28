@@ -17,6 +17,7 @@
 #import "BaseSituationListViewController.h"
 #import "ProblemFeedbackViewController.h"
 #import "OboutUsViewController.h"
+#import "MyHistoryViewController.h"
 
 static NSString *backPersonCellIden = @"backPersonCellIden";
 
@@ -64,6 +65,10 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
     [self.view addSubview:self.tableView];
 }
 
+- (void)registerNotification {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess:) name:kUserLoginSuccessNotification object:nil];
+}
+
 - (void)addMasnory {
     [self.tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.offset(CalculateWidth(22));
@@ -83,15 +88,19 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
                          @{@"icon": @"icon_shoucang", @"title": @"积分", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_shoucang", @"title": @"我的专栏", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_shoucang", @"title": @"收藏", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_lishi", @"title": @"历史", @"isArrow": @"1", @"isSwitch": @"0"}
                          ],
                      @[
-                         @{@"icon": @"icon_my_hangqing", @"title": @"行情&预警", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_push_manager", @"title": @"推送管理", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_search_clean",@"title" : @"清理缓存", @"isArrow": @"1", @"content": [NSString stringWithFormat:@"%.2fM", displaysize], @"isSwitch": @"0"}
+                         @{@"icon": @"icon_my_hangqing", @"title": @"行情&预警", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_push_manager", @"title": @"推送管理", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_search_clean",@"title" : @"清理缓存", @"isArrow": @"1", @"content": [HttpTool cacheSize], @"isSwitch": @"0"}
                          ],
                      @[
                          @{@"icon": @"icon_share_app", @"title": @"推荐「极链财经」给好友", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_good", @"title": @"给极链APP好评", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_feedback", @"title" : @"意见反馈", @"isArrow": @"1", @"isSwitch": @"0"} ,@{@"icon": @"icon_about", @"title" : @"关于极链财经", @"isArrow": @"1", @"isSwitch": @"0"}
                          ],
-                     @[@{@"icon": @"", @"title": @"退出", @"isArrow": @"0", @"isSwitch": @"0"}]
                      ];
+    NSMutableArray *tmp = [NSMutableArray arrayWithArray:arr];
+    if ([[kNSUserDefaults valueForKey:user_isLogin] isEqualToString:@"1"]) {
+        [tmp addObject:
+         @[@{@"icon": @"", @"title": @"退出", @"isArrow": @"0", @"isSwitch": @"0"}]];
+    }
 
-    self.dataArr = [SettingModel mj_objectArrayWithKeyValuesArray:arr];
+    self.dataArr = [SettingModel mj_objectArrayWithKeyValuesArray:tmp];
     [self.tableView reloadData];
 }
 
@@ -136,7 +145,6 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
         }
        
         cell.model = self.dataArr[indexPath.section][indexPath.row];
-        
         
         return cell;
     }
@@ -190,8 +198,12 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
                 break;
             case 3:
                 // 点击历史
-                
-                
+            {
+                MyHistoryViewController *vc = [[MyHistoryViewController alloc] init];
+                vc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:vc animated:YES];
+                                               
+            }
                 break;
             
             default:
@@ -224,7 +236,8 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
                 .LeeTitle(@"是否清除缓存")         // 添加一个标题 (默认样式)
                 .LeeContent([NSString stringWithFormat:@""])        // 添加一个标题 (默认样式)
                 .LeeDestructiveAction(@"确定", ^{        //添加一个默认类型的Action (默认样式 字体颜色为蓝色)
-                    [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
+//                    [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
+                    [HttpTool deleateCache];
                 })
                 .LeeCancelAction(@"取消", ^{    // 添加一个取消类型的Action (默认样式 alert中为粗体 actionsheet中为最下方独立)
                     
@@ -262,17 +275,44 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
                 [self.navigationController pushViewController:vc animated:YES];
             }
                 break;
-                
             default:
                 break;
         }
     }
+    if (indexPath.section == 3) {
+        // 点击登录退出
+        [LEEAlert alert].config
+        .LeeTitle(@"确定退出吗?")
+        .LeeContent([NSString stringWithFormat:@""])
+        .LeeCancelAction(@"取消", ^{
+            
+        })
+        .LeeAction(@"确定", ^{
+            [kUserInfoHelper logout:^(id obj, NSError *error) {
+                if (!error) {
+                    [MJYUtils saveToUserDefaultWithKey:user_isLogin withValue:@"0"];
+                    [SVProgressHUD dismiss];
+                    [self loadData];
+                }
+            }];
+        })
+        .LeeShow();
+    }
+    
 }
 
 - (void)userHeader:(UserHeadView *)headerView didClickWithUserInfo:(NSDictionary *)userInfo {
     PersonalViewController *vc = [[PersonalViewController alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)loginSuccess:(NSNotification *)noti {
+    [MJYUtils saveToUserDefaultWithKey:user_isLogin withValue:@"1"];
+    
+    [self loadData];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {

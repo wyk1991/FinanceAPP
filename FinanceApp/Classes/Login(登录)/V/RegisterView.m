@@ -122,7 +122,8 @@
         _passwordTf = [[UITextField alloc] init];
         _passwordTf.placeholder = @"请输入新密码";
         _passwordTf.font = k_text_font_args(CalculateHeight(14));
-        _passwordTf.keyboardType = UIKeyboardTypePhonePad;
+        _passwordTf.keyboardType = UIKeyboardTypeDefault;
+        _passwordTf.secureTextEntry = YES;
         _passwordTf.textColor = k_black_color;
     }
     return _passwordTf;
@@ -140,6 +141,7 @@
     if (!_againPasswordTf) {
         _againPasswordTf = [[UITextField alloc] init];
         _againPasswordTf.placeholder = @"确认密码";
+        _againPasswordTf.secureTextEntry = YES;
         _againPasswordTf.font = k_text_font_args(CalculateHeight(14));
         _againPasswordTf.keyboardType = UIKeyboardTypeDefault;
         _againPasswordTf.textColor = k_black_color;
@@ -326,7 +328,7 @@
         return;
     }
     
-    NSDictionary *param = @{@"telephone": self.areaCode.text,
+    NSDictionary *param = @{@"phone": self.phoneTf.text,
                             @"code": self.codeTf.text,
                             @"password": self.passwordTf.text
                             };
@@ -338,8 +340,18 @@
 }
 
 - (void)timeClickButtonAction {
-    if (_delegate && [_delegate respondsToSelector:@selector(clickTimeBtn:)]) {
-        [_delegate clickTimeBtn:self];
+    [self endEditing:YES];
+    if (!self.phoneTf.text) {
+        [LDToast showToastWith:@"请先填写手机号码"];
+        return;
+    }
+    if (![MJYUtils mjy_checkTel:self.phoneTf.text]) {
+        [LDToast showToastWith:@"请填写正确格式的手机号码"];
+        return;
+    }
+    [self.timeBtn start];
+    if (_delegate && [_delegate respondsToSelector:@selector(clickTimeBtn:withTel:)]) {
+        [_delegate clickTimeBtn:self withTel:self.phoneTf.text];
     }
 }
 
@@ -350,17 +362,11 @@
     [self.sureBtn setTitle:_type == ForgetType ? @"完成" : @"注册" forState:UIControlStateNormal];
 }
 
-- (void)clickBtnCheck:btn {
-    if (self.areaCode.text && self.codeTf.text && self.passwordTf.text && self.againPasswordTf.text) {
+- (void)clickBtnCheck:(UIButton *)btn {
+    [btn setSelected:!btn.isSelected];
+    if (self.areaCode.text && self.codeTf.text && self.passwordTf.text && self.againPasswordTf.text && !btn.isSelected) {
         return;
     }
-    if ([self.clickBtn isSelected]) {
-        [self.sureBtn setBackgroundColor:k_loginmain_color];
-    }
-    [self endEditing:YES];
-    [self.sureBtn setBackgroundColor:k_loginmain_color];
-    
-    
 }
 
 /*

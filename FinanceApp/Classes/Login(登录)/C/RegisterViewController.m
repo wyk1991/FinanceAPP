@@ -8,10 +8,13 @@
 
 #import "RegisterViewController.h"
 #import "RegisterView.h"
+#import "VaildationCodeHelper.h"
 
 @interface RegisterViewController ()<RegisterDelegate>
 
 @property (nonatomic, strong) RegisterView *registerView;
+
+@property (nonatomic, strong) VaildationCodeHelper *helper;
 
 @end
 
@@ -24,6 +27,13 @@
         _registerView.delegate = self;
     }
     return _registerView;
+}
+
+- (VaildationCodeHelper *)helper {
+    if (!_helper) {
+        _helper = [[VaildationCodeHelper alloc] init];
+    }
+    return _helper;
 }
 
 - (void)initUI {
@@ -41,11 +51,25 @@
 
 #pragma mark - delegate
 - (void)clickSureBtn:(RegisterView *)registerView withInfo:(NSDictionary *)infoDic {
-    
+    WS(weakSelf);
+    [self.helper helperPostInfo:infoDic callback:^(id obj, NSError *error) {
+        if (!error) {
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        }
+    }];
 }
 
-- (void)clickTimeBtn:(RegisterView *)registerView {
-    
+- (void)clickTimeBtn:(RegisterView *)registerView withTel:(NSString *)telStr {
+//    [self.helper helperGetValidationCodeCallback:^(id obj, NSError *error) {
+//        if (!error) {
+//
+//        }
+//    }];
+    [self.helper helperGetValidationCodeCallback:^(id obj, NSError *error) {
+        if (!error) {
+            
+        }
+    } telStr:telStr];
 }
 
 - (void)viewDidLoad {

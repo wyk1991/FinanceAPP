@@ -35,7 +35,8 @@
 @property (nonatomic, strong) UIImageView *headerView;
 
 @property (nonatomic, strong) UIView *searchBackView;
-
+/** 保存的路径  */
+@property (nonatomic, strong) NSString *fileName;
 @end
 
 
@@ -86,7 +87,7 @@
 - (UIView *)searchBackView {
     if (!_searchBackView) {
         _searchBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, CalculateHeight(44))];
-        _searchBackView.backgroundColor = [UIColor clearColor];
+        _searchBackView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"searchBar_background"]];
         
         UITextField *searchTf = [[UITextField alloc] init];
         [searchTf setEnabled:YES];
@@ -107,8 +108,6 @@
         [lv addSubview:img];
         searchTf.leftViewMode = UITextFieldViewModeAlways;
         searchTf.leftView = lv;
-        
-        
         
         [_searchBackView addSubview:searchTf];
         [searchTf mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -180,7 +179,6 @@
         
     }
     
-    
     // 记录是否有缓存了
     if ([[DDNewsCache sharedInstance] containsObject:pageType]) {
         return;
@@ -215,6 +213,10 @@
                                              selector:@selector(enterBackGround)
                                                  name:UIApplicationDidEnterBackgroundNotification
                                                object:nil];
+//    if (![MJYUtils isFileExist:historyFile]) {
+        // 创建文件夹
+    self.fileName = [documentPath stringByAppendingPathComponent:historyFile];
+//    }
 }
 
 - (void)refreshData {
@@ -265,9 +267,35 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"跳转webView");
+    NewsModel *model = self.helper.dateList[indexPath.row];
+    // 保存数据到历史中
+    // 异步执行方法，防止卡
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        // do something
+        
+        [self saveDataToPlist:model];
+    });
+    
+    
     ArticleWebViewController *vc = [[ArticleWebViewController alloc] initWithUrlString:[self.helper.dateList[indexPath.row] valueForKey:@"url"]];
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
+}
+- (void)saveDataToPlist:(NewsModel *)model {
+    NSMutableArray *arr1 = [[NSMutableArray alloc] initWithContentsOfFile:self.fileName];
+    for (NSDictionary *dic in arr1) {
+        if ([dic[@"title"] isEqualToString:model.title]) {
+            return;
+        }
+    }
+    
+    NSMutableDictionary *dic = @{}.mutableCopy;
+    [dic setObject:model.publishedAt forKey:@"date"];
+    [dic setObject:model.title forKey:@"title"];
+    [dic setObject:model.mj_keyValues forKey:@"model"];
+    [arr1 addObject:dic];
+    [arr1 writeToFile:self.fileName atomically:YES];
 }
 
 #pragma mark - NewPagedFlowView Delegate

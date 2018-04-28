@@ -63,11 +63,11 @@
 /**  -----------  login and register  --------   */
 #define myColleciton @"me/collections"
 
-#define register @"register"
-#define verify @"verify"
+#define verifyTelCode @"me/verify"
+#define userRegister @"me/register"
 
-#define k_login_type @"login"
-#define k_login_out @"logout"
+#define userLogin @"me/login"
+#define userLoginOut @"me/logout"
 
 
 

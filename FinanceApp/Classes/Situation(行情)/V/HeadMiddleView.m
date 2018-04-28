@@ -123,12 +123,12 @@
     }];
     [_middleLb mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_iconNameLb.mas_bottom).offset(CalculateHeight(5));
-        make.left.equalTo(_iconNameLb);
+        make.left.offset(CalculateWidth(12.5));
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(100), CalculateHeight(15)));
     }];
     [_bottomLb mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_middleLb.mas_bottom).offset(CalculateHeight(5));
-        make.left.equalTo(_iconNameLb);
+        make.left.offset(CalculateWidth(10));
     }];
     [_roseBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_bottomLb.mas_right).offset(CalculateWidth(10));

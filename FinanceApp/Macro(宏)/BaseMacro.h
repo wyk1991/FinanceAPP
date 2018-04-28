@@ -10,7 +10,7 @@
 #define BaseMacro_h
 
 
-
+#import "HttpTool.h"
 #import "LDToast.h"
 #import "JYJSON.h"
 #import "MJYUtils.h"
@@ -35,6 +35,7 @@
 //#import "WSDatePickerView.h"
 //
 //#import "BaseTableView.h"
+#import "UserInfoModelHelper.h"
 #import "ZXCategorySliderBar.h"
 #import "ZXPageCollectionView.h"
 #import "MJRefresh.h"

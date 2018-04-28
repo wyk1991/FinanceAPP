@@ -8,6 +8,7 @@
 
 #import "HomeHelper.h"
 #import "RollModel.h"
+#import "TagsModel.h"
 
 @implementation HomeHelper
 
@@ -82,27 +83,32 @@ static HomeHelper *_instance;
 
 - (void)helperGetTagDataFromPath:(NSString *)path callBack:(UICallback)callback {
     WS(weakSelf);
-    [self startGETRequest:path inParam:nil outParse:^(id retData, NSError *error) {
-        if ([retData[@"status"] integerValue] == 100) {
-            [weakSelf dealTagWith:retData];
-        }
+//    [self startGETRequest:path inParam:nil outParse:^(id retData, NSError *error) {
+//        if ([retData[@"status"] integerValue] == 100) {
+//            [weakSelf dealTagWith:retData];
+//        }
+//
+//        callback(retData, error);
+//    } callback:^(id obj, NSError *error) {
+//        callback(nil, error);
+//    }];
+    
+    [HttpTool getRequestCacheURLStr:tag_list dataField:@"categories" inParam:nil outParse:^(id retData, NSError *error) {
         
-        callback(retData, error);
     } callback:^(id obj, NSError *error) {
-        callback(nil, error);
+        [weakSelf dealTagWith:obj];
+        
+        callback(obj, error);
     }];
 }
 
 - (void)dealTagWith:(id)result {
-    NSArray *arr = result[@"categories"];
-    if (arr.count) {
-        for (NSDictionary *dic in arr) {
+        for (NSDictionary *dic in result) {
             [self.tagList addObject:dic[@"name"]];
             
             [self.tagArr addObject:dic];
-        }
+        
     }
-
 }
 
 - (void)helperGetScrollDataWithPath:(NSString *)path callBack:(UICallback)callback {

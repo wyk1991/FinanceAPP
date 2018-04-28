@@ -60,7 +60,7 @@
     }];
     [_titleLb mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_count);
-        make.top.equalTo(_count.mas_bottom).offset(CalculateHeight(11));
+        make.top.equalTo(_count.mas_bottom).offset(CalculateHeight(5));
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(100), CalculateHeight(20)));
     }];
 }
@@ -70,7 +70,7 @@
         _model = model;
     }
     self.iconImg.image = [UIImage imageNamed:model.icon_img];
-    self.count.text = model.coin_count;
+    self.count.text = [model.title isEqualToString:@"流通总市值"] || [model.title isEqualToString:@"24H交易额"] ?  [[kNSUserDefaults valueForKey:user_currency] isEqualToString:@"cny"] ? [NSString stringWithFormat:@"￥%@",model.coin_count] : [NSString stringWithFormat:@"$%@", model.coin_count] : model.coin_count ;
     self.titleLb.text = model.title;
 }
 

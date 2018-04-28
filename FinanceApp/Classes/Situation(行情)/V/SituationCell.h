@@ -10,7 +10,7 @@
 #import "IconDetailViewController.h"
 static NSString *situationCellIden = @"situationCellIden";
 typedef void(^TapCellClick)(NSIndexPath *indexPath);
-
+typedef void(^WarnBlock)(void);
 @class CoinDetailListModel, ChartsDetailModel, PricesModel, OptionCoinModel;
 @interface SituationCell : BaseCell
 
@@ -22,7 +22,7 @@ typedef void(^TapCellClick)(NSIndexPath *indexPath);
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, assign) BOOL isNotification;
 @property (nonatomic, copy) TapCellClick tapCellClick;
-
+@property (nonatomic, copy) WarnBlock warnBlock;
 @property (nonatomic, assign) CoinShowType leftType;
 
 @property (nonatomic, strong) PricesModel *priceModel;

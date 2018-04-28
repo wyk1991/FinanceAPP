@@ -9,6 +9,7 @@
 #import "LoginViewController.h"
 #import "ForgetViewController.h"
 #import "RegisterViewController.h"
+#import "UserInfoModelHelper.h"
 
 @interface LoginViewController ()
 
@@ -26,16 +27,25 @@
 @property (nonatomic, strong) UIView *btnLine;
 @property (nonatomic, strong) UIButton *registerBtn;
 
-
-
 @property (nonatomic, strong) UIView *line3;
 @property (nonatomic, strong) UIView *line4;
 @property (nonatomic, strong) UILabel *bottomLb;
 @property (nonatomic, strong) UIImageView *wechatImg;
 
+@property (nonatomic, strong) UserInfoModelHelper *helper;
+
 @end
 
 @implementation LoginViewController
+
+- (UserInfoModelHelper *)helper {
+    if (!_helper) {
+        _helper = (UserInfoModelHelper *)[UserInfoModelHelper shareInstance];
+        
+    }
+    return _helper;
+}
+
 - (UILabel *)areaCode {
     if (!_areaCode) {
         _areaCode = [[UILabel alloc] initWithText:@"+86" textColor:k_textgray_color textFont:k_text_font_args(CalculateWidth(14)) textAlignment:0];
@@ -328,7 +338,19 @@
 }
 
 - (void)loginBtnClick:(UIButton *)btn {
-    
+    if (!self.phoneTf.text.length || !self.codeTf.text.length) {
+        [LDToast showToastWith:@"填写的内容不能为空"];
+        return;
+    }
+    NSDictionary *dic = @{
+                          @"phone": self.phoneTf.text,
+                          @"password": self.codeTf.text
+                          };
+    [self.helper loginButtonWithUserInfo:dic callback:^(id obj, NSError *error) {
+        [SVProgressHUD showSuccessWithStatus:@"登录成功"];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUserLoginSuccessNotification object:nil];
+    }];
 }
 
 // 登录微信

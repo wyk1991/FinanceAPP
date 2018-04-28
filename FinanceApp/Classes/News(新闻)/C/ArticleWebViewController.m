@@ -18,19 +18,12 @@
 #define K_FONT_SIZE_CHANGE_WEB_URL @"http://3g.fx678.com/news/detail/201508031037021902"
 @implementation ArticleWebViewController
 
-
-//
-//- (void)viewDidLoad {
-//    [super viewDidLoad];
-//
-//    self.title =@"文章标题";
-//
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"img_back"] style:UIBarButtonItemStylePlain target:self action:@selector(popTo)];
-//}
-//
-//- (void)popTo {
-//    [self.navigationController popViewControllerAnimated:YES];
-//}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, CalculateWidth(112), CalculateHeight(27))];
+    img.image = [UIImage imageNamed:@"ic_logo"];
+    self.navigationItem.titleView = img;
+}
 
 - (UIView *)bottomView {
     if (!_bottomView) {
@@ -43,10 +36,12 @@
         for (int i=0; i<3; i++) {
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             btn.frame = CGRectMake(kScreenWidth/3*i, 0, kScreenWidth/3, CalculateHeight(30));
+            btn.tag = i;
             [btn setTitle:title[i] forState:UIControlStateNormal];
             [btn setTitleColor:k_black_color forState:UIControlStateNormal];
-            
             [btn setImage:[UIImage imageNamed:icon[i]] forState:UIControlStateNormal];
+            
+            [btn addTarget:self action:@selector(bottomBtnClick:) forControlEvents:UIControlEventTouchUpInside];
             [_bottomView addSubview:btn];
         }
         
@@ -67,6 +62,8 @@
     return self;
 }
 
+
+
 - (void)addMasnory {
     [_webView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.offset(0);
@@ -85,6 +82,27 @@
     NSURL *url = [NSURL URLWithString:urlStr];
     [webView loadRequest:[NSURLRequest requestWithURL:url cachePolicy:0 timeoutInterval:10]];
 //    webView.delegate = self;
+}
+
+- (void)bottomBtnClick:(UIButton *)btn {
+    switch (btn.tag) {
+        case 0:
+        {
+            
+        }
+            break;
+        case 1:
+        {
+            
+        }
+            break;
+        case 2:  // 点击分享
+        {
+            
+        }
+        default:
+            break;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

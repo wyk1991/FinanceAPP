@@ -26,7 +26,10 @@
 - (UIImageView *)augurImg {
     if (!_augurImg) {
         _augurImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_hangqing_lingdang"]];
+        _augurImg.userInteractionEnabled = YES;
         
+        UITapGestureRecognizer *ges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(warnImgClick:)];
+        [_augurImg addGestureRecognizer:ges];
     }
     return _augurImg;
 }
@@ -180,6 +183,11 @@
     self.categoryLb.text = optionModel.market;
 }
 
+- (void)warnImgClick:(UITapGestureRecognizer *)tap {
+    if (self.warnBlock) {
+        self.warnBlock();
+    }
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];

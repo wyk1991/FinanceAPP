@@ -13,12 +13,14 @@
 #import "WXApiManager.h"
 #import "WXApiRequestHandler.h"
 #import "UIAlertView+WX.h"
-
+#import "VaildationCodeHelper.h"
 
 @interface QuickLoginViewController()<LoginViewDelegate, WXApiManagerDelegate>
 @property (nonatomic, strong) LoginView *loginView;
 @property (nonatomic, strong) UILabel *bottomLb;
 @property (nonatomic, strong) UIImageView *wechatImg;
+
+@property (nonatomic, strong) VaildationCodeHelper *helper;
 
 @property (nonatomic, strong) WXApiManager *wxManage;
 
@@ -31,8 +33,16 @@
         _loginView = [[LoginView alloc] init];
         _loginView.backgroundColor = k_white_color;
         _loginView.delegate = self;
+        _loginView.type = LoginType;
     }
     return _loginView;
+}
+
+- (VaildationCodeHelper *)helper {
+    if (!_helper) {
+        _helper = [[VaildationCodeHelper alloc] init];
+    }
+    return _helper;
 }
 
 - (void)viewDidLoad {
@@ -43,8 +53,6 @@
     // 创建单例
     [WXApiManager sharedManager].delegate = self;
 }
-
-
 
 - (void)initUI {
     [super initUI];
@@ -59,8 +67,12 @@
 }
 
 #pragma mark - LoginViewDelegate
-- (void)clickTimeBtnClickWith:(LoginView *)loginView {
-    NSLog(@"1");
+- (void)clickTimeBtnClickWith:(NSString *)telStr {
+    [self.helper helperGetValidationCodeCallback:^(id obj, NSError *error) {
+        if (!error) {
+            
+        }
+    } telStr:telStr];
 }
 
 - (void)clickGoLoginPageClick {
@@ -68,8 +80,16 @@
     [self.navigationController pushViewController:loginVc animated:YES];
 }
 
-- (void)clickLoginBtnClickWith:(LoginView *)loginView {
-    NSLog(@"3");
+- (void)clickLoginBtnClickWith:(LoginView *)loginView withInfo:(NSDictionary *)postInfo {
+    
+    [kUserInfoHelper loginButtonWithUserInfo:postInfo callback:^(id obj, NSError *error) {
+        if (!error) {
+            [SVProgressHUD showSuccessWithStatus:@"登录成功"];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUserLoginSuccessNotification object:nil];
+        }
+        
+    }];
 }
 
 - (void)clickChatImgClickWith:(LoginView *)loginView {
@@ -82,8 +102,6 @@
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
-
-
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];

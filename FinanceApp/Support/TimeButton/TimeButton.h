@@ -14,7 +14,7 @@
 
 @end
 
-typedef void(^TimeClick)();
+typedef void(^TimeClick)(void);
 
 @interface TimeButton : UIView
 

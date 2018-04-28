@@ -64,8 +64,6 @@ static NSString * const reuseID  = @"DDChannelCell";
         _smallScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CalculateWidth(220), CalculateHeight(44))];
         _smallScrollView.backgroundColor = [UIColor clearColor];
         _smallScrollView.showsHorizontalScrollIndicator = NO;
-        
-        
     }
     return _smallScrollView;
 }
@@ -173,13 +171,9 @@ static NSString * const reuseID  = @"DDChannelCell";
             _list_now = self.channelList.mutableCopy;
             // 设置频道数据
             [weakSelf setupChannelLabel];
-
-            
             self.sortView.selectedArray = self.homeHelper.tagList;
-//            self.sortView.optionalArray = [NSMutableArray arrayWithArray:@[@"9:30", @"区块链"]];
-            
             self.sortView.optionalArray = @[].mutableCopy;
-            
+
             [self.bigCollectionView reloadData];
         }
     }];
@@ -190,19 +184,19 @@ static NSString * const reuseID  = @"DDChannelCell";
 {
     CGFloat margin = CalculateWidth(15);
     CGFloat x = 8;
-    CGFloat h = _smallScrollView.bounds.size.height;
+    CGFloat h = self.smallScrollView.bounds.size.height;
     int i = 0;
     for (NSString *str in self.list_now) {
         DDChannelLabel *label = [DDChannelLabel channelLabelWithTitle:str];
         label.frame = CGRectMake(x, 0, label.width + margin, h);
         label.textColor = k_tagUnselected;
-        [_smallScrollView addSubview:label];
+        [self.smallScrollView addSubview:label];
 
         x += label.bounds.size.width;
         label.tag = i++;
         [label addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelClick:)]];
     }
-    _smallScrollView.contentSize = CGSizeMake(x + margin + CalculateWidth(30), 0);
+    self.smallScrollView.contentSize = CGSizeMake(x + margin + CalculateWidth(30), 0);
     
     
     DDChannelLabel *firstLabel = [self getLabelArrayFromSubviews][0];
