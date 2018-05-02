@@ -164,6 +164,7 @@ static BOOL isProduction = TRUE;
  *  永远 ： 0
  */
 static NSInteger const cacheTime = 0 ;
+#define SettingFontArr @[@"小", @"中", @"大"]
 #define cachePath  [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject]
 #define documentPath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
 
