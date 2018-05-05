@@ -44,9 +44,14 @@
     [self.view addSubview:self.tableView];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
 - (void)addMasnory {
     [_tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(UIEdgeInsetsZero);
+        make.top.left.right.bottom.offset(0);
     }];
 }
 
@@ -62,20 +67,22 @@
     img.image = [UIImage imageNamed:@"ic_logo"];
     self.navigationItem.titleView = img;
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"清除" style:UIBarButtonItemStylePlain target:self action:@selector(clearHistory)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"清除" style:UIBarButtonItemStyleDone target:self action:@selector(clearHistory)];
 }
 
 - (void)loadDataFromDisk {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"historyModel" ofType:@"plist"];
-    NSArray *arr = [NSMutableArray arrayWithContentsOfFile:path];
-    
+//    NSString *path = [[NSBundle mainBundle] pathForResource:@"history" ofType:@"plist"];
+//    NSArray *arr = [NSMutableArray arrayWithContentsOfFile:path];
+
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *myPath = [path stringByAppendingPathComponent:historyFile];
+    NSArray *arr = [NSMutableArray arrayWithContentsOfFile:myPath];
     for (NSDictionary *dic in arr) {
         NewsModel *model = [NewsModel mj_objectWithKeyValues:dic[@"model"]];
         [self.historyArr addObject:model];
     }
     
     [self.tableView reloadData];
-    
 }
 
 #pragma mark - UITableView Datasource
@@ -110,13 +117,15 @@
 
 - (void)clearHistory {
     NSFileManager *fileMger = [NSFileManager defaultManager];
-    NSString *xiaoXiPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"history.plist"];
+    NSString *xiaoXiPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:historyFile];
     //如果文件路径存在的话
     BOOL bRet = [fileMger fileExistsAtPath:xiaoXiPath];
     if (bRet) {
         NSError *err;
         [fileMger removeItemAtPath:xiaoXiPath error:&err];
+        [self.historyArr removeAllObjects];
     }
+    
     [self.tableView reloadData];
 }
 

@@ -26,7 +26,7 @@
 
 #define RightLabelWidth CalculateWidth(70)
 #define RightLabelMagin CalculateWidth(45)
-#define LeftLableMagin CalculateWidth(60)
+#define LeftLableMagin CalculateWidth(30)
 #define LabelFirstWidth CalculateWidth(9)
 #define LabelHeight 40
 
@@ -451,7 +451,7 @@ SearchTextClick
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, RightLabelWidth * num, LabelHeight)];
     
     for (int i = 0; i < num; i++) {
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(num==2 ? CalculateWidth(22)+LeftLableMagin*i: CalculateWidth(50),  0, CalculateWidth(60)  , LabelHeight)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(num==2 ? CalculateWidth(22)+LeftLableMagin*i: CalculateWidth(15), 0, CalculateWidth(40)  , LabelHeight)];
         label.font = k_textB_font_args(CalculateHeight(16));
         label.tag = i;
         [label setText:[SituationManager leftTitleWithType:self.showType][i]];
@@ -461,7 +461,12 @@ SearchTextClick
     return view;
 }
 
-
+- (void)fetchData {
+    if (self.selectedIndex==0 || self.selectedIndex==1) {
+        return;
+    }
+    [self loadDataWithType:self.showType index:self.selectedIndex];
+}
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
     NSLog(@"scrollView -- %f", scrollView.contentOffset.y);

@@ -33,8 +33,6 @@
 @property (nonatomic, strong) HomeMiddleView *middleView;
 
 @property (nonatomic, strong) UIImageView *headerView;
-
-@property (nonatomic, strong) UIView *searchBackView;
 /** 保存的路径  */
 @property (nonatomic, strong) NSString *fileName;
 @end
@@ -78,7 +76,7 @@
 - (UIImageView *)headerView {
     if (!_headerView) {
         _headerView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_backImage"]];
-        _headerView.frame = CGRectMake(0, 0, kScreenWidth, CalculateHeight(330));
+        _headerView.frame = CGRectMake(0, CalculateHeight(44), kScreenWidth, CalculateHeight(300));
         _headerView.userInteractionEnabled = YES;
     }
     return _headerView;
@@ -87,7 +85,7 @@
 - (UIView *)searchBackView {
     if (!_searchBackView) {
         _searchBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, CalculateHeight(44))];
-        _searchBackView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"searchBar_background"]];
+        _searchBackView.backgroundColor = k_home_barColor;
         
         UITextField *searchTf = [[UITextField alloc] init];
         [searchTf setEnabled:YES];
@@ -139,7 +137,7 @@
 }
 
 - (void)initUI {
-    [self.headerView addSubview:self.searchBackView];
+    self.tableView.backgroundColor = k_back_color;
     [self.headerView addSubview:self.scrollView];
     [self.headerView addSubview:self.pageControl];
     self.scrollView.pageControl = self.pageControl;
@@ -174,9 +172,6 @@
             
         }];
         self.tableView.tableHeaderView = self.headerView;
-    } else {
-        self.tableView.tableHeaderView = self.searchBackView;
-        
     }
     
     // 记录是否有缓存了
@@ -190,7 +185,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, CalculateHeight(60), 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(CalculateHeight(44), 0, CalculateHeight(60), 0);
     WS(weakSelf);
     
     // 设置加载
@@ -213,10 +208,7 @@
                                              selector:@selector(enterBackGround)
                                                  name:UIApplicationDidEnterBackgroundNotification
                                                object:nil];
-//    if (![MJYUtils isFileExist:historyFile]) {
-        // 创建文件夹
-    self.fileName = [documentPath stringByAppendingPathComponent:historyFile];
-//    }
+
 }
 
 - (void)refreshData {
@@ -260,7 +252,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return CalculateHeight(250);
+    return CalculateHeight(220);
 }
 
 #pragma mark - UITableView Delegate methods
@@ -283,19 +275,34 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 - (void)saveDataToPlist:(NewsModel *)model {
-    NSMutableArray *arr1 = [[NSMutableArray alloc] initWithContentsOfFile:self.fileName];
-    for (NSDictionary *dic in arr1) {
-        if ([dic[@"title"] isEqualToString:model.title]) {
-            return;
+    NSString *filePath = [documentPath stringByAppendingPathComponent:historyFile];
+    
+    
+    NSMutableArray *arr1 = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
+    if (arr1.count) {
+        for (NSDictionary *dic in arr1) {
+            if ([dic[@"title"] isEqualToString:model.title]) {
+                return;
+            }
         }
+        NSMutableDictionary *dic = @{}.mutableCopy;
+        [dic setObject:model.publishedAt forKey:@"date"];
+        [dic setObject:model.title forKey:@"title"];
+        [dic setObject:model.mj_keyValues forKey:@"model"];
+        [arr1 addObject:dic];
+        [arr1 writeToFile:filePath atomically:YES];
+    } else {
+        NSMutableArray *tmp = @[].mutableCopy;
+        NSMutableDictionary *dic = @{}.mutableCopy;
+        [dic setObject:model.publishedAt forKey:@"date"];
+        [dic setObject:model.title forKey:@"title"];
+        [dic setObject:model.mj_keyValues forKey:@"model"];
+        [tmp addObject:dic];
+        [tmp writeToFile:filePath atomically:YES];
     }
     
-    NSMutableDictionary *dic = @{}.mutableCopy;
-    [dic setObject:model.publishedAt forKey:@"date"];
-    [dic setObject:model.title forKey:@"title"];
-    [dic setObject:model.mj_keyValues forKey:@"model"];
-    [arr1 addObject:dic];
-    [arr1 writeToFile:self.fileName atomically:YES];
+    
+    
 }
 
 #pragma mark - NewPagedFlowView Delegate

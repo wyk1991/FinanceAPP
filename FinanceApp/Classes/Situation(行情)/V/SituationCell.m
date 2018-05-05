@@ -184,9 +184,10 @@
 }
 
 - (void)warnImgClick:(UITapGestureRecognizer *)tap {
-    if (self.warnBlock) {
-        self.warnBlock();
-    }
+#warning 行情预警禁止
+//    if (self.warnBlock) {
+//        self.warnBlock();
+//    }
 }
 
 - (void)awakeFromNib {

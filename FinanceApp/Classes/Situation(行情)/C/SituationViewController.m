@@ -23,7 +23,11 @@
 @property (nonatomic, strong) ZXPageCollectionView *pageVC;
 @property (nonatomic, strong) ZXCategorySliderBar *sliderBar;
 
+/** 定时器 */
+@property (nonatomic, strong) NSTimer *timer;
+
 @property (nonatomic, strong) SituationHelper *helper;
+@property (nonatomic, strong) NSMutableArray *addArr;
 @end
 
 @implementation SituationViewController
@@ -45,10 +49,13 @@
     return _sliderBar;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (NSMutableArray *)addArr {
+    if (!_addArr) {
+        [self.helper.tagList removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 2)]];
+        _addArr = self.helper.tagList.copy;
+    }
+    return _addArr;
 }
-
 
 - (ZXPageCollectionView *)pageVC
 {
@@ -77,6 +84,23 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self loadTagData];
+    
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if (!self.timer) {
+        // 开启定时器
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(feachData) userInfo:nil repeats:YES];
+        // 添加到runloop中，不要使用系统默认的mainRubloop，不然会阻塞主线程
+        [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
+    }
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.timer invalidate];
 }
 
 - (void)setupNavItem {
@@ -124,6 +148,13 @@
         return childView1;
 }
 
+- (void)feachData {
+    IconDetailViewController *vc = (IconDetailViewController *)[self ZXPageCollectionView:self.pageVC viewForItemAtIndex:self.pageVC.currentIndex];
+    vc.selectedIndex = self.pageVC.currentIndex;
+    [vc fetchData];
+}
+
+
 - (void)ZXPageViewDidEndChangeIndex:(ZXPageCollectionView *)pageView currentView:(UIView *)view{
     [self.sliderBar setSelectIndex:pageView.currentIndex];
 }
@@ -138,8 +169,7 @@
 - (void)addClick {
     AddCoinViewController *vc = [[AddCoinViewController alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
-    [self.helper.tagList removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 2)]];
-     vc.itemArr = self.helper.tagList;
+    vc.itemArr = self.addArr;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

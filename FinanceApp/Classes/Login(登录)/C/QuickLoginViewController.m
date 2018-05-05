@@ -52,8 +52,12 @@
     
     // 创建单例
     [WXApiManager sharedManager].delegate = self;
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"img_back"] style:UIBarButtonItemStyleDone target:self action:@selector(close)];
 }
-
+- (void)close {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 - (void)initUI {
     [super initUI];
     [self.view addSubview:self.loginView];
@@ -85,7 +89,7 @@
     [kUserInfoHelper loginButtonWithUserInfo:postInfo callback:^(id obj, NSError *error) {
         if (!error) {
             [SVProgressHUD showSuccessWithStatus:@"登录成功"];
-            [self.navigationController popToRootViewControllerAnimated:YES];
+            [self dismissViewControllerAnimated:YES completion:nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:kUserLoginSuccessNotification object:nil];
         }
         

@@ -166,7 +166,7 @@ static BOOL isProduction = TRUE;
 static NSInteger const cacheTime = 0 ;
 #define SettingFontArr @[@"小", @"中", @"大"]
 #define cachePath  [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject]
-#define documentPath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
+#define documentPath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
 #define historyFile @"history.plist"
 #endif /* PublicMacro_h */

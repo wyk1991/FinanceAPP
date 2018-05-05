@@ -320,7 +320,6 @@
     [super viewDidLoad];
     self.view.backgroundColor = k_white_color;
     self.title = @"密码登录";
-    
 }
 
 - (void)goBtnClick:(UIButton *)btn {

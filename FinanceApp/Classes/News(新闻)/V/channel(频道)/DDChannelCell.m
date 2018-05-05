@@ -29,6 +29,7 @@
     _newsTVC.view.frame = self.bounds;
     _newsTVC.pageType = pageType;
     [self addSubview:_newsTVC.view];
+    [self addSubview:_newsTVC.searchBackView];
 }
 
 @end

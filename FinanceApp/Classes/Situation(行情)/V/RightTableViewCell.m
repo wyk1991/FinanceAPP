@@ -42,7 +42,7 @@
     [tmp addObject:[NSString stringWithFormat:@"￥%@",model.price]];
     [tmp addObject:[NSString stringWithFormat:@"%@%%",model.oneday_change]];
     [tmp addObject:model.oneday_increase];
-    [tmp addObject:model.oneday_money_cny];
+    [tmp addObject:[[MJYUtils getFromUserDefaultWithKey:user_currency] isEqualToString:@"cny"] ?  model.oneday_money_cny : model.oneday_money_cny];
     [tmp addObject:model.circulate_money];
     [tmp addObject:model.circulate_amount];
     [tmp addObject:[NSString stringWithFormat:@"%@%%",model.circulate_percentage]];
@@ -55,7 +55,7 @@
         label.text = tmp[label.tag];
         if (label.tag == 1) {
             NSString *str = tmp[label.tag];
-            label.textColor = [str containsString:@"-"] ? k_siutaion_reduce : k_siutaion_increase;
+            label.textColor = [[MJYUtils getFromUserDefaultWithKey:user_greenRed] isEqualToString:@"redRise"] ? ([str containsString:@"-"] ? k_siutaion_reduce : k_siutaion_increase) : ([str containsString:@"-"] ?k_siutaion_increase : k_siutaion_reduce);
             label.text = [str containsString:@"-"] ? [NSString stringWithFormat:@"%@%%",model.oneday_change]:[NSString stringWithFormat:@"+%@%%",model.oneday_change];
         }
     }
@@ -67,7 +67,7 @@
         _priceModel  = priceModel;
     }
     NSMutableArray *tmp = @[].mutableCopy;
-    [tmp addObject:[NSString stringWithFormat:@"￥%@ ＄%@",priceModel.price_cny, priceModel.price_usd]];
+    [tmp addObject:[[MJYUtils getFromUserDefaultWithKey:user_currency] isEqualToString:@"cny"] ? [NSString stringWithFormat:@"￥%@ ＄%@",priceModel.price_cny, priceModel.price_usd] : [NSString stringWithFormat:@"＄%@ ￥%@", priceModel.price_usd, priceModel.price_cny]];
     [tmp addObject:[NSString stringWithFormat:@"%@%%",priceModel.change]];
     [tmp addObject:priceModel.oneday_amount];
     [tmp addObject:priceModel.oneday_highest_cny];
@@ -84,8 +84,9 @@
 //            [label sizeToFit];
         }
         if (label.tag == 1) {
+            
             NSString *str = tmp[label.tag];
-            label.textColor = [str containsString:@"-"] ? k_siutaion_reduce : k_siutaion_increase;
+            label.textColor = [[MJYUtils getFromUserDefaultWithKey:user_greenRed] isEqualToString:@"redRise"] ? ([str containsString:@"-"] ? k_siutaion_reduce : k_siutaion_increase) : ([str containsString:@"-"] ?k_siutaion_increase : k_siutaion_reduce);
             label.text = [str containsString:@"-"] ? [NSString stringWithFormat:@"%@%%",priceModel.change]:[NSString stringWithFormat:@"+%@%%",priceModel.change];
         }
         

@@ -12,4 +12,6 @@
 
 @property (nonatomic, strong) NSString *pageType;
 
+
+@property (nonatomic, strong) UIView *searchBackView;
 @end

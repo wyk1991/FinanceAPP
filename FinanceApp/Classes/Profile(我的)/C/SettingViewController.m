@@ -18,6 +18,7 @@
 #import "ProblemFeedbackViewController.h"
 #import "OboutUsViewController.h"
 #import "MyHistoryViewController.h"
+#import "QuickLoginViewController.h"
 
 static NSString *backPersonCellIden = @"backPersonCellIden";
 
@@ -85,7 +86,7 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
     
     NSArray *arr = @[
                      @[
-                         @{@"icon": @"icon_shoucang", @"title": @"积分", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_shoucang", @"title": @"我的专栏", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_shoucang", @"title": @"收藏", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_lishi", @"title": @"历史", @"isArrow": @"1", @"isSwitch": @"0"}
+                         @{@"icon": @"ic_jifen", @"title": @"积分", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_my_special", @"title": @"我的专栏", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_shoucang", @"title": @"收藏", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_lishi", @"title": @"历史", @"isArrow": @"1", @"isSwitch": @"0"}
                          ],
                      @[
                          @{@"icon": @"icon_my_hangqing", @"title": @"行情&预警", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_push_manager", @"title": @"推送管理", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_search_clean",@"title" : @"清理缓存", @"isArrow": @"1", @"content": [HttpTool cacheSize], @"isSwitch": @"0"}
@@ -185,15 +186,31 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
         switch (indexPath.row) {
             case 0:
                 // 点击积分
+                if ([[kNSUserDefaults valueForKey:user_isLogin] isEqualToString:@"0"]) {
+                    [self gotoQuickLogin];
+                    
+                } else {
+                    
+                }
                 
                 break;
             case 1:
                 // 点击我的专栏
-                
+                if (![[kNSUserDefaults valueForKey:user_isLogin] isEqualToString:@"0"]) {
+                    [self gotoQuickLogin];
+                    
+                } else {
+                    
+                }
                 break;
             case 2:
                 // 点击收藏
-                
+                if (![[kNSUserDefaults valueForKey:user_isLogin] isEqualToString:@"0"]) {
+                    [self gotoQuickLogin];
+                    
+                } else {
+                    
+                }
                 
                 break;
             case 3:
@@ -302,9 +319,22 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
 }
 
 - (void)userHeader:(UserHeadView *)headerView didClickWithUserInfo:(NSDictionary *)userInfo {
-    PersonalViewController *vc = [[PersonalViewController alloc] init];
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([[kNSUserDefaults valueForKey:user_isLogin] isEqualToString:@"1"]) {
+        // 跳转
+        PersonalViewController *vc = [[PersonalViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    } else {
+        [self gotoQuickLogin];
+    }
+    
+}
+
+- (void)gotoQuickLogin {
+    QuickLoginViewController *quickVc = [[QuickLoginViewController alloc] init];
+    // 想让被推出的视图有导航栏，那视图必须被添加到navigation导航视图中
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:quickVc];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 - (void)loginSuccess:(NSNotification *)noti {
