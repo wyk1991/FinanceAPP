@@ -46,7 +46,7 @@
 {
     _button.enabled = YES;
     [_timer setFireDate:[NSDate distantFuture]];
-    [_button setTitleColor:k_main_color forState:normal];
+    [_button setTitleColor:k_timeButton forState:normal];
     [_button setTitle:@"重新获取" forState:normal];
 }
 - (void)getMessage
@@ -58,7 +58,7 @@
     _t --;
     [_button setTitle:[self getTimeStr] forState:normal];
     _button.enabled = NO;
-    [_button setTitleColor:k_main_color forState:normal];
+    [_button setTitleColor:k_timeButton forState:normal];
 
 
 }
@@ -75,7 +75,7 @@
 //    _button.layer.cornerRadius = CalculateHeight(3);
 //    _button.layer.masksToBounds = YES;
     _button.backgroundColor = k_white_color;
-    _button.titleLabel.font = [UIFont systemFontOfSize:CalculateHeight(12)];
+    _button.titleLabel.font = [UIFont systemFontOfSize:CalculateHeight(15)];
     [_button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_button];
     _timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getMessage) userInfo:nil repeats:YES];

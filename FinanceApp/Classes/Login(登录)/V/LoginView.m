@@ -33,7 +33,7 @@
 
 - (UILabel *)tipLb {
     if (!_tipLb) {
-        _tipLb = [[UILabel alloc] initWithText:@"验证即可登录, 未注册用户将根据手机号自动创建账号" textColor:k_textgray_color textFont:k_text_font_args(CalculateHeight(14)) textAlignment:1];
+        _tipLb = [[UILabel alloc] initWithText:@"验证即可登录, 未注册用户将根据手机号自动创建账号" textColor:k_login_tip textFont:k_text_font_args(CalculateHeight(13)) textAlignment:0];
         _tipLb.numberOfLines = 0;
     }
     return _tipLb;
@@ -41,7 +41,7 @@
 
 - (UILabel *)areaCode {
     if (!_areaCode) {
-        _areaCode = [[UILabel alloc] initWithText:@"+86" textColor:k_textgray_color textFont:k_text_font_args(CalculateWidth(14)) textAlignment:0];
+        _areaCode = [[UILabel alloc] initWithText:@"+86" textColor:k_login_tip textFont:k_text_font_args(CalculateWidth(13)) textAlignment:0];
     }
     return _areaCode;
 }
@@ -60,6 +60,7 @@
         _phoneTf = [[UITextField alloc] init];
         _phoneTf.placeholder = @"请输入手机号";
         _phoneTf.font = k_text_font_args(CalculateHeight(14));
+        [_phoneTf setValue:k_login_placeHold forKey:@"_placeholderLabel.textColor"];
         _phoneTf.keyboardType = UIKeyboardTypePhonePad;
         _phoneTf.textColor = k_black_color;
     }
@@ -81,6 +82,7 @@
         _codeTf.font = k_text_font_args(CalculateHeight(14));
         _codeTf.textAlignment = NSTextAlignmentLeft;
         _codeTf.keyboardType = UIKeyboardTypePhonePad;
+        [_codeTf setValue:k_login_placeHold forKey:@"_placeholderLabel.textColor"];
         _codeTf.delegate = self;
         _codeTf.textColor = k_textgray_color;
         
@@ -117,8 +119,8 @@
     if (!_goBtn) {
         _goBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_goBtn setTitle:@"账号密码登录" forState:UIControlStateNormal];
-        [_goBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-        _goBtn.titleLabel.font = k_text_font_args(CalculateHeight(17));
+        [_goBtn setTitleColor:k_pass_goBtn forState:UIControlStateNormal];
+        _goBtn.titleLabel.font = k_text_font_args(CalculateHeight(15));
         
         [_goBtn addTarget:self action:@selector(goBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -201,11 +203,11 @@
     [super layoutSubviews];
     [_tipLb mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.offset(CalculateHeight(30));
-        make.left.offset(CalculateWidth(30));
-        make.right.offset(-CalculateWidth(30));
+        make.left.offset(CalculateWidth(32));
+        make.right.offset(-CalculateWidth(32));
     }];
     [_areaCode mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_tipLb.mas_bottom).offset(CalculateHeight(40));
+        make.top.equalTo(_tipLb.mas_bottom).offset(CalculateHeight(34));
         make.left.offset(CalculateWidth(30));
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(40), CalculateHeight(20)));
     }];
@@ -238,7 +240,7 @@
     [_timeBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_carveTwoView.mas_right).offset(CalculateWidth(10));
         make.centerY.equalTo(_carveTwoView);
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(100), CalculateHeight(20)));
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(120), CalculateHeight(15)));
     }];
     [_line2 mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_codeTf.mas_bottom).offset(CalculateHeight(5));

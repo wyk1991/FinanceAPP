@@ -55,6 +55,11 @@
 
 #define k_siuation_chartLine [UIColor colorWithHex:@"#399bdb"]
 
+/** login */
+#define k_login_tip [UIColor colorWithHex:@"#666666"]
+#define k_login_placeHold [UIColor colorWithHex:@"#ceced0"]
+#define k_timeButton [UIColor colorWithHex:@"#828282"]
+#define k_pass_goBtn [UIColor colorWithHex:@"#538cff"]
 #endif /* ColorMacro_h */
 
 
