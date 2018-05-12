@@ -118,6 +118,11 @@ static NSString *normalPersonCellIden = @"normalPersonCellIden";
 
 #define RGBColor(r,g,b) RGBAColor(r,g,b,1.0)
 #define RGBAColor(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:a]
+
+/** token */
+#define kAppHasCompletedLoginToken @"user_token"
+#define kAppHasCompletedLoginUserInfo  @"userInfo_dic"
+
 /** 微信配置账号 */
 static NSString *kAuthScope = @"snsapi_message,snsapi_userinfo,snsapi_friend,snsapi_contact";
 static NSString *kAuthOpenID = @"0c806938e2413ce73eef92cc3";
@@ -140,7 +145,7 @@ static NSString *channel = @"";
 static BOOL isProduction = TRUE;
 
 /** 个人编好设置 */
-#define user_isLogin @"user_isLogin"
+
 #define user_currency @"user_currency"
 #define user_greenRed @"user_greenRed"
 #define user_earlyWaring @"user_waring"

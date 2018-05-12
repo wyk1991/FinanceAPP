@@ -16,7 +16,7 @@
 #define k_white_color [UIColor colorWithHex:@"#ffffff"]
 #define k_back_color [UIColor colorWithHex:@"#e8e9ea"]
 #define k_text_color [UIColor colorWithHex:@"#313131"]
-#define k_main_color [UIColor colorWithHex:@"#3c4c5c"]//主题色
+#define k_main_color [UIColor colorWithHex:@"#309dd9"]//主题色
 #define k_textgray_color [UIColor colorWithHex:@"#707070"]//灰字
 #define k_loginmain_color [UIColor colorWithHex:@"#fbc700"]
 #define k_themeblue_color [UIColor colorWithHex:@"#49A3EC"]
@@ -54,12 +54,20 @@
 #define k_siutaion_increase [UIColor colorWithHex:@"#fa322b"]
 
 #define k_siuation_chartLine [UIColor colorWithHex:@"#399bdb"]
+#define k_arrow_color [UIColor colorWithHex:@"#3c4c5c"]
 
 /** login */
 #define k_login_tip [UIColor colorWithHex:@"#666666"]
 #define k_login_placeHold [UIColor colorWithHex:@"#ceced0"]
 #define k_timeButton [UIColor colorWithHex:@"#828282"]
 #define k_pass_goBtn [UIColor colorWithHex:@"#538cff"]
+#define k_login_unContent [UIColor colorWithHex:@"#dddddd"]
+#define k_placehold_color [UIColor colorWithHex:@"#dddde1"]
+
+/** 我的专栏 */
+#define k_mycolumn_bg [UIColor colorWithHex:@"#2d271d"]
+#define k_threeLb_color [UIColor colorWithHex:@"#7a7975"]
+#define k_username_color [UIColor colorWithHex:@"#fefefe"]
 #endif /* ColorMacro_h */
 
 

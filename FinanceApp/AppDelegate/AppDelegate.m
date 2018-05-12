@@ -70,6 +70,17 @@
 }
 
 - (void)initTabBar {
+    BOOL isLogin = [kNSUserDefaults stringForKey:kAppHasCompletedLoginToken] ? YES : NO;
+    
+    if (isLogin) {
+        self.userHelper = kUserInfoHelper;
+        NSData *modelData = [kNSUserDefaults objectForKey:kAppHasCompletedLoginUserInfo];
+        UserInfoModel *model = [NSKeyedUnarchiver unarchiveObjectWithData:modelData];
+        NSLog(@"%@", model);
+        self.userHelper.userInfo = model;
+//        self.userHelper.userInfo = [UserInfoModel mj_objectWithKeyValues:[kNSUserDefaults valueForKey:kAppHasCompletedLoginUserInfo]];
+    }
+    
     MainTabBarController *main = [[MainTabBarController alloc] init];
     
     self.window.backgroundColor = [UIColor whiteColor];

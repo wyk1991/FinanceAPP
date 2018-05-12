@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "WXApi.h"
-
+@class UserInfoModelHelper;
 @interface AppDelegate : UIResponder <UIApplicationDelegate, WXApiDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -16,6 +16,8 @@
 @property (nonatomic, copy) NSString *registrationID;
 /** 当前的网络状况 */
 @property (nonatomic, strong) NSString *netState;
+/** 个人信息保存方法类 */
+@property (nonatomic, assign) UserInfoModelHelper *userHelper;
 
 - (void)monitorNetworking;
 @end

@@ -64,7 +64,7 @@
 }
 - (NSString *)getTimeStr
 {
-    return [NSString stringWithFormat:@"(%lds)后重新获取", (long)_t];
+    return [NSString stringWithFormat:@"(%lds)", (long)_t];
 }
 #pragma mark UI
 - (void)setSubViews

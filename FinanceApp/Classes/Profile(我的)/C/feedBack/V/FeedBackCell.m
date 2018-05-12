@@ -9,7 +9,7 @@
 #import "FeedBackCell.h"
 #import "FeedBackModel.h"
 
-@interface FeedBackCell()
+@interface FeedBackCell()<UITextViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) UIView *backView;
 
@@ -32,6 +32,7 @@
         _tv.showsVerticalScrollIndicator = false;
         _tv.showsHorizontalScrollIndicator = false;
         _tv.scrollEnabled = NO;
+        _tv.delegate = self;
         _tv.placeholderFont = k_text_font_args(CalculateHeight(15));
         _tv.textColor = k_black_color;
     }
@@ -43,6 +44,7 @@
     if (!_tf) {
         _tf = [[UITextField alloc] initWithFrame:CGRectZero];
         _tf.textAlignment = 0;
+        _tf.delegate = self;
         _tf.textColor = k_black_color;
         _tf.borderStyle = UITextBorderStyleNone;
         _tf.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -132,7 +134,22 @@
     }];
     sender.selected = YES;
     _problemType = [NSString stringWithFormat:@"%ld", (long)sender.tag];
+    if (_delegate && [_delegate respondsToSelector:@selector(probleTypeClickWithTag:cell:)]) {
+        [_delegate probleTypeClickWithTag:sender.titleLabel.text cell:self];
+    }
     NSLog(@"%@", sender.titleLabel.text);
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    _model.content = textField.text;
+    
+    [self.tf resignFirstResponder];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    _model.content = textView.text;
+    
+    [self.tv resignFirstResponder];
 }
 
 - (void)awakeFromNib {

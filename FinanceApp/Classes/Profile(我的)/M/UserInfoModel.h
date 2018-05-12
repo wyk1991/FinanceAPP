@@ -8,6 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UserInfoModel : NSObject
+@class User;
+@interface UserInfoModel : NSObject<NSCoding>
 
+@property (nonatomic, copy) NSString *token;
+@property (nonatomic, strong) User *user;
+
+-(instancetype)initWithToke:(NSString *)token user:(User *)user;
+
+@end
+
+@interface User : NSObject<NSCoding>
+
+@property (nonatomic, copy) NSString *avatar_url;
+@property (nonatomic, copy) NSString *sex;
+@property (nonatomic, copy) NSString *nickname;
 @end

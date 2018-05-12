@@ -20,4 +20,9 @@
 + (UIImage *)clipImage:(UIImage *)image;
 
 - (UIImage *)imageByScalingAndCroppingForSize:(CGSize)targetSize;
+/**
+ * 将UIColor变换为UIImage
+ *
+ **/
++ (UIImage *)createImageWithColor:(UIColor *)color;
 @end

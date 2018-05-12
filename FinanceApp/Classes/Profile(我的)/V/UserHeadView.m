@@ -10,8 +10,6 @@
 
 @interface UserHeadView()
 @property (nonatomic, strong) UIView *backView;
-@property (nonatomic, strong) UIImageView *headImg;
-@property (nonatomic, strong) UILabel *nameLb;
 @property (nonatomic, strong) UIImageView *arrowImg;
 
 @property (nonatomic, strong) UIView *separView;
@@ -35,7 +33,9 @@
 
 - (UIImageView *)headImg {
     if (!_headImg) {
-        _headImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_defaut_avatar"]];
+        _headImg = [[UIImageView alloc] init];
+        ViewBorderRadius(_headImg, CalculateWidth(27), 0, k_white_color);
+        [_headImg sd_setImageWithURL:[NSURL URLWithString:kApplicationDelegate.userHelper.userInfo.user.avatar_url] placeholderImage:[UIImage imageNamed:@"icon_defaut_avatar"]];
         _headImg.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _headImg;
@@ -43,7 +43,7 @@
 
 - (UILabel *)nameLb {
     if (!_nameLb) {
-        _nameLb = [[UILabel alloc] initWithText:@"点击登录" textColor:k_textgray_color textFont:k_text_font_args(CalculateHeight(16)) textAlignment:0];
+        _nameLb = [[UILabel alloc] initWithText:kApplicationDelegate.userHelper.userInfo.user.nickname.length ? kApplicationDelegate.userHelper.userInfo.user.nickname: @"点击登录" textColor:k_textgray_color textFont:k_text_font_args(CalculateHeight(16)) textAlignment:0];
         
     }
     return _nameLb;
@@ -109,6 +109,10 @@
     }
 }
 
+- (void)resetNoInfo {
+    self.nameLb.text = @"点击登录";
+    [self.headImg setImage:[UIImage imageNamed:@"icon_defaut_avatar"]];
+}
 
 
 

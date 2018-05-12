@@ -10,14 +10,15 @@
 
 @interface UserHelper : BaseViewModel
 
+@property (nonatomic, strong) NSMutableArray *columnList;
+@property (nonatomic, strong) NSMutableArray *feedbackList;
 + (instancetype)shareHelper;
 
-- (void)helpRegisterUserWithPath:(NSString *)path params:(NSDictionary *)userDic callBack:(UICallback)callback;
 
-- (void)helpGetVerifyCodeNum:(NSString *)path withParams:(NSDictionary *)dic callBack:(UICallback)callback;
+- (void)helpGetMyColumnData:(NSString *)path withParms:(NSDictionary *)dic callBack:(UICallback)callback;
 
-- (void)helpLoginWithPath:(NSString *)path params:(NSDictionary *)userInfo callBack:(UICallback)callback;
+- (void)helpPostWithPath:(NSString *)path withInfo:(NSDictionary *)dic callBackBlock:(UICallback)callback;
 
-- (void)heloLoginOutWithPath:(NSString *)path withCallBack:(UICallback)callback;
+- (void)helpFeedBackHistoryWithPath:(NSString *)path callBack:(UICallback)callback;
 
 @end

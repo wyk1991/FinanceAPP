@@ -28,6 +28,7 @@
 #import "TimeButton.h"
 #import "ZLPhoto.h"
 #import "AAGlobalMacro.h"
+#import "BaseTableView.h"
 //#import "JTCalendar.h"
 #import "LEEAlert.h"
 //#import "LBXScanViewController.h"
@@ -36,6 +37,7 @@
 //
 //#import "BaseTableView.h"
 #import "UserInfoModelHelper.h"
+#import "UserHelper.h"
 #import "ZXCategorySliderBar.h"
 #import "ZXPageCollectionView.h"
 #import "MJRefresh.h"
@@ -64,5 +66,6 @@
 #import "UIView+customView.h"
 #import "TSScrollStatusBar.h"
 #import "UIScrollView+TSSCrollStatusBar.h"
+#import "UINavigationBar+ChangeColor.h"
 
 #endif /* BaseMacro_h */

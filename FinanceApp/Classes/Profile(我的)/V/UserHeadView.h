@@ -17,7 +17,12 @@
 
 @interface UserHeadView : BaseView
 
+@property (nonatomic, strong) UILabel *nameLb;
+
+@property (nonatomic, strong) UIImageView *headImg;
 
 @property (nonatomic, weak) id<UserHeaderDelegate> delegate;
+
+- (void)resetNoInfo;
 
 @end

@@ -11,7 +11,7 @@
 #import "RegisterViewController.h"
 #import "UserInfoModelHelper.h"
 
-@interface LoginViewController ()
+@interface LoginViewController ()<UITextFieldDelegate>
 
 @property (nonatomic, strong) UILabel *areaCode;
 @property (nonatomic, strong) UIView *carveOneView;
@@ -68,7 +68,10 @@
         _phoneTf.placeholder = @"请输入手机号";
         _phoneTf.font = k_text_font_args(CalculateHeight(14));
         _phoneTf.keyboardType = UIKeyboardTypePhonePad;
+        _phoneTf.delegate = self;
         _phoneTf.textColor = k_black_color;
+        
+        [_phoneTf addTarget:self action:@selector(textFieldChange:) forControlEvents:UIControlEventEditingChanged];
     }
     return _phoneTf;
 }
@@ -91,6 +94,7 @@
         _codeTf.delegate = self;
         _codeTf.textColor = k_textgray_color;
         
+        [_codeTf addTarget:self action:@selector(textFieldChange:) forControlEvents:UIControlEventEditingChanged];
     }
     return _codeTf;
 }
@@ -124,8 +128,6 @@
         _forgetBtn.titleLabel.font = k_text_font_args(CalculateHeight(17));
         
         [_forgetBtn addTarget:self action:@selector(forgetBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        
-        
     }
     return _forgetBtn;
 }
@@ -156,7 +158,7 @@
         _loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_loginBtn setTitle:@"登录" forState:UIControlStateNormal];
         [_loginBtn setTitleColor:k_textgray_color forState:UIControlStateNormal];
-        [_loginBtn setBackgroundColor:[UIColor grayColor]];
+        [_loginBtn setBackgroundColor:k_login_unContent];
         [_loginBtn setTitleColor:k_white_color forState:UIControlStateSelected];
         
         _loginBtn.layer.cornerRadius = 5.0f;
@@ -347,7 +349,7 @@
                           };
     [self.helper loginButtonWithUserInfo:dic callback:^(id obj, NSError *error) {
         [SVProgressHUD showSuccessWithStatus:@"登录成功"];
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:kUserLoginSuccessNotification object:nil];
     }];
 }
@@ -355,6 +357,33 @@
 // 登录微信
 - (void)tapWeChatImg {
     
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
+}
+-(void)textFieldChange:(UITextField *)theTextField{
+    if ([self.phoneTf.text isEqualToString:@""]) {
+        if ([self.codeTf.text isEqualToString:@""]) {
+            self.loginBtn.backgroundColor = k_login_unContent;
+            [self.loginBtn setTitleColor:k_textgray_color forState:UIControlStateNormal];
+            self.loginBtn.enabled = NO;
+        } else {
+            self.loginBtn.backgroundColor = k_login_unContent;
+            [self.loginBtn setTitleColor:k_textgray_color forState:UIControlStateNormal];
+            self.loginBtn.enabled = NO;
+        }
+    } else {
+        if ([self.codeTf.text isEqualToString:@""]) {
+            self.loginBtn.backgroundColor = k_login_unContent;
+            [self.loginBtn setTitleColor:k_textgray_color forState:UIControlStateNormal];
+            self.loginBtn.enabled = NO;
+        } else {
+            self.loginBtn.backgroundColor = k_main_color;
+            [self.loginBtn setTitleColor:k_white_color forState:UIControlStateNormal];
+            self.loginBtn.enabled = YES;
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {

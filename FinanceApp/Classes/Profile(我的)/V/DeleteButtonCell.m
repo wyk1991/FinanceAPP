@@ -37,7 +37,7 @@
 }
 
 - (void)setFrame:(CGRect)frame{
-    frame.origin.y += CalculateHeight(30);
+    frame.origin.y += CalculateHeight(20);
     [super setFrame:frame];
 }
 - (void)awakeFromNib {

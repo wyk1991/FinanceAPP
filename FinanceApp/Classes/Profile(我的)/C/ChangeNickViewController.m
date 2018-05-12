@@ -72,7 +72,24 @@
 
 - (void)changeNicknameButtonAction {
     [self.view endEditing:YES];
-    
+    if (!self.nickTf.text.length) {
+        [SVProgressHUD showErrorWithStatus:@"请填写用户名称"];
+        return;
+    }
+    [HttpTool afnNetworkPostParameter:@{@"nickname": self.nickTf.text, @"session_id":kApplicationDelegate.userHelper.userInfo.token} toPath:modify_user success:^(id result) {
+        if ([result[@"status"] integerValue] == 100) {
+            [SVProgressHUD showSuccessWithStatus:@"修改成功"];
+            kApplicationDelegate.userHelper.userInfo.user.nickname = self.nickTf.text;
+            NSData *modelData = [kNSUserDefaults valueForKey:kAppHasCompletedLoginUserInfo];
+            UserInfoModel *model = [NSKeyedUnarchiver unarchiveObjectWithData:modelData];
+            model.user.nickname = self.nickTf.text;
+            [kNSUserDefaults synchronize];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    } orFail:^(NSError *error) {
+        [LDToast showToastWith:@"修改失败，查看网络问题"];
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

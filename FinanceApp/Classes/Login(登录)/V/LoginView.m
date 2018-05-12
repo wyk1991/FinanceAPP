@@ -33,8 +33,8 @@
 
 - (UILabel *)tipLb {
     if (!_tipLb) {
-        _tipLb = [[UILabel alloc] initWithText:@"验证即可登录, 未注册用户将根据手机号自动创建账号" textColor:k_login_tip textFont:k_text_font_args(CalculateHeight(13)) textAlignment:0];
-        _tipLb.numberOfLines = 0;
+        _tipLb = [[UILabel alloc] initWithText:@"验证即可登录, 未注册用户将根据手机号自动创建账号" textColor:k_login_tip textFont:k_text_font_args(CalculateHeight(12)) textAlignment:0];
+        _tipLb.numberOfLines = 1;
     }
     return _tipLb;
 }
@@ -58,11 +58,15 @@
 - (UITextField *)phoneTf {
     if (!_phoneTf) {
         _phoneTf = [[UITextField alloc] init];
-        _phoneTf.placeholder = @"请输入手机号";
         _phoneTf.font = k_text_font_args(CalculateHeight(14));
-        [_phoneTf setValue:k_login_placeHold forKey:@"_placeholderLabel.textColor"];
+        NSMutableAttributedString *placeHolder = [[NSMutableAttributedString alloc] initWithString:@"请输入手机号"];
+        [placeHolder setAttributes:@{NSForegroundColorAttributeName :k_placehold_color} range:NSMakeRange(0, 4)];
+        _phoneTf.attributedPlaceholder = placeHolder;
         _phoneTf.keyboardType = UIKeyboardTypePhonePad;
         _phoneTf.textColor = k_black_color;
+        
+        
+        [_phoneTf addTarget:self action:@selector(textFieldChange:) forControlEvents:UIControlEventEditingChanged];
     }
     return _phoneTf;
 }
@@ -82,10 +86,14 @@
         _codeTf.font = k_text_font_args(CalculateHeight(14));
         _codeTf.textAlignment = NSTextAlignmentLeft;
         _codeTf.keyboardType = UIKeyboardTypePhonePad;
-        [_codeTf setValue:k_login_placeHold forKey:@"_placeholderLabel.textColor"];
+        NSMutableAttributedString *placeHolder = [[NSMutableAttributedString alloc] initWithString:@"请输入手机验证码"];
+        [placeHolder setAttributes:@{NSForegroundColorAttributeName :k_placehold_color} range:NSMakeRange(0, 7)];
+        _phoneTf.attributedPlaceholder = placeHolder;
         _codeTf.delegate = self;
         _codeTf.textColor = k_textgray_color;
         
+        
+        [_codeTf addTarget:self action:@selector(textFieldChange:) forControlEvents:UIControlEventEditingChanged];
     }
     return _codeTf;
 }
@@ -121,7 +129,7 @@
         [_goBtn setTitle:@"账号密码登录" forState:UIControlStateNormal];
         [_goBtn setTitleColor:k_pass_goBtn forState:UIControlStateNormal];
         _goBtn.titleLabel.font = k_text_font_args(CalculateHeight(15));
-        
+        _goBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
         [_goBtn addTarget:self action:@selector(goBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _goBtn;
@@ -132,7 +140,7 @@
         _loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_loginBtn setTitle:@"登录" forState:UIControlStateNormal];
         [_loginBtn setTitleColor:k_textgray_color forState:UIControlStateNormal];
-        [_loginBtn setBackgroundColor:[UIColor grayColor]];
+        [_loginBtn setBackgroundColor:k_login_unContent];
         [_loginBtn setTitleColor:k_white_color forState:UIControlStateSelected];
         
         _loginBtn.layer.cornerRadius = 5.0f;
@@ -240,7 +248,7 @@
     [_timeBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_carveTwoView.mas_right).offset(CalculateWidth(10));
         make.centerY.equalTo(_carveTwoView);
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(120), CalculateHeight(15)));
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(80), CalculateHeight(15)));
     }];
     [_line2 mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_codeTf.mas_bottom).offset(CalculateHeight(5));
@@ -251,7 +259,7 @@
     [_goBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_line2.mas_bottom).offset(CalculateHeight(10));
         make.left.equalTo(_areaCode);
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(150), CalculateHeight(30)));
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(100), CalculateHeight(30)));
     }];
     [_loginBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_areaCode);
@@ -345,5 +353,30 @@
     [self.bottomLb setHidden:type == 1 ? NO : YES];
     
 }
+
+-(void)textFieldChange:(UITextField *)theTextField{
+    if ([self.phoneTf.text isEqualToString:@""]) {
+        if ([self.codeTf.text isEqualToString:@""]) {
+            self.loginBtn.backgroundColor = k_login_unContent;
+            [self.loginBtn setTitleColor:k_textgray_color forState:UIControlStateNormal];
+            self.loginBtn.enabled = NO;
+        } else {
+            self.loginBtn.backgroundColor = k_login_unContent;
+            [self.loginBtn setTitleColor:k_textgray_color forState:UIControlStateNormal];
+            self.loginBtn.enabled = NO;
+        }
+    } else {
+        if ([self.codeTf.text isEqualToString:@""]) {
+            self.loginBtn.backgroundColor = k_login_unContent;
+            [self.loginBtn setTitleColor:k_textgray_color forState:UIControlStateNormal];
+            self.loginBtn.enabled = NO;
+        } else {
+            self.loginBtn.backgroundColor = k_main_color;
+            [self.loginBtn setTitleColor:k_white_color forState:UIControlStateNormal];
+            self.loginBtn.enabled = YES;
+        }
+    }
+}
+
 
 @end

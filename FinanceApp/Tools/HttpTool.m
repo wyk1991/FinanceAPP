@@ -212,7 +212,7 @@ static FMDatabase *_db;
 + (NSString *)cacheSize {
     NSFileManager *mgr = [NSFileManager defaultManager];
     NSArray *subPaths  = [mgr subpathsAtPath:cachePath];
-    long long ttotalSize = 0;
+    double ttotalSize = 0;
     for (NSString  *subpath in subPaths) {
         NSString *fullPath = [cachePath stringByAppendingPathComponent:subpath];
         BOOL dir = NO;
@@ -221,8 +221,25 @@ static FMDatabase *_db;
             ttotalSize += [[mgr attributesOfItemAtPath:fullPath error:nil][NSFileSize] longLongValue];
         }
     }// M
-    ttotalSize = ttotalSize / 1024;
-    return ttotalSize<1024 ? [NSString stringWithFormat:@"%lld KB",ttotalSize]:[NSString stringWithFormat:@"%.2lld MB",ttotalSize/1024];
+//    ttotalSize = ttotalSize / 1024;
+//    return [NSString stringWithFormat:@"%4.2f %@", ttotalSize, [tokens objectAtIndex:multiplyFactor]];
+    return [self transformedValue:[NSString stringWithFormat:@"%f", ttotalSize]];
+}
+
++ (NSString *)transformedValue:(id)value
+{
+    
+    double convertedValue = [value doubleValue];
+    int multiplyFactor = 0;
+    
+    NSArray *tokens = [NSArray arrayWithObjects:@"bytes",@"KB",@"MB",@"GB",@"TB",nil];
+    
+    while (convertedValue > 1024) {
+        convertedValue /= 1024;
+        multiplyFactor++;
+    }
+    
+    return [NSString stringWithFormat:@"%4.2f %@",convertedValue, [tokens objectAtIndex:multiplyFactor]];
 }
 
 /**
@@ -246,4 +263,103 @@ static FMDatabase *_db;
     NSFileManager *mgr = [NSFileManager defaultManager];
     [mgr removeItemAtPath:cachePath error:nil];
 }
+
++ (void)afnNetworkPostParameter:(NSDictionary *)param toPath:(NSString *)path success:(void(^)(id result))success orFail:(void(^)(NSError *error))fail {
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html", @"text/plain", @"application/json", @"text/json", @"text/javascript",nil];
+    NSString *urlStr = [NSString stringWithFormat:@"%@%@", Base_URL, path];
+    
+    [manager POST:urlStr parameters:param constructingBodyWithBlock:^(id  _Nonnull formData) {
+        // 拼接data到请求体，这个block的参数是遵守AFMultipartFormData协议的。
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        // 这里可以获取到目前的数据请求的进度
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        
+        //        if ([responseObject[@"msg"] isEqualToString:@"未登录"]) {
+        //            [[NSNotificationCenter defaultCenter] postNotificationName:kLoginOutSuccessNotification object:nil];
+        //            [SVProgressHUD showInfoWithStatus:@"请先登录"];
+        //            return ;
+        //        }
+        
+        if (responseObject) {
+            
+            success(responseObject);
+            
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        //代理实现
+        fail(error);
+    }];
+    
+}
+
++ (void)afnNetworkGetFromPath:(NSString *)path and:(NSDictionary *)param  success:(void(^)(id result))success orFail:(void(^)(NSError *error))fail {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html", @"text/plain", @"application/json", @"text/json", @"text/javascript",nil];
+    
+    // 先导入证书 证书由服务端生成，具体由服务端人员操作
+    NSString *cerPath = [[NSBundle mainBundle] pathForResource:@"ca" ofType:@"cer"];//证书的路径
+    
+    NSData * certData =[NSData dataWithContentsOfFile:cerPath];
+    NSSet * certSet = [[NSSet alloc] initWithObjects:certData, nil];
+    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy defaultPolicy];
+    // 是否允许,NO-- 不允许无效的证书
+    [securityPolicy setAllowInvalidCertificates:YES];
+    securityPolicy.validatesDomainName = NO;
+    // 设置证书
+    [securityPolicy setPinnedCertificates:certSet];
+    
+    [manager setSecurityPolicy:securityPolicy];
+    
+    
+    [manager GET:path parameters:@{} progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (responseObject) {
+            
+            success(responseObject);
+            
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    } ];
+}
+
++ (void)startUploadImage:(UIImage *)img toPath:(NSString *)path with:(NSDictionary *)params outParse:(DataParse)outParse callback:(UICallback)callback {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.requestSerializer.timeoutInterval = 20;
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain", @"multipart/form-data", @"application/json", @"text/html", @"image/jpeg", @"image/png", @"application/octet-stream", @"text/json", nil];
+    
+    NSString *urlStr = [NSString stringWithFormat:@"%@%@", Base_URL, path];
+    NSData *imageData = UIImageJPEGRepresentation(img, 0.1);
+    NSString *imageDataStr = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    
+    //添加参数
+    NSMutableDictionary *inParam = params.mutableCopy;
+    [inParam setObject:imageDataStr forKey:@"base64data"];
+    [inParam setObject:kApplicationDelegate.userHelper.userInfo.token forKey:@"session_id"];
+    [inParam setObject:@"jpeg" forKey:@"format"];
+    
+    [manager POST:urlStr parameters:inParam constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        if ([responseObject[@"status"] integerValue] == 100) {
+            outParse(responseObject[@"url"], nil);
+        }
+        
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callback(task,error);
+    }];
+}
+
 @end

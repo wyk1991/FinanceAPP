@@ -36,11 +36,12 @@
                   @[
                       @{@"title": @"行情颜色", @"isArrow": @"1", @"isSwitch": @"0"},
                       @{@"title": @"显示价格", @"isArrow": @"1", @"isSwitch": @"0"},
-                      @{@"title": @"预警按钮", @"isArrow": @"0", @"isSwitch": @"1", @"isSelect":[kNSUserDefaults valueForKey:user_earlyWaring]}],
-                  @[
-                      @{@"title": @"预警提醒", @"isArrow": @"1", @"content":[SituationSettingManager settingEarlyWaring] , @"isSwitch": @"0"},
-                      @{@"title": @"已触发预警", @"isArrow": @"1", @"isSwitch": @"0"}
-                      ]
+//                      @{@"title": @"预警按钮", @"isArrow": @"0", @"isSwitch": @"1", @"isSelect":[kNSUserDefaults valueForKey:user_earlyWaring]}
+                      ],
+//                  @[
+//                      @{@"title": @"预警提醒", @"isArrow": @"1", @"content":[SituationSettingManager settingEarlyWaring] , @"isSwitch": @"0"},
+//                      @{@"title": @"已触发预警", @"isArrow": @"1", @"isSwitch": @"0"}
+//                      ]
                   ];
     self.dataList = [SettingModel mj_objectArrayWithKeyValuesArray:arr];
     [self.tableView reloadData];
@@ -84,7 +85,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"行情&预警";
+    self.title = @"行情";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

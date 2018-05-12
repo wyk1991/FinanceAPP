@@ -68,7 +68,12 @@
 
 #define userLogin @"me/login"
 #define userLoginOut @"me/logout"
-
+#define post_user_feedBack @"me/feedbacks"
+#define get_feedBack_history @"me/history_feedbacks"
+// 修改个人信息
+#define modify_user  @"me/update_info"
+// 上传用户头像
+#define upload_useravator @"me/update_avatar"
 
 
 #endif /* URLMacro_h */

@@ -6,18 +6,23 @@
 #import "ProblemFeedbackView.h"
 #import "FeedBackCell.h"
 #import "SituationSettingManager.h"
+#import "FeedBackModel.h"
+#import "UserHelper.h"
+#import "FeedBackListViewController.h"
 
 static NSString *feedBackIdentifier = @"feedBackIdentifier";
 #define k_feedBackTitles @[@"反馈类型", @"反馈内容", @"联系方式"]
 
-@interface ProblemFeedbackViewController ()<UITableViewDelegate, UITableViewDataSource>
+@interface ProblemFeedbackViewController ()<UITableViewDelegate, UITableViewDataSource, ProblemTypeClickDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) NSMutableArray *dataList;
+@property (nonatomic, strong) NSMutableArray<FeedBackModel *> *dataList;
 
 @property (nonatomic, strong) UIButton *commitBtn;
+@property (nonatomic, strong) NSString *selectStr;
 
+@property (nonatomic, strong) UserHelper *helper;
 @end
 
 @implementation ProblemFeedbackViewController
@@ -27,6 +32,13 @@ static NSString *feedBackIdentifier = @"feedBackIdentifier";
         _dataList = @[].mutableCopy;
     }
     return _dataList;
+}
+
+- (UserHelper *)helper {
+    if (!_helper) {
+        _helper = [UserHelper shareHelper];
+    }
+    return _helper;
 }
 
 - (UIButton *)commitBtn {
@@ -69,7 +81,7 @@ static NSString *feedBackIdentifier = @"feedBackIdentifier";
 #pragma mark Life Cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self setRightItem];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
@@ -80,6 +92,20 @@ static NSString *feedBackIdentifier = @"feedBackIdentifier";
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    
+}
+
+- (void)setRightItem {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"历史记录" style:UIBarButtonItemStyleDone target:self action:@selector(clickFeedHistory)];
+}
+
+
+/**
+ 点击历史记录详情
+ */
+- (void)clickFeedHistory {
+    FeedBackListViewController *vc = [[FeedBackListViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 //当键盘出现
@@ -152,7 +178,7 @@ static NSString *feedBackIdentifier = @"feedBackIdentifier";
         if(!cell) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CELL"];
         }
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.textLabel.text = k_feedBackTitles[indexPath.section];
         cell.textLabel.textAlignment = 0;
         cell.textLabel.font = k_text_font_args(CalculateHeight(15));
@@ -162,7 +188,9 @@ static NSString *feedBackIdentifier = @"feedBackIdentifier";
     if (!cell) {
         cell = [[FeedBackCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:feedBackIdentifier];
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.model = self.dataList[indexPath.section];
+    cell.delegate = self;
     return cell;
     
 }
@@ -229,11 +257,44 @@ static NSString *feedBackIdentifier = @"feedBackIdentifier";
 
 #pragma mark - commitBtnClick
 - (void)commitBtnClick:(UIButton *)sender {
+    if (!self.selectStr.length) {
+        [SVProgressHUD showInfoWithStatus:@"请填写建议类型"];
+        return;
+    }
+    if (!self.dataList[1].content.length) {
+        [SVProgressHUD showInfoWithStatus:@"请填写建议内容"];
+        return;
+    }
+    if (!self.dataList[2].content.length) {
+        [SVProgressHUD showInfoWithStatus:@"请填写联系方式"];
+        return;
+    }
+    NSDictionary *dic = @{
+                          @"session_id": kApplicationDelegate.userHelper.userInfo.token,
+                          @"type": self.selectStr,
+                          @"content":self.dataList[1].content,
+                          @"contact":self.dataList[2].content
+                          };
+    [self.helper helpPostWithPath:post_user_feedBack withInfo:dic callBackBlock:^(id obj, NSError *error) {
+        if ([obj[@"status"] integerValue] == 100) {
+            [SVProgressHUD showSuccessWithStatus:@"提交成功"];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }];
+}
+
+#pragma mark - ProblemTypeClickDelegate
+- (void)probleTypeClickWithTag:(NSString *)tag cell:(FeedBackCell *)cell {
+    if (![self.selectStr isEqualToString: tag]) {
+        self.selectStr = tag;
+    }
     
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];
 }
+
+
 
 @end

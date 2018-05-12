@@ -537,4 +537,9 @@ SearchTextClick
     [self.optionTableView reloadData];
 }
 
+- (void)clickSearchTextWithIconType:(NSString *)searchTpye {
+    NSLog(@"%@", searchTpye);
+    
+}
+
 @end

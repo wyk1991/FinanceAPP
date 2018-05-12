@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 //定义标准的C层回调block。这里面的obj会根据不同对象的方法的返回而有差异。
 typedef void (^UICallback)(id obj, NSError * error);
 
@@ -17,6 +18,12 @@ typedef void (^DataParse)(id retData, NSError * error);
 
 // 带缓存的数据请求
 + (void)getRequestCacheURLStr:(NSString *)url dataField:(NSString *)df inParam:(id)inParam outParse:(DataParse)outParse callback:(UICallback)callback;
+
+
++ (void)afnNetworkPostParameter:(NSDictionary *)param toPath:(NSString *)path success:(void(^)(id result))success orFail:(void(^)(NSError *error))fail;
++ (void)afnNetworkGetFromPath:(NSString *)path and:(NSDictionary *)param success:(void(^)(id result))success orFail:(void(^)(NSError *error))fail;
+
++ (void)startUploadImage:(UIImage *)img toPath:(NSString *)path with:(NSDictionary *)params outParse:(DataParse)outParse callback:(UICallback)callback;
 
 #pragma mark ---
 #pragma mark ---   计算一共缓存的数据的大小

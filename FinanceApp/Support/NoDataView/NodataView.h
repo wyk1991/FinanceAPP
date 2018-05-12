@@ -14,7 +14,9 @@ typedef NS_ENUM(NSInteger, NoContentType) {
     /** 无订单 */
     NoContentTypeOrder   = 1,
     /** 无搜索内容 */
-    NoContentTypeSearch  = 2
+    NoContentTypeSearch  = 2,
+    /** 无发表文章内容信息 */
+    NoContentTypeArticle = 3
     
 };
 

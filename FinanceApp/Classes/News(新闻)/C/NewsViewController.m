@@ -214,7 +214,7 @@ static NSString * const reuseID  = @"DDChannelCell";
         [UIView animateWithDuration:0.5 animations:^{
             self.imageView.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(45));
             
-            self.tabBarController.tabBar.y += 49;
+            self.tabBarController.tabBar.y += 60;
             
             [self.navigationItem.titleView setHidden:YES];
             self.sortView.y = 0;

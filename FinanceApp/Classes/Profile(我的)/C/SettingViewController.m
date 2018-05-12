@@ -19,6 +19,7 @@
 #import "OboutUsViewController.h"
 #import "MyHistoryViewController.h"
 #import "QuickLoginViewController.h"
+#import "SpecialColumnViewController.h"
 
 static NSString *backPersonCellIden = @"backPersonCellIden";
 
@@ -89,14 +90,14 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
                          @{@"icon": @"ic_jifen", @"title": @"积分", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_my_special", @"title": @"我的专栏", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_shoucang", @"title": @"收藏", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_lishi", @"title": @"历史", @"isArrow": @"1", @"isSwitch": @"0"}
                          ],
                      @[
-                         @{@"icon": @"icon_my_hangqing", @"title": @"行情&预警", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_push_manager", @"title": @"推送管理", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_search_clean",@"title" : @"清理缓存", @"isArrow": @"1", @"content": [HttpTool cacheSize], @"isSwitch": @"0"}
+                         @{@"icon": @"icon_my_hangqing", @"title": @"行情", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_push_manager", @"title": @"推送管理", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_search_clean",@"title" : @"清理缓存", @"isArrow": @"1", @"content": [HttpTool cacheSize], @"isSwitch": @"0"}
                          ],
                      @[
                          @{@"icon": @"icon_share_app", @"title": @"推荐「极链财经」给好友", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_good", @"title": @"给极链APP好评", @"isArrow": @"1", @"isSwitch": @"0"}, @{@"icon": @"icon_feedback", @"title" : @"意见反馈", @"isArrow": @"1", @"isSwitch": @"0"} ,@{@"icon": @"icon_about", @"title" : @"关于极链财经", @"isArrow": @"1", @"isSwitch": @"0"}
                          ],
                      ];
     NSMutableArray *tmp = [NSMutableArray arrayWithArray:arr];
-    if ([[kNSUserDefaults valueForKey:user_isLogin] isEqualToString:@"1"]) {
+    if ([kNSUserDefaults stringForKey:kAppHasCompletedLoginToken]) {
         [tmp addObject:
          @[@{@"icon": @"", @"title": @"退出", @"isArrow": @"0", @"isSwitch": @"0"}]];
     }
@@ -110,6 +111,8 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    // 刷新缓存的数据
+    [self loadData];
 }
 
 - (void)initUI {
@@ -135,7 +138,7 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
         if (!cell) {
             cell = [[DeleteButtonCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:backPersonCellIden];
         }
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     } else {
     
@@ -182,11 +185,12 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    BOOL isLogin = [kNSUserDefaults stringForKey:kAppHasCompletedLoginToken] ? YES : NO;
     if (indexPath.section == 0) {
         switch (indexPath.row) {
             case 0:
                 // 点击积分
-                if ([[kNSUserDefaults valueForKey:user_isLogin] isEqualToString:@"0"]) {
+                if (!isLogin) {
                     [self gotoQuickLogin];
                     
                 } else {
@@ -194,18 +198,21 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
                 }
                 
                 break;
-            case 1:
+            case 1:{
                 // 点击我的专栏
-                if (![[kNSUserDefaults valueForKey:user_isLogin] isEqualToString:@"0"]) {
+                if (!isLogin) {
                     [self gotoQuickLogin];
                     
                 } else {
-                    
+                    SpecialColumnViewController *vc = [[SpecialColumnViewController alloc] init];
+                    vc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:vc animated:YES];
                 }
+            }
                 break;
             case 2:
                 // 点击收藏
-                if (![[kNSUserDefaults valueForKey:user_isLogin] isEqualToString:@"0"]) {
+                if (!isLogin) {
                     [self gotoQuickLogin];
                     
                 } else {
@@ -255,6 +262,8 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
                 .LeeDestructiveAction(@"确定", ^{        //添加一个默认类型的Action (默认样式 字体颜色为蓝色)
 //                    [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
                     [HttpTool deleateCache];
+                    
+                    [self loadData];
                 })
                 .LeeCancelAction(@"取消", ^{    // 添加一个取消类型的Action (默认样式 alert中为粗体 actionsheet中为最下方独立)
                     
@@ -307,7 +316,10 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
         .LeeAction(@"确定", ^{
             [kUserInfoHelper logout:^(id obj, NSError *error) {
                 if (!error) {
-                    [MJYUtils saveToUserDefaultWithKey:user_isLogin withValue:@"0"];
+                    [kNSUserDefaults removeObjectForKey:kAppHasCompletedLoginToken];
+                    [kNSUserDefaults removeObjectForKey:kAppHasCompletedLoginUserInfo];
+                    kApplicationDelegate.userHelper.userInfo = nil;
+                    [self.headerView resetNoInfo];
                     [SVProgressHUD dismiss];
                     [self loadData];
                 }
@@ -319,7 +331,8 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
 }
 
 - (void)userHeader:(UserHeadView *)headerView didClickWithUserInfo:(NSDictionary *)userInfo {
-    if ([[kNSUserDefaults valueForKey:user_isLogin] isEqualToString:@"1"]) {
+    NSLog(@"userINfo %@  %@", [kNSUserDefaults valueForKey:kAppHasCompletedLoginUserInfo], kApplicationDelegate.userHelper.userInfo.user);
+    if ([kNSUserDefaults stringForKey:kAppHasCompletedLoginToken].length) {
         // 跳转
         PersonalViewController *vc = [[PersonalViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
@@ -338,11 +351,8 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
 }
 
 - (void)loginSuccess:(NSNotification *)noti {
-    [MJYUtils saveToUserDefaultWithKey:user_isLogin withValue:@"1"];
     
     [self loadData];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
