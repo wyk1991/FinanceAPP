@@ -55,6 +55,7 @@
 #define situation_listCoinName @"coin/usercoin_marketlist"
 
 #define situation_optin_list @"coin/usercoin_simple_details"
+#define situation_search @"coin/search"
 
 // 图表货币详情
 #define situation_coinDetail(obj)  [NSString stringWithFormat:@"coin/details?coin_name=%@", obj]

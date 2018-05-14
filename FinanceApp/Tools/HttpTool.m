@@ -302,22 +302,22 @@ static FMDatabase *_db;
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html", @"text/plain", @"application/json", @"text/json", @"text/javascript",nil];
     
-    // 先导入证书 证书由服务端生成，具体由服务端人员操作
-    NSString *cerPath = [[NSBundle mainBundle] pathForResource:@"ca" ofType:@"cer"];//证书的路径
+//    // 先导入证书 证书由服务端生成，具体由服务端人员操作
+//    NSString *cerPath = [[NSBundle mainBundle] pathForResource:@"ca" ofType:@"cer"];//证书的路径
+//
+//    NSData * certData =[NSData dataWithContentsOfFile:cerPath];
+//    NSSet * certSet = [[NSSet alloc] initWithObjects:certData, nil];
+//    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy defaultPolicy];
+//    // 是否允许,NO-- 不允许无效的证书
+//    [securityPolicy setAllowInvalidCertificates:YES];
+//    securityPolicy.validatesDomainName = NO;
+//    // 设置证书
+//    [securityPolicy setPinnedCertificates:certSet];
+//
+//    [manager setSecurityPolicy:securityPolicy];
+    NSString *url = [NSString stringWithFormat:@"%@%@", Base_URL, path];
     
-    NSData * certData =[NSData dataWithContentsOfFile:cerPath];
-    NSSet * certSet = [[NSSet alloc] initWithObjects:certData, nil];
-    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy defaultPolicy];
-    // 是否允许,NO-- 不允许无效的证书
-    [securityPolicy setAllowInvalidCertificates:YES];
-    securityPolicy.validatesDomainName = NO;
-    // 设置证书
-    [securityPolicy setPinnedCertificates:certSet];
-    
-    [manager setSecurityPolicy:securityPolicy];
-    
-    
-    [manager GET:path parameters:@{} progress:^(NSProgress * _Nonnull downloadProgress) {
+    [manager GET:url parameters:param progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (responseObject) {

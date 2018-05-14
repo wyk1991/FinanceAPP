@@ -23,6 +23,7 @@
 #import "EarlyWarnViewController.h"
 #import "SituationViewController.h"
 #import "CoinAllInfoModel.h"
+#import "SituationSearchViewController.h"
 
 #define RightLabelWidth CalculateWidth(70)
 #define RightLabelMagin CalculateWidth(45)
@@ -539,6 +540,9 @@ SearchTextClick
 
 - (void)clickSearchTextWithIconType:(NSString *)searchTpye {
     NSLog(@"%@", searchTpye);
+    if (_delegate && [_delegate respondsToSelector:@selector(didClickToSeachCoin:)]) {
+        [_delegate didClickToSeachCoin:self];
+    }
     
 }
 

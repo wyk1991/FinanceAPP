@@ -8,10 +8,12 @@
 
 #import "BaseCell.h"
 
-@class CoinListModel;
+static NSString *coinListNameIdentifier = @"coinListNameIdentifier";
+@class CoinListModel, SitutaionResultModel;
 @interface CoinListCell : BaseCell
 
 
 @property (nonatomic, strong) CoinListModel *model;
 
+@property (nonatomic, strong) SitutaionResultModel *resultModel;
 @end

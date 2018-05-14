@@ -18,7 +18,7 @@ typedef enum : NSUInteger {
 @protocol  WarnCellImgActionDelegate <NSObject>
 
 - (void)didClickWarnImgWith:(IconDetailViewController *)subView withInfo:(PricesModel *)model coinName:(NSString *)coinName;
-
+- (void)didClickToSeachCoin:(IconDetailViewController *)subView;
 
 @end
 

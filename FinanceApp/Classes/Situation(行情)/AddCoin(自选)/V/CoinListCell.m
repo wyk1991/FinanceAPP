@@ -8,6 +8,7 @@
 
 #import "CoinListCell.h"
 #import "CoinListModel.h"
+#import "SitutaionResultModel.h"
 
 @interface CoinListCell()
 @property (nonatomic, strong) UIImageView *iconImg;
@@ -77,14 +78,17 @@
     self.checkImg.image = model.isSelect? [UIImage imageNamed:@"verified_step1_complete_icon"] : [UIImage imageNamed:@"warning_price"];
 }
 
+- (void)setResultModel:(SitutaionResultModel *)resultModel {
+    if (_resultModel != resultModel) {
+        _resultModel = resultModel;
+    }
+    [self.checkImg setHidden:YES];
+    [self.iconImg sd_setImageWithURL:[NSURL URLWithString:resultModel.logo_url] placeholderImage:nil];
+    self.nameLb.text = [NSString stringWithFormat:@"%@(%@)", resultModel.full_name, resultModel.shot_name];
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-//    self.model.isSelect = selected ? @"1" : @"0";
-//    if (self.selected) {
-//        self.checkImg.image = [UIImage imageNamed:@"verified_step1_complete_icon"];
-//    } else {
-//        self.checkImg.image = [UIImage imageNamed:@"warning_price"];
-//    }
 }
 
 @end

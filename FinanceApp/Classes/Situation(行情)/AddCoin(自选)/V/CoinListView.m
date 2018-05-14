@@ -11,7 +11,6 @@
 #import "CoinListCell.h"
 #import "CoinListModel.h"
 
-static NSString *coinListNameIdentifier = @"coinListNameIdentifier";
 
 @interface CoinListView()<UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;

@@ -11,6 +11,7 @@
 #import "IconDetailViewController.h"
 #import "AddCoinViewController.h"
 #import "EarlyWarnViewController.h"
+#import "SituationSearchViewController.h"
 
 #import "SituationHelper.h"
 #import "NormalCoinHeadView.h"
@@ -187,6 +188,11 @@
     vc.model = model;
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)didClickToSeachCoin:(IconDetailViewController *)subView {
+    SituationSearchViewController *vc = [[SituationSearchViewController alloc] init];
+    [self.navigationController presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
