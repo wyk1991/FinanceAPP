@@ -96,7 +96,9 @@ static HomeHelper *_instance;
     [HttpTool getRequestCacheURLStr:tag_list dataField:@"categories" inParam:nil outParse:^(id retData, NSError *error) {
         
     } callback:^(id obj, NSError *error) {
-        [weakSelf dealTagWith:obj];
+            
+            [weakSelf dealTagWith:obj];
+        
         
         callback(obj, error);
     }];

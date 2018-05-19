@@ -48,7 +48,7 @@
     [self.navigationController.navigationBar setTintColor:k_main_color];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
         // 设置导航栏字体大小和颜色
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor]}];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor], NSFontAttributeName : k_text_font_args(CalculateHeight(16))}];
 }
 
 /**

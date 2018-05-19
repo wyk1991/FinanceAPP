@@ -26,7 +26,7 @@
         if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
             [cell setLayoutMargins:UIEdgeInsetsZero];
         }
-        UIView *view = [UIView viewWithLabelNumber:number];
+        UIView *view = [UIView viewWithLabelNumber:number withCount:number];
         view.tag = 100;
         [cell.contentView addSubview:view];
 
@@ -70,8 +70,8 @@
     [tmp addObject:[[MJYUtils getFromUserDefaultWithKey:user_currency] isEqualToString:@"cny"] ? [NSString stringWithFormat:@"￥%@ ＄%@",priceModel.price_cny, priceModel.price_usd] : [NSString stringWithFormat:@"＄%@ ￥%@", priceModel.price_usd, priceModel.price_cny]];
     [tmp addObject:[NSString stringWithFormat:@"%@%%",priceModel.change]];
     [tmp addObject:priceModel.oneday_amount];
-    [tmp addObject:priceModel.oneday_highest_cny];
-    [tmp addObject:priceModel.oneday_lowest_cny];
+    [tmp addObject:[[MJYUtils getFromUserDefaultWithKey:user_currency] isEqualToString:@"cny"] ?[NSString stringWithFormat:@"￥%@",priceModel.oneday_highest_cny]  : [NSString stringWithFormat:@"$%@",priceModel.oneday_highest_usd]];
+    [tmp addObject:[[MJYUtils getFromUserDefaultWithKey:user_currency] isEqualToString:@"cny"] ? [NSString stringWithFormat:@"￥%@",priceModel.oneday_lowest_cny]  : [NSString stringWithFormat:@"$%@",priceModel.oneday_lowest_usd]];
     
     //这里先使用假数据
     UIView *view = [self viewWithTag:100];

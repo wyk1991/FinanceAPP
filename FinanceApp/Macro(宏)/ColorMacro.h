@@ -16,7 +16,8 @@
 #define k_white_color [UIColor colorWithHex:@"#ffffff"]
 #define k_back_color [UIColor colorWithHex:@"#e8e9ea"]
 #define k_text_color [UIColor colorWithHex:@"#313131"]
-#define k_main_color [UIColor colorWithHex:@"#309dd9"]//主题色
+#define k_main_color [UIColor colorWithHex:@"#3c4c5c"]//主题色
+#define k_greenMain_color [UIColor colorWithHex:@"#309dd9"]
 #define k_textgray_color [UIColor colorWithHex:@"#707070"]//灰字
 #define k_loginmain_color [UIColor colorWithHex:@"#fbc700"]
 #define k_themeblue_color [UIColor colorWithHex:@"#49A3EC"]
@@ -68,6 +69,15 @@
 #define k_mycolumn_bg [UIColor colorWithHex:@"#2d271d"]
 #define k_threeLb_color [UIColor colorWithHex:@"#7a7975"]
 #define k_username_color [UIColor colorWithHex:@"#fefefe"]
+
+/** 我的界面 */
+#define k_feedback_color [UIColor colorWithHex:@"#282828"]
+#define k_priceName_color [UIColor colorWithHex:@"#060606"]
+#define k_newPrice_color [UIColor colorWithHex:@"#5f5f5f"]
+#define k_newPriceDown_color [UIColor colorWithHex:@"#b5b5b5"]
+#define k_raise_color [UIColor colorWithHex:@"#30b75f"]
+#define k_pricetitle_color [UIColor colorWithHex:@"#999999"]
+#define k_titlePrice_color [UIColor colorWithHex:@"#f7fbff"]
 #endif /* ColorMacro_h */
 
 

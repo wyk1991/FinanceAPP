@@ -96,7 +96,7 @@ static NSString *feedBackIdentifier = @"feedBackIdentifier";
 }
 
 - (void)setRightItem {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"历史记录" style:UIBarButtonItemStyleDone target:self action:@selector(clickFeedHistory)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"历史反馈" style:UIBarButtonItemStyleDone target:self action:@selector(clickFeedHistory)];
 }
 
 

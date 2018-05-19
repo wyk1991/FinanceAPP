@@ -30,9 +30,9 @@
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(CalculateWidth(15) + i*kButtonWidth, CGRectGetMaxY(lb.frame) + CalculateHeight(20), kButtonWidth, kButtonHeight);
         [btn setTitle:tmp[i] forState:UIControlStateNormal];
-        [btn setBackgroundColor:k_red_color];
-        [btn setTitleColor:k_white_color forState:UIControlStateNormal];
-        btn.layer.borderColor = k_back_color.CGColor;
+        [btn setBackgroundColor:k_titlePrice_color];
+        [btn setTitleColor:k_pricetitle_color forState:UIControlStateNormal];
+        btn.layer.borderColor = k_greenMain_color.CGColor;
         btn.layer.borderWidth = 0.5;
         btn.titleLabel.textAlignment = 1;
         btn.titleLabel.font = k_text_font_args(CalculateHeight(15));
@@ -51,8 +51,8 @@
         [btn setTitle:@"12222222" forState:UIControlStateNormal];
         btn.tag = i;
         [btn setBackgroundColor:k_white_color];
-        [btn setTitleColor:k_text_color forState:UIControlStateNormal];
-        btn.layer.borderColor = k_back_color.CGColor;
+        [btn setTitleColor:i==0 ? k_priceName_color : (i== 1 ? k_newPrice_color : k_raise_color)  forState:UIControlStateNormal];
+        btn.layer.borderColor = k_greenMain_color.CGColor;
         btn.layer.borderWidth = 0.5;
         btn.titleLabel.textAlignment = 1;
         btn.titleLabel.numberOfLines = 2;

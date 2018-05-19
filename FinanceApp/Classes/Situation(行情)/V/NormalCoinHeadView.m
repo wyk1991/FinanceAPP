@@ -11,8 +11,6 @@
 #import "HeadMiddleView.h"
 @interface NormalCoinHeadView()<AAChartViewDidFinishLoadDelegate>
 
-@property (nonatomic, strong) AAChartView *chartView;
-@property (nonatomic, strong) AAChartModel *chartModel;
 
 @property (nonatomic, strong) HeadMiddleView *middleView;
 @end
@@ -26,26 +24,7 @@
         _chartView.backgroundColor = k_white_color;
         _chartView.scrollEnabled = NO;//禁用 AAChartView 滚动效果
         
-        self.chartModel= AAObject(AAChartModel)
-        .chartTypeSet(AAChartTypeAreaspline)//图表类型
-        .titleFontSizeSet(@0)
-        .yAxisCrosshairWidthSet(@0.8)
-        .yAxisTickPositionsSet(@[@45000, @46000, @47000, @48000, @49000, @50000, @51000])
-        .subtitleFontSizeSet(@0)
-        .yAxisLabelsEnabledSet(true)
-        .yAxisVisibleSet(true)//设置 Y 轴是否可见
-        .colorsThemeSet(@[@"#399bdb"])//设置主体颜色数组
-        .yAxisTitleSet(@"")//设置 Y 轴标题
-//        .tooltipValueSuffixSet(@"$")//设置浮动提示框单位后缀
-        .legendEnabledSet(NO)
-        .backgroundColorSet(@"#399bdb")
-        .yAxisGridLineWidthSet(@1)//y轴横向分割线宽度为0(即是隐藏分割线)
-        .seriesSet(@[
-                     AAObject(AASeriesElement)
-                     .dataSet(@[@7.0, @6.9, @9.5, @14.5, @18.2, @21.5, @25.2, @26.5, @23.3, @18.3, @13.9, @9.6])
-                     ]
-                   );
-        
+       
         _chartView.delegate = self;
     }
     return _chartView;
@@ -72,6 +51,39 @@
 }
 
 - (void)setupTheChartStyle:(NSArray *)chartData withMiddleData:(PricesModel *)priceModel{
+    
+    NSNumber *maxValue = [[chartData[0] objectForKey:@"cny"] valueForKeyPath:@"@max.floatValue"];
+    NSNumber *minValue = [[chartData[0] objectForKey:@"cny"] valueForKeyPath:@"@min.floatValue"];
+    
+    double middle = [maxValue doubleValue] - [minValue doubleValue];
+    NSInteger value = middle / 2;
+    NSArray *arr = @[[NSNumber numberWithDouble:[minValue doubleValue] - value],
+                     [NSNumber numberWithDouble:[minValue doubleValue]],
+                     [NSNumber numberWithDouble:[minValue doubleValue] + value],
+                     [NSNumber numberWithDouble:[minValue doubleValue] + 2*value],
+                     [NSNumber numberWithDouble:[minValue doubleValue] + 3*value]];
+    
+    
+    self.chartModel= AAObject(AAChartModel)
+    .chartTypeSet(AAChartTypeAreaspline)//图表类型
+    .titleFontSizeSet(@0)
+    .yAxisCrosshairWidthSet(@0.8)
+    .yAxisTickPositionsSet(arr)
+    .subtitleFontSizeSet(@0)
+    .yAxisLabelsEnabledSet(true)
+    .yAxisVisibleSet(true)//设置 Y 轴是否可见
+    .colorsThemeSet(@[@"#399bdb"])//设置主体颜色数组
+    .yAxisTitleSet(@"")//设置 Y 轴标题
+    //        .tooltipValueSuffixSet(@"$")//设置浮动提示框单位后缀
+    .legendEnabledSet(NO)
+    .backgroundColorSet(@"#399bdb")
+    .yAxisGridLineWidthSet(@0.5)//y轴横向分割线宽度为0(即是隐藏分割线)
+    .seriesSet(@[
+                 AAObject(AASeriesElement)
+                 .dataSet(@[@7.0, @6.9, @9.5, @14.5, @18.2, @21.5, @25.2, @26.5, @23.3, @18.3, @13.9, @9.6])
+                 ]
+               );
+    
 //    self.chartModel.symbolStyle = AAChartSymbolStyleTypeInnerBlank;//设置折线连接点样式为:内部白色
 //    self.chartModel.gradientColorEnabled = true;//启用渐变色
 //    self.chartModel.animationType = AAChartAnimationEaseOutQuart;//图形的渲染动画为弹性动画
@@ -85,8 +97,7 @@
 //
 //    [self.chartView aa_drawChartWithChartModel:self.chartModel];
     
-    NSNumber *maxValue = [[chartData[0] objectForKey:@"cny"] valueForKeyPath:@"@max.floatValue"];
-    NSNumber *minValue = [[chartData[0] objectForKey:@"cny"] valueForKeyPath:@"@min.floatValue"];
+    
     
     //启用渐变色
 //    self.chartModel.gradientColorEnabled = true;

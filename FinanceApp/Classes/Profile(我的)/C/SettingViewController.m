@@ -20,6 +20,7 @@
 #import "MyHistoryViewController.h"
 #import "QuickLoginViewController.h"
 #import "SpecialColumnViewController.h"
+#import "MyScoreViewController.h"
 
 static NSString *backPersonCellIden = @"backPersonCellIden";
 
@@ -194,7 +195,9 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
                     [self gotoQuickLogin];
                     
                 } else {
-                    
+                    MyScoreViewController *vc = [[MyScoreViewController alloc] init];
+                    vc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:vc animated:YES];
                 }
                 
                 break;

@@ -52,13 +52,14 @@
 - (void)initUI {
     [super initUI];
     [self.view addSubview:self.tableView];
-    [self loadDataWithType:self.setType];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    [self loadDataWithType:self.setType];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(isSwithOnChange) name:notificationswitchONNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -79,27 +80,70 @@
     }];
 }
 
+- (void)isSwithOnChange {
+    
+    [kNSUserDefaults setValue:[[UIApplication sharedApplication] currentUserNotificationSettings].types != UIRemoteNotificationTypeNone ? @"1" : @"0" forKey:user_pushSwitch];
+    [kNSUserDefaults synchronize];
+    [self changeTheData:self.setType];
+}
+
 - (void)loadDataWithType:(SettingType)type {
     
     _currencySelected = [[kNSUserDefaults valueForKey:user_currency] isEqualToString:@"cny"] ? [NSIndexPath indexPathForRow:0 inSection:0] : [NSIndexPath indexPathForRow:1 inSection:0];
     _redColorSelected = [[kNSUserDefaults valueForKey:user_greenRed] isEqualToString:@"redRise"] ? [NSIndexPath indexPathForRow:1 inSection:0]  : [NSIndexPath indexPathForRow:0 inSection:0];
-    self.dataList = [SituationSettingManager getSettingModelWithType:type];
+    if (iOs8 && type==settingPushType) {
+        
+        [self.dataList addObject:[SituationSettingManager getSettingModelWithType:type]];
+        if ([[UIApplication sharedApplication] currentUserNotificationSettings].types != UIRemoteNotificationTypeNone) {
+            [self.dataList addObject:[SettingModel mj_objectArrayWithKeyValuesArray: @[@{@"title": @"文章消息通知", @"isArrow":@"0",@"isSwitch": @"1",  @"isSelect": [[kNSUserDefaults valueForKey:user_article] isEqualToString:@"1"] ? @"1" : @"0"}]]];
+        }else {
+            if (self.dataList.count == 2) {
+                
+                [self.dataList removeLastObject];
+            }
+            
+        }
+    } else {
+        
+        self.dataList = [SituationSettingManager getSettingModelWithType:type];
+    }
     
+    [self.tableView reloadData];
+}
+
+- (void)changeTheData:(NSInteger) type {
+    
+    SettingModel *model = self.dataList[0][0];
+    if (iOs8) {
+        if ([[UIApplication sharedApplication] currentUserNotificationSettings].types != UIRemoteNotificationTypeNone) {
+            if (self.dataList.count >= 2) {
+                return;
+            }
+            [self.dataList addObject:[SettingModel mj_objectArrayWithKeyValuesArray: @[@{@"title": @"文章消息通知", @"isArrow":@"0",@"isSwitch": @"1",  @"isSelect": [[kNSUserDefaults valueForKey:user_article] isEqualToString:@"1"] ? @"1" : @"0"}]]];
+            
+            model.isSelect = @"1";
+        }else {
+            if (self.dataList.count == 2) {
+                [self.dataList removeLastObject];
+                model.isSelect = @"0";
+            }
+        }
+    }
     [self.tableView reloadData];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = self.setType == 0 ? @"行情颜色" : (self.setType == 1 ? @"显示价格" : @"预警提醒");
+    self.title = self.setType == 0 ? @"行情颜色" : (self.setType == 1 ? @"显示价格" : self.setType == 3 ? @"推送管理":@"预警提醒");
     self.view.backgroundColor = k_back_color;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.setType == 1 || self.setType == 4 ? 2 : 1;
+    return self.setType == 1 || self.setType == 4 ? 2 : (self.setType == 3 ? ([[kNSUserDefaults valueForKey:user_pushSwitch] isEqualToString:@"1"] ? 2 : 1) : 1) ;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.setType == 1 && section == 1 ? 1 : (self.setType == 4 ? [self.dataList[section] count] : [self.dataList count]);
+    return self.setType == 1 && section == 1 ? 1 : (self.setType == 4 ? [self.dataList[section] count] : (self.setType == 3 ? [self.dataList[section] count] :[self.dataList count]));
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -125,8 +169,7 @@
         cell.tintColor = k_red_color;
     }
     
-    cell.model = self.setType == 4 ? self.dataList[indexPath.section][indexPath.row] : self.dataList[indexPath.row];
-    
+    cell.model = self.setType == 4 ? self.dataList[indexPath.section][indexPath.row] : (self.setType == 3 ? self.dataList[indexPath.section][indexPath.row] : self.dataList[indexPath.row]);
     return cell;
 }
 
@@ -182,7 +225,7 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    if (self.setType == 3) {
+    if (self.setType == 3 && section == 0) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth - CalculateWidth(30), CalculateHeight(150))];
         view.backgroundColor = [UIColor clearColor];
         
@@ -197,12 +240,15 @@
         
         UILabel *lb1 = [[UILabel alloc] initWithText:@"开启通知后可进一步设置接受不同分类的消息" textColor:k_textgray_color textFont:k_text_font_args(CalculateHeight(14)) textAlignment:0];
         lb1.numberOfLines = 0;
-        [view addSubview:lb1];
-        [lb1 mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(lb.mas_bottom).offset(CalculateHeight(15));
-            make.left.offset(CalculateWidth(15));
-            make.right.offset(-CalculateWidth(15));
-        }];
+        if ([[kNSUserDefaults valueForKey:user_pushSwitch] isEqualToString:@"0"]) {
+            [view addSubview:lb1];
+            [lb1 mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(lb.mas_bottom).offset(CalculateHeight(15));
+                make.left.offset(CalculateWidth(15));
+                make.right.offset(-CalculateWidth(15));
+            }];
+        }
+        
         return view;
     }
     
@@ -212,8 +258,10 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if (self.setType == 3) {
+    if (self.setType == 3 && [[kNSUserDefaults valueForKey:user_pushSwitch] isEqualToString:@"0"]) {
         return CalculateHeight(150);
+    } else if([[kNSUserDefaults valueForKey:user_pushSwitch] isEqualToString:@"1"] && self.setType == 3){
+        return CalculateHeight(70);
     }
     return 0;
 }

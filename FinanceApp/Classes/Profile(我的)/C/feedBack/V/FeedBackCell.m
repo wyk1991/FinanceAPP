@@ -70,11 +70,11 @@
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom
                                 ];
             button.layer.cornerRadius = 10.f;
-            button.titleLabel.font = k_text_font_args(CalculateHeight(13));
-            button.layer.borderColor = k_themeblue_color.CGColor;
+            button.titleLabel.font = k_text_font_args(CalculateHeight(16));
+            button.layer.borderColor = k_feedback_color.CGColor;
             button.layer.borderWidth = CalculateWidth(1);
             [button setTitle:titles[index] forState:normal];
-            [button setTitleColor:k_black_color forState:normal];
+            [button setTitleColor:k_feedback_color forState:normal];
             [button setTitleColor:k_themeblue_color forState:UIControlStateSelected];
             [button addTarget:self action:@selector(problemFeedbackTypeButtonAction:) forControlEvents:64];
             button.tag = index+1;

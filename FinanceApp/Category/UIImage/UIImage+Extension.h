@@ -25,4 +25,12 @@
  *
  **/
 + (UIImage *)createImageWithColor:(UIColor *)color;
+
+/**
+ 将imageView裁剪为圆形
+
+ @param cornerRadius 半径
+ @return image
+ */
+- (void)imageWithCorner:(CGSize)size completaion:(void (^)(UIImage *))completion;
 @end

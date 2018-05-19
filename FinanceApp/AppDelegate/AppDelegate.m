@@ -22,6 +22,9 @@
     [self.window makeKeyAndVisible];
     [self monitorNetworking];
     
+    // 检测版本号
+//    [self checkTheVersion];
+    
     // 注册wechat author登录授权
     [self wechatAuthor];
     // 注册友盟分享
@@ -56,6 +59,35 @@
     }
 }
 
+- (void)checkTheVersion {
+    // 获取手机程序的版本号
+    NSString *ver = [MJYUtils mjy_checkAPPVersion];
+    NSString *itunesUrl = @"https://itunes.apple.com/lookup";
+    [HttpTool afnNetworkPostParameter:@{@"id": kAppId} toPath:itunesUrl success:^(id result) {
+        NSArray *arr = result[@"results"];
+        if (arr.count != 0) { // 先判断返回的数据是否为空
+            NSDictionary *dict = arr[0];
+            
+            // 判断版本
+            if (dict[@"version"] > ver) {
+                [LEEAlert alert].config
+                .LeeTitle(@"更新")
+                .LeeContent(@"有新的版本的更新")
+                .LeeAction(@"立即前往", ^{
+                    UIApplication *application = [UIApplication sharedApplication];
+                    [application openURL:[NSURL URLWithString:kAppUpdateUrl]];
+                })
+                .LeeDestructiveAction(@"取消", ^{
+                    
+                })
+                .LeeShow();
+            }
+        }
+    } orFail:^(NSError *error) {
+        
+    }];
+}
+
 - (void)initMain {
     // 判断用户是否登录
 //    BOOL isLogin = [kNSUserDefaults stringForKey:kUseisLoginWithToke] ? YES : NO;
@@ -79,6 +111,8 @@
         NSLog(@"%@", model);
         self.userHelper.userInfo = model;
 //        self.userHelper.userInfo = [UserInfoModel mj_objectWithKeyValues:[kNSUserDefaults valueForKey:kAppHasCompletedLoginUserInfo]];
+        
+        // 请求wan
     }
     
     MainTabBarController *main = [[MainTabBarController alloc] init];
@@ -234,6 +268,7 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [[NSNotificationCenter defaultCenter] postNotificationName:notificationswitchONNotification object:nil];
 }
 
 

@@ -161,9 +161,8 @@ static SituationHelper *_instance;
     NSMutableArray *usdArr = @[].mutableCopy;
     NSMutableArray *dateArr = @[].mutableCopy;
     
-    
     for (ChartsTrackModel *trackM in model.oneday_track) {
-        [cnyArr addObject:[NSNumber numberWithLongLong:[trackM.price_cny longLongValue]]];
+        [cnyArr addObject:[NSNumber numberWithDouble:[trackM.price_cny doubleValue]]];
         [usdArr addObject:[NSNumber numberWithDouble:[trackM.price_usd doubleValue]]];
         [dateArr addObject:[[MJYUtils mjy_timeChangeWith:trackM.time] substringFromIndex:10]];
     }
@@ -233,7 +232,7 @@ static SituationHelper *_instance;
  */
 - (void)helperGetOptionCoinListWithPath:(NSString *)path params:(NSDictionary *)params callBack:(UICallback)callback {
     WS(weakSelf);
-    [weakSelf startGETRequest:path inParam:params outParse:^(id retData, NSError *error) {
+    [weakSelf startPostRequest:path inParam:params outParse:^(id retData, NSError *error) {
         
         [weakSelf dealOptionData:retData];
         callback(retData, nil);
@@ -248,6 +247,7 @@ static SituationHelper *_instance;
         self.optionsCoinList = [OptionCoinModel mj_objectArrayWithKeyValuesArray:retData[@"coinlist"]];
     }
     for (OptionCoinModel *model in self.optionsCoinList) {
+        
         [_optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuClose] forKey:model.market];
     }
 }

@@ -94,7 +94,7 @@
                 make.size.mas_equalTo(CGSizeMake(CalculateWidth(15), CalculateHeight(18)));
             }];
             [_nameLb mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(self).offset(CalculateHeight(10));
+                make.top.equalTo(self).offset(CalculateHeight(2));
                 make.left.equalTo(_augurImg.mas_right).offset(CalculateWidth(15));
                 make.size.mas_equalTo(CGSizeMake(CalculateWidth(80), CalculateHeight(15)));
             }];

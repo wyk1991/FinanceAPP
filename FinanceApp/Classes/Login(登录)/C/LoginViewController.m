@@ -111,8 +111,8 @@
     if (!_goBtn) {
         _goBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_goBtn setTitle:@"手机号快捷登录" forState:UIControlStateNormal];
-        [_goBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-        _goBtn.titleLabel.font = k_text_font_args(CalculateHeight(17));
+        [_goBtn setTitleColor:k_greenMain_color forState:UIControlStateNormal];
+        _goBtn.titleLabel.font = k_text_font_args(CalculateHeight(15));
         
         [_goBtn addTarget:self action:@selector(goBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -263,9 +263,9 @@
         make.height.mas_equalTo(CalculateHeight(1));
     }];
     [_goBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_line2.mas_bottom).offset(CalculateHeight(20));
+        make.top.equalTo(_line2.mas_bottom).offset(CalculateHeight(10));
         make.left.equalTo(_areaCode);
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(150), CalculateHeight(30)));
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(110), CalculateHeight(30)));
     }];
     [_loginBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_areaCode);

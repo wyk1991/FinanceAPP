@@ -45,7 +45,7 @@
 
 - (UILabel *)priceLb {
     if (!_priceLb) {
-        _priceLb = [[UILabel alloc] initWithText:@"" textColor:k_textgray_color textFont:k_text_font_args(14) textAlignment:2];
+        _priceLb = [[UILabel alloc] initWithText:@"122" textColor:k_textgray_color textFont:k_text_font_args(14) textAlignment:2];
         _priceLb.numberOfLines = 2;
     }
     return _priceLb;
@@ -53,7 +53,7 @@
 
 - (UILabel *)raseLb {
     if (!_raseLb) {
-        _raseLb = [[UILabel alloc] initWithText:@"" textColor:k_textgray_color textFont:k_text_font_args(14) textAlignment:2];
+        _raseLb = [[UILabel alloc] initWithText:@"12" textColor:k_textgray_color textFont:k_text_font_args(14) textAlignment:2];
     }
     return _raseLb;
 }
@@ -74,7 +74,7 @@
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(15), CalculateHeight(18)));
     }];
     [_nameLb mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(CalculateHeight(10));
+        make.top.equalTo(self).offset(CalculateHeight(5));
         make.left.equalTo(_augurImg.mas_right).offset(CalculateWidth(15));
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(80), CalculateHeight(15)));
     }];
@@ -86,7 +86,7 @@
     [_raseLb mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.right.offset(-CalculateWidth(20));
         make.centerY.offset(0);
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(150), CalculateHeight(20)));
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(60), CalculateHeight(20)));
     }];
     [_priceLb mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(_raseLb.mas_left).offset(-CalculateWidth(10));

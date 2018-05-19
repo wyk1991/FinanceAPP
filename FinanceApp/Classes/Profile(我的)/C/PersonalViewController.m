@@ -116,7 +116,9 @@
         v.backgroundColor = k_white_color;
         
         UIImageView *avatorImg = [[UIImageView alloc] init];
-        ViewBorderRadius(avatorImg, CalculateWidth(30), 0, [UIColor clearColor]);
+        avatorImg.contentMode = UIViewContentModeScaleToFill;
+        ViewBorderRadius(avatorImg, 30, 0, [UIColor clearColor]);
+        avatorImg.clipsToBounds = YES;
         avatorImg.userInteractionEnabled = YES;
         [avatorImg sd_setImageWithURL:[NSURL URLWithString:kApplicationDelegate.userHelper.userInfo.user.avatar_url] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
             
@@ -129,7 +131,7 @@
         [avatorImg mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(v);
             make.centerY.equalTo(v);
-            make.size.mas_equalTo(CGSizeMake(CalculateWidth(60), CalculateHeight(60)));
+            make.size.mas_equalTo(CGSizeMake(60, 60));
         }];
         self.userImg = avatorImg;
         return v;
@@ -284,24 +286,26 @@
     if (!img) {
         return;
     }
-    
-    [HttpTool startUploadImage:img toPath:upload_useravator with:@{} outParse:^(id retData, NSError *error) {
-        
-        NSLog(@"%@",kApplicationDelegate.userHelper.userInfo.user.avatar_url );
-    
-        kApplicationDelegate.userHelper.userInfo.user.avatar_url = retData;
-        
-        NSData *modelData = [kNSUserDefaults valueForKey:kAppHasCompletedLoginUserInfo];
-        UserInfoModel *model = [NSKeyedUnarchiver unarchiveObjectWithData:modelData];
-        model.user.avatar_url = retData;
-        [kNSUserDefaults setObject:model forKey:kAppHasCompletedLoginUserInfo];
-        [kNSUserDefaults synchronize];
-        
-        [picker dismissViewControllerAnimated:YES completion:nil];
-        [self.tableView reloadData];
-    } callback:^(id obj, NSError *error) {
-        
+    [img imageWithCorner:CGSizeMake(30, 30) completaion:^(UIImage *image) {
+        [HttpTool startUploadImage:image toPath:upload_useravator with:@{} outParse:^(id retData, NSError *error) {
+            
+            NSLog(@"%@",kApplicationDelegate.userHelper.userInfo.user.avatar_url );
+            
+            kApplicationDelegate.userHelper.userInfo.user.avatar_url = retData;
+            
+            NSData *modelData = [kNSUserDefaults valueForKey:kAppHasCompletedLoginUserInfo];
+            UserInfoModel *model = [NSKeyedUnarchiver unarchiveObjectWithData:modelData];
+            model.user.avatar_url = retData;
+//            [kNSUserDefaults setObject:model forKey:kAppHasCompletedLoginUserInfo];
+//            [kNSUserDefaults synchronize];
+            
+            [picker dismissViewControllerAnimated:YES completion:nil];
+            [self.tableView reloadData];
+        } callback:^(id obj, NSError *error) {
+            
+        }];
     }];
+    
     
     
 }

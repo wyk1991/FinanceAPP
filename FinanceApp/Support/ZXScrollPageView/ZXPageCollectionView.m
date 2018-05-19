@@ -116,6 +116,7 @@ static char UIViewIsInScreen;
         _mainScrollView.showsHorizontalScrollIndicator = NO;
         _mainScrollView.backgroundColor = [UIColor whiteColor];
         _mainScrollView.pagingEnabled = YES;
+        _mainScrollView.delaysContentTouches = NO; 
     }
     return _mainScrollView;
 }
@@ -290,5 +291,6 @@ static char UIViewIsInScreen;
 {
     [self.mainScrollView removeObserver:self forKeyPath:@"contentOffset"];
 }
+
 
 @end

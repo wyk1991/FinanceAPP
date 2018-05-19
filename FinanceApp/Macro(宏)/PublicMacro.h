@@ -91,6 +91,8 @@
 #define kServerE_mail @"4008@shangxiang.com"
 #define kServerUrl @"www.baidu.com"
 
+#define kAppUpdateUrl @""
+#define kAppId @""
 
 // cell identifier
 static NSString *normalPersonCellIden = @"normalPersonCellIden";
@@ -153,6 +155,7 @@ static BOOL isProduction = TRUE;
 #define user_noticeShackType @"user_shackType"
 
 #define user_pushSwitch @"user_pushSwithc"
+#define user_article @"user_article"
 
 #define user_telephoneBinding @"user_telephoneBinding"
 #define user_wechat @"user_wechat"
@@ -174,4 +177,12 @@ static NSInteger const cacheTime = 0 ;
 #define documentPath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
 #define historyFile @"history.plist"
+
+#define RightLabelWidth CalculateWidth(70)
+#define RightLabelMagin CalculateWidth(45)
+#define LeftLableMagin CalculateWidth(30)
+#define LabelFirstWidth CalculateWidth(9)
+#define chartRightLabelWidth CalculateWidth(100)
+#define chartRightLabelMargin CalculateWidth(60)
+#define LabelHeight 40
 #endif /* PublicMacro_h */

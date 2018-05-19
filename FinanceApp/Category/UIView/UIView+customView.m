@@ -12,14 +12,14 @@
 
 @implementation UIView (customView)
 
-+ (UIView *)viewWithLabelNumber:(NSInteger)num{
-    UIView *view = [[self alloc] initWithFrame:CGRectMake(0, 0, LabelWidth * num, LabelHeight)];
++ (UIView *)viewWithLabelNumber:(NSInteger)num withCount:(NSInteger)count{
+    UIView *view = [[self alloc] initWithFrame:CGRectMake(0, 0, count == 5 ? chartRightLabelWidth*num :  LabelWidth * num, LabelHeight)];
     for (int i = 0; i < num; i++) {
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(LabelWidth * i, 0, LabelWidth, LabelHeight)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(count == 5 ?   (i== 0 ? chartRightLabelMargin/2 :(chartRightLabelWidth+chartRightLabelMargin-CalculateWidth(10))*i ): LabelWidth * i, 0, count == 5 ? chartRightLabelWidth : LabelWidth, LabelHeight)];
         label.tag = i;
         label.font = k_text_font_args(15);
         label.textColor = k_siutaion_coloum;
-        label.textAlignment = 1;
+        label.textAlignment = count == 5 ? 0 : 1;
         [view addSubview:label];
     }
     return view;

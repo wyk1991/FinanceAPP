@@ -10,6 +10,6 @@
 
 @interface UIView (customView)
 
-+ (UIView *)viewWithLabelNumber:(NSInteger)num;
++ (UIView *)viewWithLabelNumber:(NSInteger)num withCount:(NSInteger)count;
 
 @end

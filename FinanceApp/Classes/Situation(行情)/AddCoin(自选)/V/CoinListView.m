@@ -20,6 +20,13 @@
 
 @implementation CoinListView
 
+- (NSMutableArray *)selectedArr {
+    if (!_selectedArr) {
+        _selectedArr = @[].mutableCopy;
+    }
+    return _selectedArr;
+}
+
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:(UITableViewStylePlain)];
@@ -100,7 +107,14 @@
     CoinListModel *model = [[SituationHelper shareHelper] coinNameList][indexPath.row];
     model.isSelect = !model.isSelect;
     
-    [_tableView reloadData];
+    if (model.isSelect) {
+        [self.selectedArr addObject:@{@"name":model.name}];
+    } else {
+        [self.selectedArr removeObject:@{@"name": model.name}];
+    }
+    NSLog(@"%@", self.selectedArr);
+    
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:0]] withRowAnimation:(UITableViewRowAnimationNone)];
 }
 
 @end

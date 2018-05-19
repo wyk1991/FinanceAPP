@@ -14,6 +14,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *maxPriceLb;
 @property (weak, nonatomic) IBOutlet UILabel *minPrice;
 
+@property (weak, nonatomic) IBOutlet UILabel *nameLb;
+@property (weak, nonatomic) IBOutlet UILabel *categoryLb;
+@property (weak, nonatomic) IBOutlet UILabel *priceLb;
 
 @property (nonatomic, strong) OptionCoinModel *model;
 @end

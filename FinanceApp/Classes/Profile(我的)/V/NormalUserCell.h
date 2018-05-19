@@ -7,6 +7,7 @@
 //
 
 #import "BaseCell.h"
+@class NormalUserCell;
 
 @class SettingModel;
 @interface NormalUserCell : BaseCell

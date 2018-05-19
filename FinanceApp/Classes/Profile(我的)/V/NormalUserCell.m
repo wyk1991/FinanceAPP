@@ -142,7 +142,20 @@
     } else if([self.model.title isEqualToString:@"预警按钮"]) {
         [MJYUtils saveToUserDefaultWithKey:user_earlyWaring withValue:sw.isOn ? @"1" : @"0"];
     }
+    if ([self.model.title isEqualToString:@"接受新消息通知"]) {
+        [self openSettingApp];
+        
+    }
+    if ([self.model.title isEqualToString:@"文章消息通知"]) {
+        [MJYUtils saveToUserDefaultWithKey:user_article withValue:sw.isOn ? @"1" : @"0"];
+    }
+}
+
+- (void)openSettingApp {
     
+    NSURL *appSettings = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    
+    [[UIApplication sharedApplication] openURL:appSettings];
 }
 
 - (void)awakeFromNib {

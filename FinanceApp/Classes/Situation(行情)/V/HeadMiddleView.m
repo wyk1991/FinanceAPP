@@ -165,7 +165,7 @@
         _model = model;
     }
     self.iconNameLb.text = model.trading_market_name;
-    self.middleLb.text = [[MJYUtils getFromUserDefaultWithKey:user_currency] isEqualToString:@"cny"] ? [NSString stringWithFormat:@"￥%@",model.price_cny] : [NSString stringWithFormat:@"$%@",model.price_usd];
+    self.middleLb.text = [[MJYUtils getFromUserDefaultWithKey:user_currency] isEqualToString:@"cny"] ? [NSString stringWithFormat:@"$%@",model.price_usd] : [NSString stringWithFormat:@"￥%@",model.price_cny];
     self.bottomLb.text = [[MJYUtils getFromUserDefaultWithKey:user_currency] isEqualToString:@"cny"] ? [NSString stringWithFormat:@"￥%@", model.price_cny] : [NSString stringWithFormat:@"$%@", model.price_usd];
     [self.roseBtn setTitle:[model.change containsString:@"-"] ? [NSString stringWithFormat:@"-%@%%", model.change] :[NSString stringWithFormat:@"+%@%%", model.change] forState:UIControlStateNormal];
     self.maxPrice.text =  [NSString stringWithFormat:@"最高  ￥%@", model.oneday_highest_cny];

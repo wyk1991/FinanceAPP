@@ -20,6 +20,9 @@
 /** 滑动监听通知 */
 #define tapCellScrollNotification @"tapCellScrollNotification"
 
+/** 设置通知开关的回调通知 */
+#define notificationswitchONNotification @"notificationswitchONNotification"
+
 /** 授权登录成功通知 */
 #define WXAuthorizationSuceess @"WXAuthorizationSuceess"
 #endif /* NotificationMacro_h */

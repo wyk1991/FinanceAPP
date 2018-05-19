@@ -108,4 +108,27 @@
     
     return resultImage;
 }
+
+- (void)imageWithCorner:(CGSize)size completaion:(void (^)(UIImage *))completion {
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        UIGraphicsBeginImageContextWithOptions(size, YES, 0);
+        CGRect rect = CGRectMake(0, 0, size.width, size.height);
+        
+        UIRectFill(rect);
+        UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:rect];
+        [path addClip];
+        
+        [self drawInRect:rect];
+        
+        UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion != nil) {
+                completion(result);
+            }
+        });
+    });
+}
 @end

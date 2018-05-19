@@ -60,11 +60,6 @@
 }
 
 - (void)clickTimeBtn:(RegisterView *)registerView withTel:(NSString *)telStr {
-//    [self.helper helperGetValidationCodeCallback:^(id obj, NSError *error) {
-//        if (!error) {
-//
-//        }
-//    }];
     [self.helper helperGetValidationCodeCallback:^(id obj, NSError *error) {
         if (!error) {
             

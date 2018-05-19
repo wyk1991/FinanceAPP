@@ -12,6 +12,7 @@
 #import "AddCoinViewController.h"
 #import "EarlyWarnViewController.h"
 #import "SituationSearchViewController.h"
+#import "ShareClipViewController.h"
 
 #import "SituationHelper.h"
 #import "NormalCoinHeadView.h"
@@ -82,6 +83,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupNavItem];
+    self.view.userInteractionEnabled = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self loadTagData];
@@ -164,9 +166,40 @@
     [self.pageVC moveToIndex:index animation:NO];
 }
 
+
+/**
+ 点击分享按钮
+ */
 - (void)shareBtnClick {
+    CGSize size = CGSizeZero;
+    IconDetailViewController *v;
+    for (UIView *view in self.pageVC.mainScrollView.subviews) {
+        if ([view isKindOfClass:[IconDetailViewController class]]) {
+            NSLog(@"%@", view.subviews);
+            NSLog(@"%f", view.frame.size.height);
+            size = view.frame.size;
+            v = view;
+        }
+    }
+    
+    // 设置截屏大小
+    UIGraphicsBeginImageContextWithOptions(size, YES, 0);
+    [[v layer] renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsGetCurrentContext();
+    
+    [self pushShareViewControllerWithImage:viewImage withInfo:@{}];
     
 }
+
+- (void)pushShareViewControllerWithImage:(UIImage *)viewImage withInfo:(NSDictionary *)dic {
+    ShareClipViewController *vc = [[ShareClipViewController alloc] initWithClipImage:viewImage Height:viewImage.size.height];
+    [self.navigationController presentViewController:vc animated:YES completion:nil];
+}
+
+/**
+ 点击添加自选的功能
+ */
 - (void)addClick {
     AddCoinViewController *vc = [[AddCoinViewController alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
@@ -176,9 +209,28 @@
 
 - (void)ZXPageViewWillBeginDragging:(ZXPageCollectionView *)pageView
 {
-    NSLog(@"%@", pageView.subviews);
+    NSLog(@"%@", pageView.mainScrollView.subviews);
+//    for (UIView *view in pageView.mainScrollView.subviews) {
+//        if ([view isKindOfClass:[IconDetailViewController class]]) {
+//            NSLog(@"%@", view.subviews);
+//            NSLog(@"%f", view.frame.size.height);
+//        }
+//    }
     self.sliderBar.isMoniteScroll = NO;
     self.sliderBar.scrollViewLastContentOffset = pageView.mainScrollView.contentOffset.x;
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    // 获取UITouch对象
+    UITouch *touch = [touches anyObject];
+    // 获取当前点的位置
+    CGPoint curP = [touch locationInView:self.view];
+
+    if (self.pageVC.currentIndex >=2) {
+        
+        BOOL isInner = CGRectContainsPoint(CGRectMake(0, 0, kScreenWidth, CalculateHeight(150)), curP);
+        self.pageVC.mainScrollView.scrollEnabled = isInner ? NO : YES;
+    }
 }
 
 #pragma mark - warnCellAction

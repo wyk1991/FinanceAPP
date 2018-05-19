@@ -25,11 +25,8 @@
 #import "CoinAllInfoModel.h"
 #import "SituationSearchViewController.h"
 
-#define RightLabelWidth CalculateWidth(70)
-#define RightLabelMagin CalculateWidth(45)
-#define LeftLableMagin CalculateWidth(30)
-#define LabelFirstWidth CalculateWidth(9)
-#define LabelHeight 40
+
+#import "AAChartView.h"
 
 #define MAS_SHORTHAND
 #define MAS_SHORTHAND_GLOBALS
@@ -166,13 +163,15 @@ SearchTextClick
     [self.optionTopView addSubview:view2];
     
     self.optionTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-    self.optionTableView.frame = CGRectMake(0, CalculateHeight(15/2), kScreenWidth, kScreenHeight);
+    self.optionTableView.frame = CGRectMake(0, CalculateHeight(15/2+40), kScreenWidth, kScreenHeight);
     self.optionTableView.tableFooterView = [UIView new];
     self.optionTableView.delegate = self;
     self.optionTableView.dataSource = self;
     self.optionTableView.showsVerticalScrollIndicator = false;
     self.optionTableView.showsHorizontalScrollIndicator = false;
-    [self.optionTableView registerClass:[OptionDetailCell class] forCellReuseIdentifier:optionListCellIdentifier];
+    [self.optionTableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+//    [self.optionTableView registerClass:[OptionDetailCell class] forCellReuseIdentifier:optionListCellIdentifier];
+    [self.optionTableView registerNib:[UINib nibWithNibName:@"OptionDetailCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:optionListCellIdentifier];
     
     [self addSubview:self.optionTableView];
 }
@@ -189,16 +188,25 @@ SearchTextClick
     self.leftTableView.dataSource = self;
     self.leftTableView.showsVerticalScrollIndicator = NO;
     [self.leftTableView registerClass:[SituationCell class] forCellReuseIdentifier:situationCellIden];
+    [self.leftTableView.tableFooterView setHidden:YES];
+    // 添加下拉刷新的
+    self.leftTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        [self loadMoreData];
+    }];
     [self addSubview:self.leftTableView];
     
-    self.rightTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, type == 0 ? kScreenWidth*11/18: self.rightTitles.count * RightLabelWidth + 20 + RightLabelMagin*(self.rightTitles.count-1), [UIScreen mainScreen].bounds.size.height) style:UITableViewStylePlain];
+    self.rightTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, type == 0 ? kScreenWidth*11/18: self.rightTitles.count * (self.showType >= 2 ? chartRightLabelWidth : RightLabelWidth) + 20 + RightLabelMagin*(self.rightTitles.count-1), [UIScreen mainScreen].bounds.size.height) style:UITableViewStylePlain];
     self.rightTableView.backgroundColor = k_back_color;
     self.rightTableView.delegate = self;
     self.rightTableView.dataSource = self;
     self.rightTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.rightTableView.showsVerticalScrollIndicator = NO;
-    self.buttomScrollView = [[UIScrollView alloc] init];
+    [self.rightTableView.tableFooterView setHidden:YES];
+    self.rightTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        [self loadMoreData];
+    }];
     
+    self.buttomScrollView = [[UIScrollView alloc] init];
     self.buttomScrollView.frame = CGRectMake(CGRectGetMaxX(self.leftTableView.frame), type == 0 ? CalculateHeight(15/2) : ( type == 1 ? CalculateHeight(211+15/2) : CalculateHeight(250 + 18)), kScreenWidth*11/18, kScreenHeight);
     self.buttomScrollView.contentSize = CGSizeMake(type == 0 ? kScreenWidth*11/18 : self.rightTableView.bounds.size.width, 0);
     self.buttomScrollView.backgroundColor = [UIColor clearColor];
@@ -243,7 +251,8 @@ SearchTextClick
     WS(weakSelf);
     switch (type) {
         case 0: {
-            [weakSelf.helper helperGetOptionCoinListWithPath:situation_optin_list params:nil callBack:^(id obj, NSError *error) {
+            NSString *url = [NSString stringWithFormat:@"%@?sessionid=%@&name=BTC&market=Huobi&userid=anything",situation_optin_list,kApplicationDelegate.userHelper.userInfo.token];
+            [weakSelf.helper helperGetOptionCoinListWithPath:url params:@{} callBack:^(id obj, NSError *error) {
                 if (!error) {
                     [self.optionTableView reloadData];
                 }
@@ -284,6 +293,11 @@ SearchTextClick
     }
 }
 
+#pragma mark - 加载更多coin列表数据
+- (void)loadMoreData {
+    
+}
+
 - (void)configCoinDetailData {
     [self.chartsTopView setupTheChartStyle:self.helper.chartList withMiddleData:[self.helper.oneDayList firstObject]];
 }
@@ -294,7 +308,14 @@ SearchTextClick
     if (tableView == self.optionTableView) {
         OptionDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:optionListCellIdentifier];
         
+        if (!cell) {
+            cell = [[OptionDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:optionListCellIdentifier];
+        }
+        
         cell.model = self.helper.optionsCoinList[indexPath.row];
+        cell.tag = indexPath.row;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SpreadImageClick:)];
+        [cell addGestureRecognizer:tap];
         
         return cell;
     }
@@ -341,41 +362,41 @@ SearchTextClick
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (self.showType == 0) {
-        return self.helper.optionsCoinList.count;
-    }
+//    if (self.showType == 0) {
+//        return self.helper.optionsCoinList.count;
+//    }
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.showType == 0) {
-        NSString *cateStr = [(OptionCoinModel *)[self.helper.optionsCoinList objectAtIndex:section] market];
-        
-        MCDropdownListSectionStatu openOrNot = [[self.helper.optionOpenDict valueForKey:cateStr] unsignedIntegerValue];
-        
-        if (openOrNot == MCDropdownListSectionStatuOpen) {
-            return 1;
-        }
-        return 0;
+//        NSString *cateStr = [(OptionCoinModel *)[self.helper.optionsCoinList objectAtIndex:section] market];
+//
+//        MCDropdownListSectionStatu openOrNot = [[self.helper.optionOpenDict valueForKey:cateStr] unsignedIntegerValue];
+//
+//        if (openOrNot == MCDropdownListSectionStatuOpen) {
+//            return 1;
+//        }
+        return self.helper.optionsCoinList.count;
     }
     return  self.showType == 1 ? self.helper.coinListData.count : self.helper.chartCoinList.count;
 }
 #pragma mark -- 设置左右两个table View的自定义头部View
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     if (self.showType == 0) {
-        OptionSectionView *headerView = nil;
-        headerView = [[OptionSectionView alloc] init];
-        headerView.frame = CGRectMake(0, 0, tableView.bounds.size.width, CalculateHeight(50));
-        headerView.backgroundColor = k_white_color;
-        headerView.model = self.helper.optionsCoinList[section];
-        UIButton* btn = [[UIButton alloc] initWithFrame:headerView.frame];
-        [headerView addSubview:btn];
-        
-        [btn addTarget:self action:@selector(onExpandSection:) forControlEvents:UIControlEventTouchUpInside];
-        btn.tag = section;
-        
-        return headerView;
+//        OptionSectionView *headerView = nil;
+//        headerView = [[OptionSectionView alloc] init];
+//        headerView.frame = CGRectMake(0, 0, tableView.bounds.size.width, CalculateHeight(50));
+//        headerView.backgroundColor = k_white_color;
+//        headerView.model = self.helper.optionsCoinList[section];
+//        UIButton* btn = [[UIButton alloc] initWithFrame:headerView.frame];
+//        [headerView addSubview:btn];
+//
+//        [btn addTarget:self action:@selector(onExpandSection:) forControlEvents:UIControlEventTouchUpInside];
+//        btn.tag = section;
+//
+//        return headerView;
     }
     if (tableView == self.rightTableView) {
         UIView *rightHeaderView = [self viewWithRightLabelNumber:self.rightTitles.count];
@@ -409,14 +430,107 @@ SearchTextClick
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (self.showType == 0) {
+        return 0;
+    }
     return CalculateHeight(40);
 }
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.showType == 0 ) {
+        NSString *cateStr = [self.helper.optionsCoinList[indexPath.row] market];
+        MCDropdownListSectionStatu openOrNot = [[self.helper.optionOpenDict valueForKey:cateStr] unsignedIntegerValue];
+        if (openOrNot == MCDropdownListSectionStatuOpen) {
+            return CalculateHeight(100);
+        } else {
+            return CalculateHeight(50);
+        }
+    }
     return CalculateHeight(50);
 }
 
+
+#pragma mark - tableview delete
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableView == self.optionTableView) {
+        return YES;
+    }
+    return NO;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableView == self.optionTableView) {
+        return UITableViewCellEditingStyleDelete;
+    }
+    return UITableViewCellEditingStyleNone;
+}
+
+// 配置侧滑多个按钮
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+       // 实现点击的删除
+        
+    }];
+    
+    UITableViewRowAction *pushTopAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"置顶" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        
+    }];
+    pushTopAction.backgroundColor = [UIColor grayColor];
+    
+    return @[deleteAction, pushTopAction];
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    editingStyle = UITableViewCellEditingStyleDelete;
+}
+
+
+#pragma mark - action
+- (void)onExpandSection:(UIButton *)button
+{
+    OptionCoinModel *model =self.helper.optionsCoinList[button.tag];
+    NSString *cateStr = model.market;
+    MCDropdownListSectionStatu openOrNot = [[self.helper.optionOpenDict objectForKey:cateStr] unsignedIntegerValue];
+    if (MCDropdownListSectionStatuClose == openOrNot) {
+        // 原先缩回的，现在展开
+        [self.helper.optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuOpen] forKey:cateStr];
+    } else {
+        //原先是展开的，现在缩回
+        [self.helper.optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuClose] forKey:cateStr];
+    }
+    [self.optionTableView reloadSections:[NSIndexSet indexSetWithIndex:button.tag] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (void)clickSearchTextWithIconType:(NSString *)searchTpye {
+    NSLog(@"%@", searchTpye);
+    if (_delegate && [_delegate respondsToSelector:@selector(didClickToSeachCoin:)]) {
+        [_delegate didClickToSeachCoin:self];
+    }
+    
+}
+
+- (void)SpreadImageClick:(UITapGestureRecognizer*)tap{
+    
+    //传递当前手势，通过手势识别出点击的cell
+    
+    OptionDetailCell* cell = (OptionDetailCell*)tap.view;
+    
+    //单元格展开功能
+    OptionCoinModel *model =self.helper.optionsCoinList[tap.view.tag];
+    NSString *cateStr = model.market;
+    MCDropdownListSectionStatu openOrNot = [[self.helper.optionOpenDict objectForKey:cateStr] unsignedIntegerValue];
+    if (MCDropdownListSectionStatuClose == openOrNot) {
+        // 原先缩回的，现在展开
+        [self.helper.optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuOpen] forKey:cateStr];
+    } else {
+        //原先是展开的，现在缩回
+        [self.helper.optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuClose] forKey:cateStr];
+    }
+    [self.optionTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:tap.view.tag inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    
+}
 - (void)tableView:(UITableView *)tableView scrollFollowTheOther:(UITableView *)other{
     CGFloat offsetY= other.contentOffset.y;
     CGPoint offset=tableView.contentOffset;
@@ -425,7 +539,7 @@ SearchTextClick
 }
 
 - (UIView *)viewWithRightLabelNumber:(NSInteger)num{
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, RightLabelWidth * num, LabelHeight)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.showType >= 2 ? chartRightLabelWidth*num: RightLabelWidth * num, LabelHeight)];
     
     // 计算label的宽度
     NSMutableArray *tmp = @[].mutableCopy;
@@ -439,7 +553,7 @@ SearchTextClick
             tmpf += [tmp[i-1] floatValue];
         }
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(i==0 ? CalculateWidth(57)+i*RightLabelMagin :  CalculateWidth(57)+i*RightLabelMagin+ tmpf, 0, CalculateWidth([tmp[i] integerValue] + CalculateWidth(2)), LabelHeight)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(i==0 ? CalculateWidth(57)+i*(self.showType >= 2 ? chartRightLabelMargin : RightLabelMagin) :  CalculateWidth(57)+i*(self.showType >= 2 ? chartRightLabelMargin : RightLabelMagin)+ tmpf, 0, CalculateWidth([tmp[i] integerValue] + CalculateWidth(2)), LabelHeight)];
         label.font = k_textB_font_args(CalculateHeight(16));
         label.tag = i;
         label.textAlignment = 0;
@@ -498,52 +612,6 @@ SearchTextClick
             self.buttomScrollView.st_y = self.showType == 1 ? CalculateHeight(211+15/2):CalculateHeight(250+18);
         }];
     }
-}
-#pragma mark - tableview delete
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (tableView == self.optionTableView) {
-        return YES;
-    }
-    return NO;
-}
-
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (tableView == self.optionTableView) {
-        return UITableViewCellEditingStyleDelete;
-    }
-    return UITableViewCellEditingStyleNone;
-}
-
-// 点击删除的按钮
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    
-    // 实现删除的操作
-}
-
-
-#pragma mark - action
-- (void)onExpandSection:(UIButton *)button
-{
-    OptionCoinModel *model =self.helper.optionsCoinList[button.tag];
-    NSString *cateStr = model.market;
-    MCDropdownListSectionStatu openOrNot = [[self.helper.optionOpenDict objectForKey:cateStr] unsignedIntegerValue];
-    if (MCDropdownListSectionStatuClose == openOrNot) {
-        // 原先缩回的，现在展开
-        [self.helper.optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuOpen] forKey:cateStr];
-    } else {
-        //原先是展开的，现在缩回
-        [self.helper.optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuClose] forKey:cateStr];
-    }
-    [self.optionTableView reloadData];
-}
-
-- (void)clickSearchTextWithIconType:(NSString *)searchTpye {
-    NSLog(@"%@", searchTpye);
-    if (_delegate && [_delegate respondsToSelector:@selector(didClickToSeachCoin:)]) {
-        [_delegate didClickToSeachCoin:self];
-    }
-    
 }
 
 @end
