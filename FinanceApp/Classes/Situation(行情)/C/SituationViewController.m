@@ -135,6 +135,8 @@
 
 - (void)ZXPageViewDidScroll:(UIScrollView *)scrollView direction:(NSString *)direction{
     
+    self.pageVC.mainScrollView.scrollEnabled = self.pageVC.currentIndex == 0 ? NO: YES;
+    
     [self.sliderBar adjustIndicateViewX:scrollView direction:direction];
 }
 
@@ -216,6 +218,7 @@
 //            NSLog(@"%f", view.frame.size.height);
 //        }
 //    }
+    
     self.sliderBar.isMoniteScroll = NO;
     self.sliderBar.scrollViewLastContentOffset = pageView.mainScrollView.contentOffset.x;
 }
@@ -231,6 +234,7 @@
         BOOL isInner = CGRectContainsPoint(CGRectMake(0, 0, kScreenWidth, CalculateHeight(150)), curP);
         self.pageVC.mainScrollView.scrollEnabled = isInner ? NO : YES;
     }
+    
 }
 
 #pragma mark - warnCellAction
