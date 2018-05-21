@@ -71,6 +71,8 @@ SearchTextClick
 @property (nonatomic,strong) NSArray *rightTitles;
 
 @property (nonatomic, strong) NSMutableArray *touchPoints;
+/** 记录当前点击的自选的列表 */
+@property (nonatomic, assign) NSInteger frontIndex;
 @end
 
 @implementation IconDetailViewController
@@ -489,7 +491,11 @@ SearchTextClick
     }];
     
     UITableViewRowAction *pushTopAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"置顶" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        
+        if (indexPath.row == 0) {
+            return ;
+        }
+        [self.helper.optionsCoinList exchangeObjectAtIndex:indexPath.row withObjectAtIndex:0];
+        [self.optionTableView reloadData];
     }];
     pushTopAction.backgroundColor = [UIColor grayColor];
     
@@ -498,23 +504,6 @@ SearchTextClick
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
     editingStyle = UITableViewCellEditingStyleDelete;
-}
-
-
-#pragma mark - action
-- (void)onExpandSection:(UIButton *)button
-{
-    OptionCoinModel *model =self.helper.optionsCoinList[button.tag];
-    NSString *cateStr = model.market;
-    MCDropdownListSectionStatu openOrNot = [[self.helper.optionOpenDict objectForKey:cateStr] unsignedIntegerValue];
-    if (MCDropdownListSectionStatuClose == openOrNot) {
-        // 原先缩回的，现在展开
-        [self.helper.optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuOpen] forKey:cateStr];
-    } else {
-        //原先是展开的，现在缩回
-        [self.helper.optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuClose] forKey:cateStr];
-    }
-    [self.optionTableView reloadSections:[NSIndexSet indexSetWithIndex:button.tag] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)clickSearchTextWithIconType:(NSString *)searchTpye {
@@ -526,15 +515,12 @@ SearchTextClick
 }
 
 - (void)SpreadImageClick:(UITapGestureRecognizer*)tap{
-    
     //传递当前手势，通过手势识别出点击的cell
-    
-    OptionDetailCell* cell = (OptionDetailCell*)tap.view;
-    
     //单元格展开功能
     OptionCoinModel *model =self.helper.optionsCoinList[tap.view.tag];
     NSString *cateStr = model.market;
     MCDropdownListSectionStatu openOrNot = [[self.helper.optionOpenDict objectForKey:cateStr] unsignedIntegerValue];
+    
     if (MCDropdownListSectionStatuClose == openOrNot) {
         // 原先缩回的，现在展开
         [self.helper.optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuOpen] forKey:cateStr];
@@ -542,7 +528,14 @@ SearchTextClick
         //原先是展开的，现在缩回
         [self.helper.optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuClose] forKey:cateStr];
     }
-    [self.optionTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:tap.view.tag inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    if (self.frontIndex != tap.view.tag && self.frontIndex >= 0) {
+        OptionCoinModel *model =self.helper.optionsCoinList[_frontIndex];
+        NSString *cateStr = model.market;
+        [self.helper.optionOpenDict setObject:[NSNumber numberWithUnsignedInteger:MCDropdownListSectionStatuClose] forKey:cateStr];
+        self.frontIndex = tap.view.tag;
+    }
+//    [self.optionTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:tap.view.tag inSection:0], [NSIndexPath indexPathForRow:self.frontIndex inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.optionTableView reloadData];
     
 }
 - (void)tableView:(UITableView *)tableView scrollFollowTheOther:(UITableView *)other{
