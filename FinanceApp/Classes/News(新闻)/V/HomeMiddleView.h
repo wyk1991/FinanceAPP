@@ -14,4 +14,6 @@
 @property (nonatomic, strong) NSMutableArray *modelArr;
 
 
+@property (nonatomic, copy) void (^scrollerTapActionBlock)(NSInteger index);
+
 @end

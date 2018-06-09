@@ -88,4 +88,22 @@ static UserHelper *_instance;
     }];
 }
 
+- (void)changeThePasswordWithPath:(NSString *)path withInfo:(NSDictionary *)params callBack:(UICallback)callback {
+    WS(weakSelf);
+    [weakSelf startPostRequest:path inParam:params outParse:^(id retData, NSError *error) {
+        callback(retData, nil);
+    } callback:^(id obj, NSError *error) {
+        callback(nil, error);
+    }];
+}
+
+- (void)getTheUserpublishHTMLPath:(NSString *)path callBack:(UICallback)callback {
+    WS(weakSelf);
+    [weakSelf startGETRequest:path inParam:@{} outParse:^(id retData, NSError *error) {
+        callback(retData, nil);
+    } callback:^(id obj, NSError *error) {
+        callback(nil,error);
+    }];
+}
+
 @end

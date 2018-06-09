@@ -21,9 +21,14 @@ UITableViewDataSource
 @property (nonatomic, strong) UILabel *bottomTip;
 
 @property (nonatomic, strong) BaseTableView *tableView;
+
+@property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, strong) MyColumnHeadView *headView;
 
 @property (nonatomic, strong) UserHelper *helper;
+
+/** html片断 */
+@property (nonatomic, strong) NSString *htmlStr;
 
 @end
 
@@ -77,7 +82,13 @@ UITableViewDataSource
 
 // 加载
 - (void)loadData {
-    
+    [self.helper getTheUserpublishHTMLPath:new_article_content callBack:^(id obj, NSError *error) {
+        if ([obj[@"status"] integerValue] == 100) {
+            self.htmlStr = obj[@"notes"];
+            
+            [self.tableView reloadData];
+        }
+    }];
 }
 
 - (void)viewDidLoad {
@@ -110,49 +121,49 @@ UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 //    return self.helper.columnList.count ? 2 : 1;
-    return 2;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //    return section==0 ? 1 : self.helper.columnList.count;
-    return section == 0 ? 1 : 10;
+    return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return indexPath.section == 0 ? CalculateHeight(50) : CalculateHeight(100);
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 1 ) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CELL1"];
-        if(!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CELL1"];
-        }
-        
-        cell.textLabel.text = @"苹果干";
-        
-        return cell;
-    } else {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CELL"];
-        if(!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CELL"];
-        }
-        
-        cell.backgroundColor = [k_mycolumn_bg colorWithAlphaComponent:0.35];
-        cell.textLabel.text = @"苹果干过过过过过过过过过过过过过过过过过过反反复复付付多所付发给答复";
-        
-        return cell;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CELL1"];
+    if(!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CELL1"];
     }
-    
+    return cell;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        UIWebView *webVc = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, CalculateHeight(220))];
+        
+        [webVc loadHTMLString:self.htmlStr baseURL:nil];
+        
+        return webVc;
+    } else {
+        return [UIView new];
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return CalculateHeight(220);
 }
 
 #pragma mark - UITableView Delegate methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        // 跳转修改个人介绍
-        IntroduceMeViewController *vc = [[IntroduceMeViewController alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
+//        // 跳转修改个人介绍
+//        IntroduceMeViewController *vc = [[IntroduceMeViewController alloc] init];
+//        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
@@ -160,7 +171,7 @@ UITableViewDataSource
     NSLog(@"%f", scrollView.contentOffset.y);
     [self.navigationController.navigationBar changeColor:k_white_color WithScrollView:scrollView AndValue:90];
     if (scrollView.contentOffset.y > 22) {
-        self.navigationItem.title = @"1234";
+        self.navigationItem.title = kApplicationDelegate.userHelper.userInfo.user.nickname;
     } else if (scrollView.contentOffset.y < 22 && scrollView.contentOffset.y == 0) {
         self.navigationItem.title = @"";
     }

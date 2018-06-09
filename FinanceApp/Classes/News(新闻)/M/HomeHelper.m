@@ -55,13 +55,13 @@ static HomeHelper *_instance;
     }
     return _dateList;
 }
-
-- (NSMutableArray *)contentArr {
-    if (!_contentArr) {
-        _contentArr = @[].mutableCopy;
-    }
-    return _contentArr;
-}
+//
+//- (NSMutableArray *)contentArr {
+//    if (!_contentArr) {
+//        _contentArr = @[].mutableCopy;
+//    }
+//    return _contentArr;
+//}
 
 + (instancetype)shareHelper {
     
@@ -83,32 +83,34 @@ static HomeHelper *_instance;
 
 - (void)helperGetTagDataFromPath:(NSString *)path callBack:(UICallback)callback {
     WS(weakSelf);
-//    [self startGETRequest:path inParam:nil outParse:^(id retData, NSError *error) {
-//        if ([retData[@"status"] integerValue] == 100) {
-//            [weakSelf dealTagWith:retData];
-//        }
-//
-//        callback(retData, error);
-//    } callback:^(id obj, NSError *error) {
-//        callback(nil, error);
-//    }];
-    
-    [HttpTool getRequestCacheURLStr:tag_list dataField:@"categories" inParam:nil outParse:^(id retData, NSError *error) {
-        
+    [self startGETRequest:path inParam:nil outParse:^(id retData, NSError *error) {
+        if ([retData[@"status"] integerValue] == 100) {
+            [weakSelf dealTagWith:retData];
+        }
+
+        callback(retData, error);
     } callback:^(id obj, NSError *error) {
-            
-            [weakSelf dealTagWith:obj];
-        
-        
-        callback(obj, error);
+        callback(nil, error);
     }];
+    
+//    [HttpTool getRequestCacheURLStr:tag_list dataField:@"cate" inParam:nil outParse:^(id retData, NSError *error) {
+//
+//    } callback:^(id obj, NSError *error) {
+//
+//        [weakSelf dealTagWith:obj];
+//
+//
+//        callback(obj, error);
+//    }];
 }
 
 - (void)dealTagWith:(id)result {
-        for (NSDictionary *dic in result) {
+    
+    self.tagArr = [TagsModel mj_keyValuesArrayWithObjectArray:result[@"categories"]];
+        for (NSDictionary *dic in result[@"categories"]) {
             [self.tagList addObject:dic[@"name"]];
             
-            [self.tagArr addObject:dic];
+//            [self.tagArr addObject:result[@"cate"]];
         
     }
 }
@@ -149,14 +151,14 @@ static HomeHelper *_instance;
     if (arr.count) {
         for (NSDictionary *dic in arr) {
             [self.AdModelArr addObject:[NewsModel mj_objectWithKeyValues:dic]];
-            [self.contentArr addObject:dic[@"title"]];
+//            [self.contentArr addObject:];
         }
     }
 }
 
 - (void)helperGetDataListWithPath:(NSString *)path WithTag:(NSString *)tag callBack:(UICallback)callback {
     WS(weakSelf);
-    [weakSelf startGETRequest:path inParam:@{@"cate": tag, @"page": @(self.page).stringValue} outParse:^(id retData, NSError *error) {
+    [weakSelf startGETRequest:path inParam:@{@"cate": tag, @"start": @(self.page).stringValue} outParse:^(id retData, NSError *error) {
         if ([retData[@"status"] integerValue] == 100) {
             [weakSelf dealDataList:retData];
         }

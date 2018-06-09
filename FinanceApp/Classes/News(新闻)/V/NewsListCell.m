@@ -29,7 +29,7 @@
 
 - (UILabel *)timeLb {
     if (!_timeLb) {
-        _timeLb = [[UILabel alloc] initWithText:@"2018-01-01 00:00" textColor:k_textgray_color textFont:k_text_font_args(CalculateHeight(13)) textAlignment:0];
+        _timeLb = [[UILabel alloc] initWithText:@"2018-01-01 00:00·212344444" textColor:k_textgray_color textFont:k_text_font_args(CalculateHeight(13)) textAlignment:0];
     }
     return _timeLb;
 }
@@ -65,7 +65,7 @@
     [_timeLb mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_titleLb);
         make.bottom.offset(-CalculateHeight(10));
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(200), CalculateHeight(20)));
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(250), CalculateHeight(20)));
     }];
 }
 
@@ -73,8 +73,8 @@
     _model = model;
     
     [self.image sd_setImageWithURL:[NSURL URLWithString:model.urlToImage] placeholderImage:nil];
-    self.timeLb.text = model.publishedAt;
-    self.titleLb.text = model.title;
+    self.timeLb.text = [NSString stringWithFormat:@"%@ %@·%@", [model.publishedAt substringToIndex:10] , [model.publishedAt substringWithRange:NSMakeRange(11, 5)], model.author];
+    self.titleLb.text =model.title;
 }
 
 - (void)awakeFromNib {

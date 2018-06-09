@@ -9,18 +9,29 @@
 #import "AddCoinViewController.h"
 #import "ZXCategorySliderBar.h"
 #import "ZXPageCollectionView.h"
-
+#import "UpdateCoinListModel.h"
 #import "CoinListView.h"
+
+#import "SituationHelper.h"
 
 @interface AddCoinViewController ()<ZXCategorySliderBarDelegate, ZXPageCollectionViewDelegate, ZXPageCollectionViewDataSource>
 @property (nonatomic, strong) ZXPageCollectionView *pageVC;
 @property (nonatomic, strong) ZXCategorySliderBar *sliderBar;
 
 
+@property (nonatomic, strong) NSMutableArray *updateArr;
 
+@property (nonatomic, strong) SituationHelper *helper;
 @end
 
 @implementation AddCoinViewController
+
+- (SituationHelper *)helper {
+    if (!_helper) {
+        _helper = [SituationHelper shareHelper];
+    }
+    return _helper;
+}
 
 - (ZXCategorySliderBar *)sliderBar
 {
@@ -44,6 +55,13 @@
     return _pageVC;
 }
 
+- (NSMutableArray *)updateArr {
+    if (!_updateArr) {
+        _updateArr = @[].mutableCopy;
+    }
+    return _updateArr;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"添加自选";
@@ -61,7 +79,12 @@
     if (_itemArr != itemArr) {
         _itemArr = itemArr;
     }
-
+    for (int i =0; i<itemArr.count; i++) {
+        UpdateCoinListModel *model = [[UpdateCoinListModel alloc] init];
+        NSDictionary *dic = @{self.itemArr[i]: model};
+        [self.updateArr addObject:dic];
+    }
+    
 }
 
 
@@ -88,7 +111,7 @@
     NSString *reuseIdentifier = [NSString stringWithFormat:@"childView%ld", (long)index];
     CoinListView *childView1 = (CoinListView *)[ZXPageCollectionView dequeueReuseViewWithReuseIdentifier:reuseIdentifier forIndex:index];
     if (!childView1) {
-        childView1 = [[CoinListView alloc] initWithFrame:CGRectMake(0, 0, ZXPageCollectionView.frame.size.width, ZXPageCollectionView.frame.size.height) WithCoinName:self.itemArr[index]];
+        childView1 = [[CoinListView alloc] initWithFrame:CGRectMake(0, 0, ZXPageCollectionView.frame.size.width, ZXPageCollectionView.frame.size.height) withCoinDic:self.updateArr[index]];
         childView1.reuseIdentifier = reuseIdentifier;
     }
     return childView1;
@@ -99,8 +122,49 @@
 }
 
 - (void)sureBtnClick:(UIButton *)btn {
+    [SVProgressHUD showInfoWithStatus:@"正在提交数据"];
+    NSMutableDictionary *muDics = @{}.mutableCopy;
+    [muDics addEntriesFromDictionary:@{@"session_id": kApplicationDelegate.userHelper.userInfo.token}];
+    for (int i =0; i<self.itemArr.count; i++) {
+        for (NSDictionary *dic in self.updateArr) {
+            UpdateCoinListModel *model = dic[_itemArr[i]];
+            if (model != nil) {
+                if (model.markets != nil && model.markets.count) {
+                    NSMutableArray *muArr = @[].mutableCopy;
+                    NSMutableArray *coinArr = @[].mutableCopy;
+                    for (NSDictionary *dic in model.markets) {
+                        [coinArr addObject:dic[@"name"]];
+                    }
+                    NSDictionary *dic = @{@"markets": coinArr, @"coin_name": model.coin_name};
+//                    [muArr addObject:[NSDictionary dictionaryWithObject:coinArr forKey:@"markets"]];
+//                    [muArr addObject:[NSDictionary dictionaryWithObject:model.coin_name forKey:@"coin_name"]];
+                    [muArr addObject:dic];
+//                    [muArr setValue:coinArr forKey:@"markets"];
+//                    [muArr setValue:model.coin_name forKey:@"coin_name"];
+                    
+                    [muDics addEntriesFromDictionary:@{@"updates": muArr}];
+                }
+            }
+        }
+    }
     
+    if (!muDics.count) {
+        [SVProgressHUD showInfoWithStatus:@"请选择选项"];
+        return;
+    }
+    NSString *str = [JYJSON JSONStringWithDictionaryOrArray:muDics];
+    NSLog(@"%@", str);
+    
+    [self.helper helpAddOptionItemWithPath:situation_AddOptionList params:str callback:^(id obj, NSError *error) {
+        if ([obj[@"status"] integerValue] == 100) {
+            [SVProgressHUD dismiss];
+            [self.navigationController popViewControllerAnimated:YES];
+            [LDToast showToastWith:@"添加成功"];
+        }
+    }];
+
 }
+
 - (void)ZXPageViewDidEndChangeIndex:(ZXPageCollectionView *)pageView currentView:(UIView *)view{
     NSLog(@"=====%s=====", __func__);
     [self.sliderBar setSelectIndex:pageView.currentIndex];

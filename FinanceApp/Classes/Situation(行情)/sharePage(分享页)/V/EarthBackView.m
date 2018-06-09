@@ -29,15 +29,17 @@
 
 - (UIImageView *)tipImage {
     if (!_tipImage) {
-        _tipImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_share_head"]];
+        _tipImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_logo_jilian"]];
     }
     return _tipImage;
 }
 
 - (UIImageView *)qrCodeImg {
     if (!_qrCodeImg) {
-        _qrCodeImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_ewm"]];
-//        _QRCodeImg.contentMode = UIViewContentModeScaleAspectFill;
+        _qrCodeImg = [[UIImageView alloc] init];
+        [_qrCodeImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", Base_URL, jilian_QRurl]] placeholderImage:[UIImage imageNamed:@"icon_ewm_default"]];
+        
+        _qrCodeImg.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _qrCodeImg;
 }
@@ -47,7 +49,6 @@
     
     [self.earthView addSubview:self.qrCodeImg];
     [self.earthView addSubview:self.tipImage];
-    
 }
 
 - (void)layoutSubviews {
@@ -59,14 +60,14 @@
         make.size.mas_equalTo(CGSizeMake(kScreenWidth - CalculateWidth(30)*2, kScreenWidth - CalculateWidth(30)*2));
     }];
     [_tipImage mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.offset(-CalculateWidth(40));
-        make.top.offset(CalculateHeight(40));
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(120), CalculateHeight(91)));
+        make.centerX.offset(-CalculateWidth(60));
+        make.top.offset(CalculateHeight(10));
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(168), CalculateHeight(42)));
     }];
     [_qrCodeImg mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_tipImage.mas_right).offset(CalculateWidth(5));
-        make.bottom.equalTo(_tipImage);
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(30), CalculateHeight(30)));
+        make.top.equalTo(_tipImage);
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(100), CalculateHeight(100)));
     }];
 }
 

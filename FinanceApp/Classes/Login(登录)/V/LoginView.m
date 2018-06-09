@@ -371,7 +371,7 @@
             [self.loginBtn setTitleColor:k_textgray_color forState:UIControlStateNormal];
             self.loginBtn.enabled = NO;
         } else {
-            self.loginBtn.backgroundColor = k_main_color;
+            self.loginBtn.backgroundColor = k_greenMain_color;
             [self.loginBtn setTitleColor:k_white_color forState:UIControlStateNormal];
             self.loginBtn.enabled = YES;
         }

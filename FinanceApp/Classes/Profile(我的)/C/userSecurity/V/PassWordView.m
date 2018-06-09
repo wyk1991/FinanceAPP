@@ -10,6 +10,8 @@
 
 @interface PassWordView()<TimeClickDelegate>
 
+@property (nonatomic, strong) UIView *backView;
+
 @property (nonatomic, strong) UITextField *codeTf;
 @property (nonatomic, strong) UIView *line;
 @property (nonatomic, strong) TimeButton *timeBtn;
@@ -24,10 +26,11 @@
 @end
 
 @implementation PassWordView
+
 - (UITextField *)codeTf {
     if (!_codeTf) {
         _codeTf = [[UITextField alloc] init];
-        _codeTf.placeholder = @"请输入手机验证码";
+        _codeTf.placeholder = @"验证码";
         _codeTf.font = k_text_font_args(CalculateHeight(14));
         _codeTf.textAlignment = NSTextAlignmentLeft;
         _codeTf.keyboardType = UIKeyboardTypePhonePad;
@@ -65,9 +68,10 @@
 - (UITextField *)passwordTf {
     if (!_passwordTf) {
         _passwordTf = [[UITextField alloc] init];
-        _passwordTf.placeholder = @"请输入新密码";
+        _passwordTf.placeholder = @"请输入最少8位的密码";
         _passwordTf.font = k_text_font_args(CalculateHeight(14));
-        _passwordTf.keyboardType = UIKeyboardTypePhonePad;
+        _passwordTf.keyboardType = UIKeyboardTypeDefault;
+        _passwordTf.secureTextEntry = YES;
         _passwordTf.textColor = k_black_color;
     }
     return _passwordTf;
@@ -87,6 +91,7 @@
         _againPasswordTf.placeholder = @"确认密码";
         _againPasswordTf.font = k_text_font_args(CalculateHeight(14));
         _againPasswordTf.keyboardType = UIKeyboardTypeDefault;
+        _againPasswordTf.secureTextEntry = YES;
         _againPasswordTf.textColor = k_black_color;
     }
     return _againPasswordTf;
@@ -104,8 +109,8 @@
     if (!_sureBtn) {
         _sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_sureBtn setTitle:@"完成" forState:UIControlStateNormal];
-        [_sureBtn setBackgroundColor:k_textgray_color];
-        [_sureBtn setTitleColor:k_black_color forState:UIControlStateNormal];
+        [_sureBtn setBackgroundColor:k_greenMain_color];
+        [_sureBtn setTitleColor:k_white_color forState:UIControlStateNormal];
         _sureBtn.titleLabel.textAlignment = 1;
         _sureBtn.titleLabel.font = k_text_font_args(CalculateHeight(16));
         
@@ -118,11 +123,11 @@
 }
 
 - (void)setupUI {
+    [self addSubview:self.line1];
     [self addSubview:self.codeTf];
     [self addSubview:self.line];
     [self addSubview:self.passwordTf];
     [self addSubview:self.timeBtn];
-    [self addSubview:self.line1];
     [self addSubview:self.againPasswordTf];
     [self addSubview:self.line2];
     [self addSubview:self.line3];
@@ -132,7 +137,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     [_codeTf mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_line1.mas_bottom).offset(CalculateHeight(40));
+        make.top.offset(CalculateHeight(10));
         make.left.offset(CalculateWidth(30));
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(200), CalculateHeight(30)));
     }];
@@ -148,12 +153,12 @@
     }];
     [_line1 mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_codeTf.mas_bottom).offset(CalculateHeight(3));
-        make.left.equalTo(_line);
-        make.right.equalTo(_line);
+        make.left.offset(CalculateWidth(30));
+        make.right.offset(-CalculateWidth(30));
         make.height.mas_equalTo(CalculateHeight(0.5));
     }];
     [_passwordTf mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_line2.mas_bottom).offset(CalculateHeight(40));
+        make.top.equalTo(_line1.mas_bottom).offset(CalculateHeight(40));
         make.left.equalTo(_codeTf);
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(200), CalculateHeight(30)));
     }];
@@ -168,23 +173,43 @@
         make.left.equalTo(_codeTf);
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(200), CalculateHeight(30)));
     }];
+    [_line3 mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_againPasswordTf.mas_bottom).offset(CalculateHeight(3));
+        make.left.equalTo(_line1);
+        make.right.equalTo(_line1);
+        make.height.mas_equalTo(CalculateHeight(0.5));
+    }];
     [_sureBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_line2).offset(CalculateHeight(100));
+        make.top.equalTo(_line3).offset(CalculateHeight(30));
         make.left.equalTo(_codeTf);
         make.right.equalTo(_line1);
-        make.size.height.mas_equalTo(CalculateHeight(44));
+        make.size.mas_equalTo(CGSizeMake(kScreenWidth - CalculateWidth(30)*2, CalculateHeight(44)));
     }];
 }
 
 - (void)sureBtnClick:(UIButton *)btn {
-    if (self.codeTf.text  && self.passwordTf.text && self.againPasswordTf.text) {
+    
+    [self endEditing:YES];
+    if (!self.codeTf.text  && !self.passwordTf.text && !self.againPasswordTf.text) {
+        [LDToast showToastWith:@"请输入选项内容"];
         return;
     }
-    [self endEditing:YES];
-    [self.sureBtn setBackgroundColor:k_loginmain_color];
+    if (![self.passwordTf.text isEqualToString:self.againPasswordTf.text]) {
+        [LDToast showToastWith:@"两者输入的密码不一致"];
+        return;
+    }
+    NSDictionary *dic = @{@"phone": [kNSUserDefaults valueForKey:user_telephoneBinding],
+                          @"code": self.codeTf.text,
+                          @"password": self.againPasswordTf.text
+                          };
+    if (_delegate && [_delegate respondsToSelector:@selector(clickSureBtn:withInfo:)]) {
+        [_delegate clickSureBtn:self withInfo:dic];
+    }
 }
 
 - (void)timeClickButtonAction {
+    [self.timeBtn start];
+    [SVProgressHUD showSuccessWithStatus:@"发送成功"];
     if (_delegate && [_delegate respondsToSelector:@selector(clickTimeBtn:)]) {
         [_delegate clickTimeBtn:self];
     }

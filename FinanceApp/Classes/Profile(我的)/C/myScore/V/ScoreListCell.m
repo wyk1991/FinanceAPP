@@ -7,6 +7,7 @@
 //
 
 #import "ScoreListCell.h"
+#import "ScoreListModel.h"
 
 @interface ScoreListCell()
 
@@ -38,7 +39,7 @@
         make.centerY.offset(0);
     }];
     [_scoreLb mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.right.offset(CalculateWidth(27));
+        make.right.offset(-CalculateWidth(27));
         make.centerY.offset(0);
     }];
 }
@@ -46,6 +47,14 @@
 - (void)setupUI {
     [self.contentView addSubview:self.nameLb];
     [self.contentView addSubview:self.scoreLb];
+}
+
+- (void)setModel:(ScoreListModel *)model {
+    if (_model != model) {
+        _model = model;
+    }
+    self.nameLb.text = model.name;
+    self.scoreLb.text = model.count;
 }
 
 

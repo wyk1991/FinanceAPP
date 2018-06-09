@@ -9,7 +9,7 @@
 #import "ShareBottomView.h"
 
 @interface ShareBottomView()
-
+@property (nonatomic, strong) UIView *line;
 @property (nonatomic, strong) UIView *backView;
 @property (nonatomic, strong) UIButton *backBtn;
 @property (nonatomic, strong) UIButton *qqBtn;
@@ -21,6 +21,14 @@
 @end
 
 @implementation ShareBottomView
+
+- (UIView *)line {
+    if (!_line) {
+        _line = [[UIView alloc] init];
+        _line.backgroundColor = k_black_color;
+    }
+    return _line;
+}
 
 - (UIButton *)backBtn {
     if (!_backBtn) {
@@ -87,6 +95,10 @@
         make.left.right.top.offset(0);
         make.size.mas_equalTo(CGSizeMake(kScreenWidth, CalculateHeight(50)));
     }];
+    [_line mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.offset(0);
+        make.size.mas_equalTo(CGSizeMake(kScreenWidth, CalculateHeight(0.5)));
+    }];
     [_backBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.offset(CalculateWidth(20));
         make.centerY.offset(0);
@@ -116,6 +128,7 @@
 
 - (void)setupUI {
     [self addSubview:self.backView];
+    [self.backView addSubview:self.line];
     [self.backView addSubview:self.backBtn];
     [self.backView addSubview:self.qqBtn];
     [self.backView addSubview:self.wechatBtn];

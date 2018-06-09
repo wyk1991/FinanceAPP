@@ -40,6 +40,9 @@
 /** 当前页面 */
 @property (nonatomic, assign) NSInteger page;
 
+/** 自选当前页 */
+@property (nonatomic, assign) NSInteger optionPage;
+
 /** coin list data */
 @property (nonatomic, strong) NSMutableArray *coinNameList;
 
@@ -58,6 +61,11 @@
 
 - (void)helperGetOptionCoinListWithPath:(NSString *)path params:(NSDictionary *)params callBack:(UICallback)callback;
 
-- (NSDictionary *)helpGetCoinAllInfoWith:(CoinAllInfoModel *)model;
+/** 删除自选的列表数据 */
+- (void)helpDeleteOptionListItemWithPath:(NSString *)path params:(NSDictionary *)params callback:(UICallback)callback;
 
+/** 添加自选选项卡 */
+- (void)helpAddOptionItemWithPath:(NSString *)path params:(NSString *)str callback:(UICallback)callback;
+
+- (NSDictionary *)helpGetCoinAllInfoWith:(CoinAllInfoModel *)model;
 @end

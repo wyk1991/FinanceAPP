@@ -20,7 +20,7 @@
 - (UIView *)backView {
     if (!_backView) {
         _backView = [[UIView alloc] init];
-        _backView.backgroundColor = RGB(31, 45, 29);
+        _backView.backgroundColor = RGB(31, 45, 79);
     }
     return _backView;
 }
@@ -57,7 +57,9 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     [_backView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.offset(0);
+        make.left.offset(CalculateWidth(15));
+        make.right.offset(-CalculateWidth(15));
+        make.bottom.offset(-CalculateHeight(15));
     }];
     [_timeLb mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.offset(CalculateHeight(15));
@@ -72,7 +74,7 @@
         make.top.equalTo(_timeLb.mas_bottom).offset(CalculateHeight(15));
         make.left.offset(CalculateWidth(10));
         make.right.offset(-CalculateWidth(10));
-        make.bottom.offset(CalculateHeight(20));
+        make.bottom.offset(-CalculateHeight(20));
     }];
     
 }

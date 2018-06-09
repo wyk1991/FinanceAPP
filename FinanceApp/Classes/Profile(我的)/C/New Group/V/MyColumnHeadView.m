@@ -25,13 +25,19 @@
         _userImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_defaut_avatar"]];
         ViewBorderRadius(_userImg, CalculateWidth(30), CalculateWidth(60), [UIColor clearColor]);
         _userImg.contentMode  = UIViewContentModeScaleAspectFit;
+        if ([kNSUserDefaults valueForKey:kAppHasCompletedLoginUserInfo]) {
+            [_userImg sd_setImageWithURL:[NSURL URLWithString:kApplicationDelegate.userHelper.userInfo.user.avatar_url] placeholderImage:[UIImage imageNamed:@"icon_defaut_avatar"]];
+        }
     }
     return _userImg;
 }
 
 - (UILabel *)userLb {
     if (!_userLb) {
-        _userLb = [[UILabel alloc] initWithText:@"汪洋可ad" textColor:k_username_color textFont:k_text_font_args(14) textAlignment:0];
+        _userLb = [[UILabel alloc] initWithText:@"用户名" textColor:k_username_color textFont:k_text_font_args(14) textAlignment:0];
+        if ([kNSUserDefaults valueForKey:kAppHasCompletedLoginUserInfo]) {
+            _userLb.text = kApplicationDelegate.userHelper.userInfo.user.nickname;
+        }
     }
     return _userLb;
 }
@@ -89,11 +95,11 @@
     self.backgroundColor = k_mycolumn_bg;
     [self addSubview:self.userImg];
     [self addSubview:self.userLb];
-    [self addSubview:self.fansNumbtn];
-    [self addSubview:self.line];
-    [self addSubview:self.artNumbtn];
-    [self addSubview:self.line2];
-    [self addSubview:self.lookNumbtn];
+//    [self addSubview:self.fansNumbtn];
+//    [self addSubview:self.line];
+//    [self addSubview:self.artNumbtn];
+//    [self addSubview:self.line2];
+//    [self addSubview:self.lookNumbtn];
 }
 
 - (void)layoutSubviews {
@@ -108,31 +114,31 @@
         make.centerY.equalTo(_userImg);
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(120), CalculateHeight(20)));
     }];
-    [_fansNumbtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_userImg.mas_bottom).offset(CalculateHeight(15));
-        make.left.offset(0);
-        make.size.mas_equalTo(CGSizeMake(kScreenWidth/3, CalculateHeight(20)));
-    }];
-    [_line mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_fansNumbtn.mas_right).offset(0);
-        make.centerY.equalTo(_fansNumbtn);
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(0.5), CalculateHeight(15)));
-    }];
-    [_artNumbtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(_fansNumbtn);
-        make.left.equalTo(_fansNumbtn.mas_right).offset(0);
-        make.size.mas_equalTo(CGSizeMake(kScreenWidth/3, CalculateHeight(20)));
-    }];
-    [_line2 mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_artNumbtn.mas_right).offset(0);
-        make.centerY.equalTo(_fansNumbtn);
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(0.5), CalculateHeight(15)));
-    }];
-    [_lookNumbtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(_fansNumbtn);
-        make.right.offset(0);
-        make.size.mas_equalTo(CGSizeMake(kScreenWidth/3, CalculateHeight(20)));
-    }];
+//    [_fansNumbtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(_userImg.mas_bottom).offset(CalculateHeight(15));
+//        make.left.offset(0);
+//        make.size.mas_equalTo(CGSizeMake(kScreenWidth/3, CalculateHeight(20)));
+//    }];
+//    [_line mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(_fansNumbtn.mas_right).offset(0);
+//        make.centerY.equalTo(_fansNumbtn);
+//        make.size.mas_equalTo(CGSizeMake(CalculateWidth(0.5), CalculateHeight(15)));
+//    }];
+//    [_artNumbtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.equalTo(_fansNumbtn);
+//        make.left.equalTo(_fansNumbtn.mas_right).offset(0);
+//        make.size.mas_equalTo(CGSizeMake(kScreenWidth/3, CalculateHeight(20)));
+//    }];
+//    [_line2 mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(_artNumbtn.mas_right).offset(0);
+//        make.centerY.equalTo(_fansNumbtn);
+//        make.size.mas_equalTo(CGSizeMake(CalculateWidth(0.5), CalculateHeight(15)));
+//    }];
+//    [_lookNumbtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.equalTo(_fansNumbtn);
+//        make.right.offset(0);
+//        make.size.mas_equalTo(CGSizeMake(kScreenWidth/3, CalculateHeight(20)));
+//    }];
 }
 
 

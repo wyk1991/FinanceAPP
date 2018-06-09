@@ -90,7 +90,8 @@
         _codeTf.placeholder = @"请输入密码";
         _codeTf.font = k_text_font_args(CalculateHeight(14));
         _codeTf.textAlignment = NSTextAlignmentLeft;
-        _codeTf.keyboardType = UIKeyboardTypePhonePad;
+        _codeTf.keyboardType = UIKeyboardTypeDefault;
+        _codeTf.secureTextEntry = YES;
         _codeTf.delegate = self;
         _codeTf.textColor = k_textgray_color;
         
@@ -379,7 +380,7 @@
             [self.loginBtn setTitleColor:k_textgray_color forState:UIControlStateNormal];
             self.loginBtn.enabled = NO;
         } else {
-            self.loginBtn.backgroundColor = k_main_color;
+            self.loginBtn.backgroundColor = k_greenMain_color;
             [self.loginBtn setTitleColor:k_white_color forState:UIControlStateNormal];
             self.loginBtn.enabled = YES;
         }

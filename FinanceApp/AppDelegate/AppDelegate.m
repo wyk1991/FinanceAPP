@@ -12,16 +12,13 @@
 #import <UMSocialCore/UMSocialCore.h>
 #import "JPUSHService.h"
 
-
+#import "WYCustomSharePlatform.h"
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
-    [self monitorNetworking];
     
+    [self.window makeKeyAndVisible];
     // 检测版本号
 //    [self checkTheVersion];
     
@@ -31,10 +28,28 @@
     [self configUSharePlatforms];
     // 注册极光
     [self registerJPushWithOption:launchOptions];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    [self monitorNetworking];
     
     [self initMain];
     
     [self initUserSettingConfig];
+    
+    //适配iOS11的tableView问题
+    [UITableView appearance].estimatedRowHeight = 0;
+
+[UITableView appearance].estimatedSectionHeaderHeight = 0;
+
+[UITableView appearance].estimatedSectionFooterHeight = 0;
+
+if (@available(iOS 11, *)) {
+    
+[UIScrollView appearance].contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever; //iOS11 解决SafeArea的问题，同时能解决pop时上级页面scrollView抖动的问题
+    
+}
+    
     return YES;
 }
 
@@ -56,6 +71,9 @@
     }
     if (![kNSUserDefaults valueForKey:user_earlyWaring]) {
         [kNSUserDefaults setValue:@"1" forKey:user_earlyWaring];
+    }
+    if (![kNSUserDefaults valueForKey:user_webFontSize]) {
+        [kNSUserDefaults setValue:@"0" forKey:user_webFontSize];
     }
 }
 
@@ -106,13 +124,16 @@
     
     if (isLogin) {
         self.userHelper = kUserInfoHelper;
-        NSData *modelData = [kNSUserDefaults objectForKey:kAppHasCompletedLoginUserInfo];
-        UserInfoModel *model = [NSKeyedUnarchiver unarchiveObjectWithData:modelData];
-        NSLog(@"%@", model);
-        self.userHelper.userInfo = model;
-//        self.userHelper.userInfo = [UserInfoModel mj_objectWithKeyValues:[kNSUserDefaults valueForKey:kAppHasCompletedLoginUserInfo]];
-        
-        // 请求wan
+        // 请求网络
+        [self.userHelper getUserInfoWithToken:[kNSUserDefaults stringForKey:kAppHasCompletedLoginToken] callback:^(id obj, NSError *error) {
+            if (!error) {
+                
+                NSData *modelData = [kNSUserDefaults objectForKey:kAppHasCompletedLoginUserInfo];
+                UserInfoModel *model = [NSKeyedUnarchiver unarchiveObjectWithData:modelData];
+                self.userHelper.userInfo = model;
+                NSLog(@"user_token  --- %@", model.token);
+            }
+        }];
     }
     
     MainTabBarController *main = [[MainTabBarController alloc] init];
@@ -177,6 +198,9 @@
     
     //** 设置新浪的appKey和appSecret */
     [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:wechatAppkey appSecret:wechatSecret redirectURL:@"https://sns.whalecloud.com/sina2/callback"];
+   WYCustomSharePlatform *cusPlatform = [[WYCustomSharePlatform alloc] init];
+    [[UMSocialManager defaultManager] addAddUserDefinePlatformProvider:cusPlatform withUserDefinePlatformType:UMSocialPlatformType_Link];
+    
 }
 
 #pragma mark - --------  JPush  ----------

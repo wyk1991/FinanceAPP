@@ -13,10 +13,11 @@
 #import "FlashModel.h"
 
 #import "DDFlashCache.h"
+#import "ShareFlashInfoViewController.h"
 
 static NSString *flashListCellIden = @"flashListCellIden";
 
-@interface NewFlashListController ()<UITableViewDelegate, UITableViewDataSource>
+@interface NewFlashListController ()<UITableViewDelegate, UITableViewDataSource, ShareBtnClickDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) FlashHelper *helper;
@@ -54,7 +55,7 @@ static NSString *flashListCellIden = @"flashListCellIden";
     // 设置加载
     WS(weakSelf);
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        self.helper.page = 1;
+        self.helper.page = 0;
         [weakSelf refreshData];
     }];
     self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
@@ -85,9 +86,11 @@ static NSString *flashListCellIden = @"flashListCellIden";
 - (void)refreshData {
     [_helper helperGetFlashListDataWithPath:newFlashList withTags:self.cateType callback:^(id obj, NSError *error) {
         [self.tableView reloadData];
-        [self.tableView.ts_scrollStatusBar configWithString:@"+ 2 篇新内容"];
+        NSInteger count = [obj[@"kuaixun"] count];
+        [self.tableView.ts_scrollStatusBar configWithString:[NSString stringWithFormat:@"+ %ld 篇新内容", count]];
         [self.tableView.ts_scrollStatusBar show];
         [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
     }];
 }
 
@@ -95,6 +98,10 @@ static NSString *flashListCellIden = @"flashListCellIden";
     [_helper helperGetFlashListDataWithPath:newFlashList withTags:self.cateType callback:^(id obj, NSError *error) {
         [self.tableView reloadData];
         [self.tableView.mj_footer endRefreshing];
+        if ([obj[@"kuaixun"] count] == 0) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        }
+        
     }];
 }
 
@@ -110,7 +117,8 @@ static NSString *flashListCellIden = @"flashListCellIden";
 
 - (void)addMasnory {
     [_tableView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.right.bottom.offset(0);
+        make.top.left.right.offset(0);
+        make.bottom.offset(-CalculateHeight(80));
     }];
 }
 
@@ -130,8 +138,10 @@ static NSString *flashListCellIden = @"flashListCellIden";
     if (!cell) {
         cell = [[NewFlashListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:flashListCellIden];
     }
+    cell.delegate = self;
     cell.viewModel = self.helper.dataList[indexPath.section][indexPath.row];
-    
+    cell.indexPath = indexPath;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
@@ -157,6 +167,8 @@ static NSString *flashListCellIden = @"flashListCellIden";
     timeLb.textColor = k_flash_pulish;
     timeLb.font = k_text_font_args(CalculateHeight(15));
     FlashViewModel *viewModel= [self.helper.dataList objectAtIndex:section][0];
+    NSString *str = viewModel.model.publishedAt;
+    timeLb.text = [NSString stringWithFormat:@"%@年 %@月%@日 ", [str substringToIndex:3], [str substringWithRange:NSMakeRange(5, 2)], [str substringWithRange:NSMakeRange(8, 2)]];
     timeLb.text = viewModel.model.publishedAt;
     timeLb.textAlignment = 1;
     [headerView addSubview:timeLb];
@@ -178,6 +190,14 @@ static NSString *flashListCellIden = @"flashListCellIden";
     
 }
 
+- (void)shareBtnClick:(NewFlashListCell *)cell withIndexPath:(NSIndexPath *)indexPath{
+    
+    FlashViewModel *viewModel = self.helper.dataList[indexPath.section][indexPath.row];
+    ShareFlashInfoViewController *vc = [[ShareFlashInfoViewController alloc] init];
+    vc.model = viewModel.model;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:nil];
+}
 
 
 @end

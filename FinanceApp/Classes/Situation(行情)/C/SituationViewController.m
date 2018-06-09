@@ -13,6 +13,7 @@
 #import "EarlyWarnViewController.h"
 #import "SituationSearchViewController.h"
 #import "ShareClipViewController.h"
+#import "QuickLoginViewController.h"
 
 #import "SituationHelper.h"
 #import "NormalCoinHeadView.h"
@@ -99,6 +100,18 @@
         // 添加到runloop中，不要使用系统默认的mainRubloop，不然会阻塞主线程
         [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
     }
+//    IconDetailViewController *vc = (IconDetailViewController *)[self ZXPageCollectionView:self.pageVC viewForItemAtIndex:self.pageVC.currentIndex];
+//    [vc addNotification];
+    
+    [self addNotification];
+}
+
+- (void)addNotification {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feachData) name:kUserChangeCurrencyNotification object:nil];
+    // 成功登录的回调通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feachData) name:kUserLoginSuccessNotification object:nil];
+    // 退出的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feachData) name:kUserLoginOutSuccessNotification object:nil];
     
 }
 
@@ -156,6 +169,9 @@
 - (void)feachData {
     IconDetailViewController *vc = (IconDetailViewController *)[self ZXPageCollectionView:self.pageVC viewForItemAtIndex:self.pageVC.currentIndex];
     vc.selectedIndex = self.pageVC.currentIndex;
+    if (vc.selectedIndex == 0) {
+        return;
+    }
     [vc fetchData];
 }
 
@@ -173,29 +189,119 @@
  点击分享按钮
  */
 - (void)shareBtnClick {
-    CGSize size = CGSizeZero;
-    IconDetailViewController *v;
-    for (UIView *view in self.pageVC.mainScrollView.subviews) {
-        if ([view isKindOfClass:[IconDetailViewController class]]) {
-            NSLog(@"%@", view.subviews);
-            NSLog(@"%f", view.frame.size.height);
-            size = view.frame.size;
-            v = view;
+    UIImage *headImg = nil;
+    IconDetailViewController *vc = (IconDetailViewController *)[self ZXPageCollectionView:self.pageVC viewForItemAtIndex:self.pageVC.currentIndex];
+    for (UIView *view in vc.subviews) {
+        NSLog(@"%@", vc);
+        NSLog(@"%@", view.subviews);
+        NSLog(@"%f", view.frame.size.height);
+        CGRect rect = view.frame;
+        if ([view isKindOfClass:[UIScrollView class]]) {
+            rect.size = ((UIScrollView *)view).contentSize;
         }
+        if ([view isKindOfClass:[UIButton class]]) {
+            break;
+        }
+        UIGraphicsBeginImageContextWithOptions(rect.size, YES, [UIScreen mainScreen].scale);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        [view.layer renderInContext:context];
+        headImg = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
     }
     
-    // 设置截屏大小
-    UIGraphicsBeginImageContextWithOptions(size, YES, 0);
-    [[v layer] renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsGetCurrentContext();
+    NSLog(@"left heght: %f, right height: %f", vc.leftTableView.contentSize.height, vc.rightTableView.contentSize.height);
     
-    [self pushShareViewControllerWithImage:viewImage withInfo:@{}];
+    UIImage *optionImg = nil;
+    UIImage *leftImg = nil;
+    UIImage *rightImg = nil;
+    if (vc.optionTableView) {
+        
+        UIGraphicsBeginImageContextWithOptions(vc.optionTableView.contentSize, YES, [UIScreen mainScreen].scale);
+        {
+            CGPoint savedContentOffset = vc.optionTableView.contentOffset;
+            CGRect saveFrame = vc.optionTableView.frame;
+            vc.optionTableView.contentOffset = CGPointZero;
+            vc.optionTableView.frame = CGRectMake(0, 0, vc.optionTableView.contentSize.width, vc.optionTableView.contentSize.height);
+            [vc.optionTableView.layer renderInContext:UIGraphicsGetCurrentContext()];
+            
+            optionImg = UIGraphicsGetImageFromCurrentImageContext();
+            vc.optionTableView.contentOffset = savedContentOffset;
+            vc.optionTableView.frame = saveFrame;
+        }
+        UIGraphicsEndImageContext();
+    }
+    if (vc.leftTableView && vc.rightTableView) {
+        UIGraphicsBeginImageContextWithOptions(vc.leftTableView.contentSize, YES, [UIScreen mainScreen].scale);
+        {
+            CGPoint savedContentOffset = vc.leftTableView.contentOffset;
+            CGRect saveFrame = vc.leftTableView.frame;
+            vc.leftTableView.contentOffset = CGPointZero;
+            vc.leftTableView.frame = CGRectMake(0, 0, vc.leftTableView.contentSize.width, vc.leftTableView.contentSize.height);
+            [vc.leftTableView.layer renderInContext:UIGraphicsGetCurrentContext()];
+            
+            leftImg = UIGraphicsGetImageFromCurrentImageContext();
+            vc.leftTableView.contentOffset = savedContentOffset;
+            vc.leftTableView.frame = saveFrame;
+        }
+        
+        UIGraphicsBeginImageContextWithOptions(vc.rightTableView.contentSize, YES, [UIScreen mainScreen].scale);
+        {
+            CGPoint savedContentOffset = vc.rightTableView.contentOffset;
+            CGRect saveFrame = vc.rightTableView.frame;
+            vc.rightTableView.contentOffset = CGPointZero;
+            vc.rightTableView.frame = CGRectMake(0, 0, vc.rightTableView.contentSize.width, vc.rightTableView.contentSize.height);
+            [vc.rightTableView.layer renderInContext:UIGraphicsGetCurrentContext()];
+            
+            rightImg = UIGraphicsGetImageFromCurrentImageContext();
+            vc.rightTableView.contentOffset = savedContentOffset;
+            vc.rightTableView.frame = saveFrame;
+        }
+        UIGraphicsEndImageContext();
+    }
+    
+    
+    UIImage *resultImg = [self composeWithHeader:headImg leftTableView:leftImg rightTableView:rightImg footTable:optionImg];
+    
+    [self pushShareViewControllerWithImage:resultImg withInfo:resultImg.size];
     
 }
 
-- (void)pushShareViewControllerWithImage:(UIImage *)viewImage withInfo:(NSDictionary *)dic {
-    ShareClipViewController *vc = [[ShareClipViewController alloc] initWithClipImage:viewImage Height:viewImage.size.height];
+- (UIImage *)composeWithHeader:(UIImage *)header leftTableView:(UIImage *)leftImg rightTableView:(UIImage *)rightImg footTable:(UIImage *)footImg {
+    UIImage *topImg = nil;
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[ZXCategorySliderBar class]]) {
+            CGRect rect = view.frame;
+            
+            UIGraphicsBeginImageContextWithOptions(rect.size, YES, [UIScreen mainScreen].scale);
+            CGContextRef context = UIGraphicsGetCurrentContext();
+            [view.layer renderInContext:context];
+            topImg = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+        }
+    }
+    
+    CGSize size = CGSizeMake(kScreenWidth, topImg.size.height+ header.size.height + leftImg.size.height + footImg.size.height);
+    UIGraphicsBeginImageContextWithOptions(size, YES, [UIScreen mainScreen].scale);
+    [topImg drawInRect:CGRectMake(0, 0, topImg.size.width, topImg.size.height)];
+    [header drawInRect:CGRectMake(0, topImg.size.height , header.size.width, header.size.height)];
+    if (leftImg && rightImg) {
+        [leftImg drawInRect:CGRectMake(0, header.size.height + topImg.size.height , leftImg.size.width, leftImg.size.height)];
+        [rightImg drawInRect:CGRectMake(leftImg.size.width, header.size.height + topImg.size.height, rightImg.size.width, rightImg.size.height)];
+    } else {
+        [footImg drawInRect:CGRectMake(0, header.size.height+ topImg.size.height, footImg.size.width , footImg.size.height)];
+    }
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
+
+
+- (void)pushShareViewControllerWithImage:(UIImage *)viewImage withInfo:(CGSize)size {
+    ShareClipViewController *vc = [[ShareClipViewController alloc] initWithClipImage:viewImage Height:size.height];
     [self.navigationController presentViewController:vc animated:YES completion:nil];
 }
 
@@ -203,22 +309,24 @@
  点击添加自选的功能
  */
 - (void)addClick {
-    AddCoinViewController *vc = [[AddCoinViewController alloc] init];
-    vc.hidesBottomBarWhenPushed = YES;
-    vc.itemArr = self.addArr;
-    [self.navigationController pushViewController:vc animated:YES];
+    // 判断是否登录了
+    if (![kNSUserDefaults valueForKey:kAppHasCompletedLoginToken]) {
+        QuickLoginViewController *vc = [[QuickLoginViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+//        [self.navigationController pushViewController:vc animated:YES];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        [self presentViewController:nav animated:YES completion:nil];
+    } else {
+        AddCoinViewController *vc = [[AddCoinViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        vc.itemArr = self.addArr;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
 }
 
 - (void)ZXPageViewWillBeginDragging:(ZXPageCollectionView *)pageView
 {
-    NSLog(@"%@", pageView.mainScrollView.subviews);
-//    for (UIView *view in pageView.mainScrollView.subviews) {
-//        if ([view isKindOfClass:[IconDetailViewController class]]) {
-//            NSLog(@"%@", view.subviews);
-//            NSLog(@"%f", view.frame.size.height);
-//        }
-//    }
-    
     self.sliderBar.isMoniteScroll = NO;
     self.sliderBar.scrollViewLastContentOffset = pageView.mainScrollView.contentOffset.x;
 }
@@ -249,6 +357,10 @@
 - (void)didClickToSeachCoin:(IconDetailViewController *)subView {
     SituationSearchViewController *vc = [[SituationSearchViewController alloc] init];
     [self.navigationController presentViewController:vc animated:YES completion:nil];
+}
+
+- (void)didClickAddBtn:(IconDetailViewController *)subView {
+    [self addClick];
 }
 
 - (void)didReceiveMemoryWarning {

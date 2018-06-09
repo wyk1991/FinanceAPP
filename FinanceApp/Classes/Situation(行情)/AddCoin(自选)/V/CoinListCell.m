@@ -75,7 +75,7 @@
     }
     [self.iconImg sd_setImageWithURL:[NSURL URLWithString:model.logo] placeholderImage:nil];
     self.nameLb.text = model.name;
-    self.checkImg.image = model.isSelect? [UIImage imageNamed:@"verified_step1_complete_icon"] : [UIImage imageNamed:@"warning_price"];
+    self.checkImg.image = [model.selected isEqualToString:@"1"] ? [UIImage imageNamed:@"verified_step1_complete_icon"] : [UIImage imageNamed:@"warning_price"];
 }
 
 - (void)setResultModel:(SitutaionResultModel *)resultModel {
@@ -84,7 +84,7 @@
     }
     [self.checkImg setHidden:YES];
     [self.iconImg sd_setImageWithURL:[NSURL URLWithString:resultModel.logo_url] placeholderImage:nil];
-    self.nameLb.text = [NSString stringWithFormat:@"%@(%@)", resultModel.full_name, resultModel.shot_name];
+    self.nameLb.text = [NSString stringWithFormat:@"%@(%@)", resultModel.full_name, resultModel.short_name];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

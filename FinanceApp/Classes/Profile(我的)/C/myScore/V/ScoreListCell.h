@@ -8,7 +8,9 @@
 
 #import "BaseCell.h"
 
+@class ScoreListModel;
 static NSString *scoreListIdentifier = @"scoreListIdentifier";
 @interface ScoreListCell : BaseCell
 
+@property (nonatomic, strong) ScoreListModel *model;
 @end

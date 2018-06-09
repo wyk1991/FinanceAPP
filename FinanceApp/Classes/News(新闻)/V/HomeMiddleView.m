@@ -9,6 +9,8 @@
 #import "HomeMiddleView.h"
 #import "NewsModel.h"
 
+#import "ArticleWebViewController.h"
+
 @interface HomeMiddleView()<TXScrollLabelViewDelegate>
 
 @property (nonatomic, strong) UILabel *title;
@@ -24,7 +26,6 @@
 @end
 
 @implementation HomeMiddleView
-
 
 - (instancetype)init {
     self = [super init];
@@ -128,39 +129,45 @@
     
 }
 
-
-
 - (void)setModelArr:(NSMutableArray *)modelArr {
     if (_modelArr != modelArr) {
         _modelArr = modelArr;
     }
-    [self setScrollLabelWithArr:modelArr];
+    NSMutableArray *contentArr = @[].mutableCopy;
+    for (NewsModel *model in modelArr) {
+        NSString *content = model.title;
+        [contentArr addObject:content];
+    }
+    [self setScrollLabelWithArr:contentArr];
     
-    NSArray *time = @[@"12:30", @"10:23", @"10:22"];
-    self.index = 2;
+    NSArray *time = @[@"9:30"];
+    self.index = 0;
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(changeTheTime:) userInfo:@{@"userinfo": time} repeats:YES];
     self.timer = timer;
     
     /** Step2: 创建 ScrollLabelView */
     TXScrollLabelView *scrollLabelView = nil;
-    scrollLabelView = [TXScrollLabelView scrollWithTextArray:modelArr type:2 velocity:2 options:UIViewAnimationOptionCurveEaseInOut inset:UIEdgeInsetsZero];
+    
+    scrollLabelView = [TXScrollLabelView scrollWithTextArray:contentArr type:2 velocity:2 options:UIViewAnimationOptionCurveEaseInOut inset:UIEdgeInsetsZero];
     
     
     /** Step3: 设置代理进行回调 */
     scrollLabelView.scrollLabelViewDelegate = self;
     
     /** Step4: 布局(Required) */
-    scrollLabelView.frame = CGRectMake(self.frame.size.width/2 - CalculateWidth(50) , CalculateHeight(20), CalculateWidth(200), CalculateHeight(45));
+    scrollLabelView.frame = CGRectMake(self.frame.size.width/2 - CalculateWidth(60) , CalculateHeight(20), CalculateWidth(220), CalculateHeight(45));
     
     [self addSubview:scrollLabelView];
     
     //偏好(Optional), Preference,if you want.
 //    scrollLabelView.tx_centerX  = [UIScreen mainScreen].bounds.size.width * 0.5;
-    scrollLabelView.scrollInset = UIEdgeInsetsMake(0, 10 , 0, 10);
-    scrollLabelView.scrollSpace = 10;
-    scrollLabelView.font = [UIFont systemFontOfSize:15];
+    scrollLabelView.scrollInset = UIEdgeInsetsMake(0, 5 , 0, 5);
+    scrollLabelView.scrollSpace = 8;
+    scrollLabelView.font = [UIFont systemFontOfSize:17];
+    scrollLabelView.mode = NSLineBreakByTruncatingTail;
     scrollLabelView.textAlignment = NSTextAlignmentCenter;
     scrollLabelView.backgroundColor = [UIColor clearColor];
+    
     scrollLabelView.scrollTitleColor = k_black_color;
 //    scrollLabelView.layer.cornerRadius = 5;
     
@@ -174,11 +181,14 @@
 
 - (void)scrollLabelView:(TXScrollLabelView *)scrollLabelView didClickWithText:(NSString *)text atIndex:(NSInteger)index {
     NSLog(@"%@--%ld",text, index);
+    if (_scrollerTapActionBlock) {
+        _scrollerTapActionBlock(index);
+    }
 }
 
 - (void)changeTheTime:(NSTimer *)timer {
     if (self.index == -1) {
-        self.index = 2;
+        self.index = 0;
     }
     NSArray *arr = [timer.userInfo valueForKey:@"userinfo"];
     [self.cateTypeLb setTitle:arr[self.index] forState:UIControlStateNormal];

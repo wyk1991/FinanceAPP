@@ -20,6 +20,7 @@ typedef enum : NSUInteger {
 - (void)didClickWarnImgWith:(IconDetailViewController *)subView withInfo:(PricesModel *)model coinName:(NSString *)coinName;
 - (void)didClickToSeachCoin:(IconDetailViewController *)subView;
 
+- (void)didClickAddBtn:(IconDetailViewController *)subView;
 @end
 
 #import "BaseView.h"
@@ -35,6 +36,9 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, assign) NSInteger selectedIndex;
 
+@property (nonatomic,strong) UITableView *leftTableView, *rightTableView;
+
+@property (nonatomic, strong) UITableView *optionTableView;
 - (instancetype)initWithFrame:(CGRect)frame withShowType:(CoinShowType)showType withIndex:(NSInteger)index;
 
 @end

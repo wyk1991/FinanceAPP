@@ -10,4 +10,7 @@
 
 @interface MyScoreViewController : BaseViewController
 
+
+
+- (instancetype)initWithViewType:(NSString *)viewType;
 @end

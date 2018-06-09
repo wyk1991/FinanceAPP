@@ -160,6 +160,8 @@ static BOOL isProduction = TRUE;
 #define user_telephoneBinding @"user_telephoneBinding"
 #define user_wechat @"user_wechat"
 #define user_settingPassword @"user_password"
+/** 0: 小 1: 中 2: 大 */
+#define user_webFontSize @"user_webFontSize"
 
 /*!
  *  缓存的策略：(如果 cacheTime == 0，将永久缓存数据) 也就是缓存的时间 以 秒 为单位计算

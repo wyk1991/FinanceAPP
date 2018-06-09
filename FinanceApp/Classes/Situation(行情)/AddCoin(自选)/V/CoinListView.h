@@ -12,6 +12,6 @@
 
 @property (nonatomic, strong) NSString *coinName;
 
-- (instancetype)initWithFrame:(CGRect)frame WithCoinName:(NSString *)name;
+- (instancetype)initWithFrame:(CGRect)frame withCoinDic:(NSDictionary *)dic;
 
 @end

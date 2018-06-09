@@ -14,6 +14,7 @@
 #import "HomeMiddleView.h"
 
 #import "HomeHelper.h"
+#import "RollModel.h"
 
 #import "SearchViewController.h"
 #import "ArticleWebViewController.h"
@@ -50,7 +51,6 @@
         _scrollView.orientation = NewPagedFlowViewOrientationHorizontal;
         _scrollView.isOpenAutoScroll = YES;
         
-        
     }
     return _scrollView;
 }
@@ -69,6 +69,15 @@
         _middleView.frame = CGRectMake(CalculateWidth(23), CGRectGetMaxY(self.pageControl.frame) + CalculateHeight(10), kScreenWidth - CalculateWidth(23)*2, CalculateHeight(77));
         _middleView.layer.cornerRadius = 5.0f;
         _middleView.layer.masksToBounds = YES;
+        
+        WS(weakSelf);
+        _middleView.scrollerTapActionBlock = ^(NSInteger index) {
+            NSLog(@"点击le %ld", index);
+            NewsModel *model = weakSelf.helper.AdModelArr[index];
+            ArticleWebViewController *vc = [[ArticleWebViewController alloc] initWithUrlString:model.url];
+            vc.hidesBottomBarWhenPushed = YES;
+            [weakSelf.navigationController pushViewController:vc animated:YES];
+        };
     }
     return _middleView;
 }
@@ -167,7 +176,7 @@
             if (!error) {
                 // 设置头条数据
                 [self.headerView addSubview:self.middleView];
-                self.middleView.modelArr = self.helper.contentArr;
+                self.middleView.modelArr = self.helper.AdModelArr;
             }
             
         }];
@@ -197,7 +206,7 @@
         self.helper.page++;
         [weakSelf loadMoreData];
     }];
-    
+    self.automaticallyAdjustsScrollViewInsets = NO;
     // 去除刷新前的横线
     UIView*view = [UIView new];
     view.backgroundColor= [UIColor clearColor];
@@ -216,15 +225,17 @@
         [self.tableView reloadData];
         
         [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
     }];
 }
 
 - (void)loadMoreData {
     [[HomeHelper shareHelper] helperGetDataListWithPath:newsList WithTag:self.pageType callBack:^(id obj, NSError *error) {
         [self.tableView reloadData];
-        
-        
         [self.tableView.mj_footer endRefreshing];
+        if ([obj[@"articles"] count] == 0) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        }
     }];
 }
 
@@ -244,6 +255,7 @@
         cell = [[NewsListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:newListIdentifier];
     }
     cell.model = self.helper.dateList[indexPath.row];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
@@ -252,27 +264,33 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return CalculateHeight(220);
+    return CalculateHeight(0);
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [[UIView alloc] init];
 }
 
 #pragma mark - UITableView Delegate methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"跳转webView");
-    NewsModel *model = self.helper.dateList[indexPath.row];
-    // 保存数据到历史中
-    // 异步执行方法，防止卡
-    dispatch_async(dispatch_get_main_queue(), ^{
+    if (self.helper.dateList.count) {
+        NewsModel *model = self.helper.dateList[indexPath.row];
+        // 保存数据到历史中
+        // 异步执行方法，防止卡
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            // do something
+            
+            [self saveDataToPlist:model];
+        });
         
-        // do something
-        
-        [self saveDataToPlist:model];
-    });
+        ArticleWebViewController *vc = [[ArticleWebViewController alloc] initWithUrlString:[self.helper.dateList[indexPath.row] valueForKey:@"url"]];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
     
-    
-    ArticleWebViewController *vc = [[ArticleWebViewController alloc] initWithUrlString:[self.helper.dateList[indexPath.row] valueForKey:@"url"]];
-    vc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vc animated:YES];
 }
 - (void)saveDataToPlist:(NewsModel *)model {
     NSString *filePath = [documentPath stringByAppendingPathComponent:historyFile];
@@ -300,9 +318,6 @@
         [tmp addObject:dic];
         [tmp writeToFile:filePath atomically:YES];
     }
-    
-    
-    
 }
 
 #pragma mark - NewPagedFlowView Delegate
@@ -312,6 +327,10 @@
 
 - (void)didSelectCell:(PGIndexBannerSubiew *)subView withSubViewIndex:(NSInteger)subIndex {
     NSLog(@"点击了第%ld张图",(long)subIndex + 1);
+    RollModel *model = self.helper.scrollList[subIndex];
+    ArticleWebViewController *vc = [[ArticleWebViewController alloc] initWithUrlString:model.url];
+    vc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)didScrollToPage:(NSInteger)pageNumber inFlowView:(NewPagedFlowView *)flowView {
@@ -340,41 +359,27 @@
 
 #pragma mark - UITextFiledDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-
 {
-    
     if (textField == _searchBackView.subviews[0])
-        
     {
-        
         SearchViewController *seachVc = [[SearchViewController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:seachVc];
         seachVc.hidesBottomBarWhenPushed = YES;
         [self presentViewController:nav animated:YES completion:nil];
-        
     }
-    
-    
-    
     return YES;
-    
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
-
 {
-    
     [self.searchBackView.subviews[0] resignFirstResponder];
-    
 }
-
 
 #pragma mark - enterBackGround
 - (void)enterBackGround
 {
     [[DDNewsCache sharedInstance] removeAllObjects];
 }
-
 
 - (void)dealloc
 {

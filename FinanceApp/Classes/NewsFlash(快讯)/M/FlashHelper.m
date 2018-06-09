@@ -39,7 +39,7 @@ static FlashHelper *_instance;
         // 为了防止多线程同时访问对象，造成多次分配内存空间，所以要加上线程锁
         if (_instance == nil) {
             _instance = [super allocWithZone:zone];
-            _instance.page = 1;
+            _instance.page = 0;
         }
         return _instance;
     }
@@ -76,7 +76,7 @@ static FlashHelper *_instance;
 
 - (void)helperGetFlashListDataWithPath:(NSString *)path withTags:(NSString *)tagStr callback:(UICallback)callback {
     WS(weakSelf);
-    [weakSelf startGETRequest:path inParam:@{@"cate": tagStr, @"page": @(self.page).stringValue} outParse:^(id retData, NSError *error) {
+    [weakSelf startGETRequest:path inParam:@{@"cate": tagStr, @"start": @(self.page).stringValue} outParse:^(id retData, NSError *error) {
         if ([retData[@"status"] integerValue] == 100) {
             [weakSelf dealFlashListData:retData];
         }
@@ -88,7 +88,7 @@ static FlashHelper *_instance;
 
 - (void)dealFlashListData:(id)result {
     NSArray *arr = result[@"kuaixun"];
-    if (self.page == 1) {
+    if (self.page == 0) {
         [self.dataList removeAllObjects];
     }
     if (arr.count) {

@@ -11,8 +11,6 @@
 
 @implementation FlashViewModel
 
-
-
 -(CGSize)sizeWithText:(NSString *)text font:(UIFont *)font maxSize:(CGSize)maxSize
 {
     NSDictionary *attrs=@{NSFontAttributeName:font};

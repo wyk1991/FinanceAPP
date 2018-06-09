@@ -18,6 +18,7 @@
 
 #import "HomeHelper.h"
 #import "RollModel.h"
+#import "ArticleWebViewController.h"
 
 static NSString *const cxSearchCollectionViewCell = @"CXSearchCollectionViewCell";
 
@@ -511,11 +512,12 @@ UICollectionReusableViewButtonDelegate
 #pragma mark - UITableView Delegate methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     // 跳转 文章页面
-    
+    RollModel *model = self.dataList[indexPath.row];
+    ArticleWebViewController *vc = [[ArticleWebViewController alloc] initWithUrlString:model.url];
+    [self.navigationController pushViewController:vc animated:YES];
 }
-
-
 
 - (void)cancelBtnClick:(UIButton *)btn {
     [self.view endEditing:YES];

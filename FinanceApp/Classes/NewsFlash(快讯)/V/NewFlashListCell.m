@@ -22,9 +22,12 @@
 
 @property (nonatomic, strong) CardDetailView *detailView;
 
-@property (nonatomic, strong) UIButton *publishBtn;
+@property (nonatomic, strong) UIImageView *timeImg;
+@property (nonatomic, strong) UILabel *bottomTimeLb;
 @property (nonatomic, strong) UILabel *surplusLb;
-@property (nonatomic, strong) UIButton *shareBtn;
+//@property (nonatomic, strong) UIButton *shareBtn;
+@property (nonatomic, strong) UIImageView *shareImg;
+@property (nonatomic, strong) UILabel *shareLb;
 
 @end
 
@@ -76,17 +79,20 @@
     }
     return _detailView;
 }
-- (UIButton *)publishBtn {
-    if (!_publishBtn) {
-        _publishBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_publishBtn setImage:[UIImage imageNamed:@"ic_time"] forState:UIControlStateNormal];
-        [_publishBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -10, 0, 0)];
-        [_publishBtn setTitle:@"" forState:UIControlStateNormal];
-        _publishBtn.userInteractionEnabled = NO;
-        _publishBtn.titleLabel.font = k_text_font_args(CalculateHeight(12));
-        [_publishBtn setTitleColor:k_currenty_text forState:UIControlStateNormal];
+
+- (UIImageView *)timeImg {
+    if (!_timeImg) {
+        _timeImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_time"]];
     }
-    return _publishBtn;
+    return _timeImg;
+}
+
+- (UILabel *)bottomTimeLb {
+    if (!_bottomTimeLb) {
+        _bottomTimeLb = [[UILabel alloc] initWithText:@"09:30:22" textColor:k_currenty_text textFont:k_text_font_args(CalculateHeight(12)) textAlignment:2];
+        
+    }
+    return _bottomTimeLb;
 }
 
 - (UILabel *)surplusLb {
@@ -96,18 +102,40 @@
     return _surplusLb;
 }
 
-- (UIButton *)shareBtn {
-    if (!_shareBtn) {
-        _shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_shareBtn setImage:[UIImage imageNamed:@"ic_share"] forState:UIControlStateNormal];
-        [_shareBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -10, 0, 0)];
-        [_shareBtn setTitle:@"" forState:UIControlStateNormal];
-        [_shareBtn setTitleColor:k_currenty_text forState:UIControlStateNormal];
-        _shareBtn.titleLabel.font = k_text_font_args(CalculateHeight(12));
+//- (UIButton *)shareBtn {
+//    if (!_shareBtn) {
+//        _shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//        [_shareBtn setImage:[UIImage imageNamed:@"ic_share"] forState:UIControlStateNormal];
+//        [_shareBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -10, 0, 0)];
+//        [_shareBtn setTitle:@"" forState:UIControlStateNormal];
+//        [_shareBtn setTitleColor:k_currenty_text forState:UIControlStateNormal];
+//        _shareBtn.titleLabel.font = k_text_font_args(CalculateHeight(12));
+//
+//        [_shareBtn addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+//    }
+//    return _shareBtn;
+//}
+
+- (UIImageView *)shareImg {
+    if (!_shareImg) {
+        _shareImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_share"]];
+        _shareImg.userInteractionEnabled = YES;
+        UITapGestureRecognizer *ges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(shareBtnClick)];
         
-        [_shareBtn addTarget:self action:@selector(shareBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_shareImg addGestureRecognizer:ges];
     }
-    return _shareBtn;
+    return _shareImg;
+}
+
+- (UILabel *)shareLb {
+    if (!_shareLb) {
+        _shareLb = [[UILabel alloc] initWithText:@"分享挖矿" textColor:k_currenty_text textFont:k_text_font_args(CalculateHeight(12)) textAlignment:2];
+        _shareLb.userInteractionEnabled = YES;
+        UITapGestureRecognizer *ges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(shareBtnClick)];
+        
+        [_shareLb addGestureRecognizer:ges];
+    }
+    return _shareLb;
 }
 
 - (void)setupUI {
@@ -118,9 +146,13 @@
     [self.contentView addSubview:self.starsView];
     [self.contentView addSubview:self.contentLb];
     [self.contentView addSubview:self.detailView];
-    [self.contentView addSubview:self.publishBtn];
+//    [self.contentView addSubview:self.publishBtn];
+    [self.contentView addSubview:self.timeImg];
+    [self.contentView addSubview:self.bottomTimeLb];
     [self.contentView addSubview:self.surplusLb];
-    [self.contentView addSubview:self.shareBtn];
+//    [self.contentView addSubview:self.shareBtn];
+    [self.contentView addSubview:self.shareLb];
+    [self.contentView addSubview:self.shareImg];
 }
 
 - (void)layoutSubviews {
@@ -155,30 +187,41 @@
         make.right.equalTo(_contentLb);
         make.size.height.mas_equalTo(@0);
     }];
-    [_shareBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//    [_shareBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.right.offset(-CalculateWidth(24));
+//        make.bottom.offset(-CalculateHeight(10));
+//        make.size.mas_equalTo(CGSizeMake(CalculateWidth(80), CalculateHeight(12)));
+//    }];
+    [_shareLb mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.right.offset(-CalculateWidth(24));
-        make.bottom.offset(-CalculateHeight(15));
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(80), CalculateHeight(12)));
+        make.bottom.offset(-CalculateHeight(10));
+    }];
+    [_shareImg mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(_shareLb.mas_left).offset(-CalculateWidth(5));
+        make.centerY.equalTo(_shareLb);
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(16), CalculateHeight(16)));
     }];
     [_surplusLb mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(_shareBtn.mas_left).offset(CalculateWidth(15));
-        make.top.equalTo(_shareBtn);
+        make.right.equalTo(_shareImg.mas_left).offset(-CalculateWidth(10));
+        make.centerY.equalTo(_shareImg);
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(100), CalculateHeight(12)));
     }];
-    [_publishBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(_surplusLb.mas_left).offset(-CalculateWidth(15));
-        make.top.equalTo(_shareBtn);
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(120), CalculateHeight(12)));
+    [_bottomTimeLb mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(_surplusLb.mas_left).offset(-CalculateWidth(10));
+        make.centerY.equalTo(_shareImg);
+    }];
+    [_timeImg mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(_bottomTimeLb.mas_left).offset(-CalculateWidth(5));
+        make.centerY.equalTo(_shareImg);
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(15), CalculateHeight(16)));
     }];
     
 }
 
 - (void)setViewModel:(FlashViewModel *)viewModel {
-    
     if (_viewModel != viewModel) {
         _viewModel = viewModel;
     }
-    
     self.starsView.score = [viewModel.model.hottness floatValue];
     self.timeLb.text = [viewModel.model.publishedAt substringWithRange:NSMakeRange(11, 5)];
     self.contentLb.text = viewModel.model.desc;
@@ -188,17 +231,23 @@
     } else {
         [self.detailView setHidden:YES];
     }
-    [self.publishBtn setTitle:viewModel.model.publishedAt forState:UIControlStateNormal];
+    self.bottomTimeLb.text = [viewModel.model.publishedAt substringWithRange:NSMakeRange(11, 8)];
     self.surplusLb.text = [NSString stringWithFormat:@"剩余数目  %@", viewModel.model.remain_coin];
-    [self.shareBtn setTitle:@"12222" forState:UIControlStateNormal];
+//    [self.shareBtn setTitle:@"分享挖矿" forState:UIControlStateNormal];
     
     [self layoutIfNeeded];
 }
 
+- (void)setIndexPath:(NSIndexPath *)indexPath {
+    if (_indexPath != indexPath) {
+        _indexPath = indexPath;
+    }
+    
+}
 
-- (void)shareBtnClick:(UIButton *)btn {
-    if (_delegate && [_delegate respondsToSelector:@selector(shareBtnClick:)]) {
-        [_delegate shareBtnClick:self];
+- (void)shareBtnClick {
+    if (_delegate && [_delegate respondsToSelector:@selector(shareBtnClick:withIndexPath:)]) {
+        [_delegate shareBtnClick:self withIndexPath:self.indexPath];
     }
 }
 

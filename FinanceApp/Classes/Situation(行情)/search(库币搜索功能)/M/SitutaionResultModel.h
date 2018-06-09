@@ -11,7 +11,7 @@
 @interface SitutaionResultModel : NSObject
 
 @property (nonatomic, copy) NSString *full_name;
-@property (nonatomic, copy) NSString *shot_name;
+@property (nonatomic, copy) NSString *short_name;
 @property (nonatomic, copy) NSString *logo_url;
 
 @end

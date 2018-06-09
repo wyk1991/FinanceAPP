@@ -12,6 +12,7 @@
 #import "PreviewCell.h"
 #import "SituationSettingManager.h"
 #import "TelBindingViewController.h"
+#import "NewPasswordViewController.h"
 
 @interface BaseSituationListViewController ()<UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -134,7 +135,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = self.setType == 0 ? @"行情颜色" : (self.setType == 1 ? @"显示价格" : self.setType == 3 ? @"推送管理":@"预警提醒");
+    self.title = self.setType == 0 ? @"行情颜色" : (self.setType == 1 ? @"显示价格" : self.setType == 3 ? @"推送管理": (self.setType == 4?@"账号安全" : @"预警提醒"));
     self.view.backgroundColor = k_back_color;
 }
 
@@ -206,17 +207,22 @@
     }
     
     if (self.setType == 4) {
-        if (indexPath.row == 0) {
+        if (indexPath.row == 0 && indexPath.section == 0) {
             // 点击跳转手机号
             TelBindingViewController *vc = [[TelBindingViewController alloc] init];
             vc.title = @"绑定手机号";
             [self.navigationController pushViewController:vc animated:YES];
         }
         if (indexPath.section == 1 && indexPath.row == 0) {
-            if ([[kNSUserDefaults valueForKey:user_telephoneBinding] isEqualToString:@"0"]) {
+            if (![[kNSUserDefaults valueForKey:user_telephoneBinding] length]) {
                 [SVProgressHUD showWithStatus:@"请先绑定手机号"];
                 return;
             }
+            
+        }
+        if (indexPath.row == 0 && indexPath.section == 1) {
+            NewPasswordViewController *vc = [[NewPasswordViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
             
         }
     }

@@ -361,5 +361,4 @@ static FMDatabase *_db;
         callback(task,error);
     }];
 }
-
 @end

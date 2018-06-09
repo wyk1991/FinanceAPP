@@ -8,14 +8,24 @@
 
 #import "TelBindingViewController.h"
 #import "LoginView.h"
+#import "VaildationCodeHelper.h"
 
 @interface TelBindingViewController ()<LoginViewDelegate>
 
 @property (nonatomic, strong) LoginView *bindView;
 
+@property (nonatomic, strong) VaildationCodeHelper *helper;
 @end
 
 @implementation TelBindingViewController
+
+- (VaildationCodeHelper *)helper {
+    if (!_helper) {
+        _helper = [[VaildationCodeHelper alloc] init];
+        
+    }
+    return _helper;
+}
 
 - (LoginView *)bindView {
     if (!_bindView) {
@@ -47,13 +57,29 @@
 }
 
 // 获取验证码
-- (void)clickTimeBtnClickWith:(LoginView *)loginView {
-    
+- (void)clickTimeBtnClickWith:(NSString *)telStr {
+    [self.helper helperGetValidationCodeCallback:^(id obj, NSError *error) {
+        if (!error) {
+            [SVProgressHUD showSuccessWithStatus:@"短信发送成功"];
+        }
+    } telStr:telStr];
 }
 
 // 点击绑定按钮
-- (void)clickLoginBtnClickWith:(LoginView *)loginView {
-    
+- (void)clickLoginBtnClickWith:(LoginView *)loginView withInfo:(NSDictionary *)postInfo {
+    NSMutableDictionary *muDic = [NSMutableDictionary dictionaryWithDictionary:postInfo];
+    [muDic addEntriesFromDictionary:@{@"session_id": kApplicationDelegate.userHelper.userInfo.token}];
+    [kUserInfoHelper loginButtonWithUserInfo:muDic callback:^(id obj, NSError *error) {
+        if ([obj[@"status"] integerValue] == 100) {
+            [SVProgressHUD showSuccessWithStatus:@"绑定成功"];
+            [self.navigationController popViewControllerAnimated:YES];
+            //
+            [MJYUtils saveToUserDefaultWithKey:user_telephoneBinding withValue:postInfo[@"phone"]];
+        } else {
+            [SVProgressHUD showErrorWithStatus:obj[@"msg"]];
+        }
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -57,6 +57,12 @@
 #define situation_optin_list @"coin/usercoin_simple_details"
 #define situation_search @"coin/search"
 
+/** 删除自选的选项 */
+#define situation_optionDelet @"coin/usercoin_deletecoin"
+
+/** 添加自选交易所选项 */
+#define situation_AddOptionList @"coin/usercoin_setcoin"
+
 // 图表货币详情
 #define situation_coinDetail(obj)  [NSString stringWithFormat:@"coin/details?coin_name=%@", obj]
 
@@ -67,14 +73,27 @@
 #define verifyTelCode @"me/verify"
 #define userRegister @"me/register"
 
+#define user_info @"me/userinfo"
+
 #define userLogin @"me/login"
 #define userLoginOut @"me/logout"
+/** 修改密码 */
+#define update_user_password @"me/update_password"
 #define post_user_feedBack @"me/feedbacks"
 #define get_feedBack_history @"me/history_feedbacks"
 // 修改个人信息
 #define modify_user  @"me/update_info"
 // 上传用户头像
 #define upload_useravator @"me/update_avatar"
+// 二维码图片地址
+#define jilian_QRurl @"resources/qrcode/qrcode.png"
+// 获取个人积分列表
+#define get_scoreList @"points/get_list"
+// 绑定手机号码
+#define binding_userTel @"me/link_phone"
+
+// 获取文章html内容片断
+#define new_article_content @"constants/new_article"
 
 
 #endif /* URLMacro_h */

@@ -36,10 +36,10 @@
     } else if (type == 4) {
         arr = @[
                 
-                @[@{@"title": @"手机号", @"isArrow": @"1", @"isSwitch": @"0", @"content": [kNSUserDefaults valueForKey:user_telephoneBinding] ? [kNSUserDefaults valueForKey:user_telephoneBinding] : @"未设置"},
+                @[@{@"title": @"手机号", @"isArrow": @"1", @"isSwitch": @"0", @"content": [[kNSUserDefaults valueForKey:user_telephoneBinding] length] ? [kNSUserDefaults valueForKey:user_telephoneBinding] : @"未设置"},
                 @{@"title": @"微信", @"isArrow": @"0", @"isSwitch": @"1"}],
                 
-                @[@{@"title": @"账号密码", @"isArrow": @"1", @"isSwitch": @"0", @"content": [kNSUserDefaults valueForKey:user_settingPassword] ? [kNSUserDefaults valueForKey:user_settingPassword] : @"未设置"}]
+                @[@{@"title": @"账号密码", @"isArrow": @"1", @"isSwitch": @"0", @"content": @"修改密码"}]
                 ];
     }
     NSMutableArray *modelArr = [SettingModel mj_objectArrayWithKeyValuesArray:arr];

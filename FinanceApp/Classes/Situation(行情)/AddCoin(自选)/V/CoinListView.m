@@ -11,11 +11,17 @@
 #import "CoinListCell.h"
 #import "CoinListModel.h"
 
+#import "UpdateCoinListModel.h"
 
 @interface CoinListView()<UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) SituationHelper *helper;
+
+@property (nonatomic, strong) NSMutableDictionary *dic;
+
+@property (nonatomic, strong) UpdateCoinListModel *model;
 @property (nonatomic, strong) NSMutableArray *selectedArr; // 存放选中项
+@property (nonatomic, strong) NSMutableArray *coinNameArr; // 每个大类的coin的存放
 @end
 
 @implementation CoinListView
@@ -52,18 +58,27 @@
 }
 
 /** init method */
-- (instancetype)initWithFrame:(CGRect)frame WithCoinName:(NSString *)name {
+- (instancetype)initWithFrame:(CGRect)frame withCoinDic:(NSDictionary *)dic {
     if (self = [super initWithFrame:frame]) {
-        _coinName = name;
+        if (_coinName != [dic allKeys][0]) {
+            _model = [dic valueForKey:[dic allKeys][0]];
+            _model.coin_name = [dic allKeys][0];
+            _model.markets = @[].mutableCopy;
+        }
+        _coinName = [dic allKeys][0];
         self.backgroundColor = k_back_color;
-        [self loadDataWithCoinName:name];
+        [self loadDataWithCoinName:_coinName];
         
     }
     return self;
 }
 
 - (void)loadDataWithCoinName:(NSString *)name {
-    [self.helper helperGetCoinListNameDataWithPath:situation_listCoinName params:@{@"name":name} callBack:^(id obj, NSError *error) {
+    if (!kApplicationDelegate.userHelper.userInfo.token.length) {
+        NSLog(@"%@  token", kApplicationDelegate.userHelper.userInfo.token);
+        return;
+    }
+    [self.helper helperGetCoinListNameDataWithPath:situation_listCoinName params:@{@"name":name, @"session_id": kApplicationDelegate.userHelper.userInfo.token} callBack:^(id obj, NSError *error) {
         [self addSubview:self.tableView];
         
         [self.tableView reloadData];
@@ -105,13 +120,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     CoinListModel *model = [[SituationHelper shareHelper] coinNameList][indexPath.row];
-    model.isSelect = !model.isSelect;
+    model.selected = [model.selected isEqualToString:@"1"] ? @"0" : @"1";
     
-    if (model.isSelect) {
-        [self.selectedArr addObject:@{@"name":model.name}];
+    if ([model.selected isEqualToString:@"1"]) {
+//        [self.selectedArr addObject:@{@"name":model.name}];
+//        [self.coinNameArr addObject:@{@"name":model.name}];
+        [_model.markets addObject:@{@"name":model.name}];
     } else {
-        [self.selectedArr removeObject:@{@"name": model.name}];
+        [_model.markets removeObject:@{@"name":model.name}];
     }
+//    [self.selectedArr addObject:@{@"coin_name": self.coinName, @"markets": }];
     NSLog(@"%@", self.selectedArr);
     
     [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:0]] withRowAnimation:(UITableViewRowAnimationNone)];

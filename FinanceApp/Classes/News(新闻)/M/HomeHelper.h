@@ -29,8 +29,8 @@
 /** 分页数 */
 @property (nonatomic, assign) NSInteger page;
 
-/** 获取滚动内容 */
-@property (nonatomic, strong) NSMutableArray *contentArr;
+///** 获取滚动内容 */
+//@property (nonatomic, strong) NSMutableArray *contentArr;
 
 
 

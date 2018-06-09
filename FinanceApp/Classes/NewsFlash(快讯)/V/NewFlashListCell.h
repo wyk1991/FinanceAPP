@@ -12,7 +12,7 @@
 @class NewFlashListCell;
 @protocol ShareBtnClickDelegate<NSObject>
 
-- (void)shareBtnClick:(NewFlashListCell *)cell;
+- (void)shareBtnClick:(NewFlashListCell *)cell withIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
@@ -20,4 +20,6 @@
 
 @property (nonatomic, weak) id<ShareBtnClickDelegate> delegate;
 @property (nonatomic, strong) FlashViewModel *viewModel;
+
+@property (nonatomic, strong) NSIndexPath *indexPath;
 @end

@@ -354,6 +354,13 @@ typedef NS_ENUM(NSInteger, TXScrollLabelType) {
     [self setupSubviewsLayout];
 }
 
+- (void)setMode:(int)mode {
+    _mode = mode;
+    self.upLabel.lineBreakMode = mode;
+    self.downLabel.lineBreakMode = mode;
+    
+}
+
 - (UIFont *)font {
     if (_font) return _font;
     return TXScrollLabelFont;

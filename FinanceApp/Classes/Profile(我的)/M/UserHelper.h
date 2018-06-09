@@ -21,4 +21,9 @@
 
 - (void)helpFeedBackHistoryWithPath:(NSString *)path callBack:(UICallback)callback;
 
+/** 改变密码 */
+- (void)changeThePasswordWithPath:(NSString *)path withInfo:(NSDictionary *)params callBack:(UICallback)callback;
+
+/** 获取个人的发布的文本内容 */
+- (void)getTheUserpublishHTMLPath:(NSString *)path callBack:(UICallback)callback;
 @end

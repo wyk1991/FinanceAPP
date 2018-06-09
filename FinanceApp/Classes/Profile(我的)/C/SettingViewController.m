@@ -195,7 +195,7 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
                     [self gotoQuickLogin];
                     
                 } else {
-                    MyScoreViewController *vc = [[MyScoreViewController alloc] init];
+                    MyScoreViewController *vc = [[MyScoreViewController alloc] initWithViewType:@"0"];
                     vc.hidesBottomBarWhenPushed = YES;
                     [self.navigationController pushViewController:vc animated:YES];
                 }
@@ -219,7 +219,9 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
                     [self gotoQuickLogin];
                     
                 } else {
-                    
+                    MyScoreViewController *vc = [[MyScoreViewController alloc] initWithViewType:@"1"];
+                    vc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:vc animated:YES];
                 }
                 
                 break;
@@ -319,6 +321,8 @@ static NSString *backPersonCellIden = @"backPersonCellIden";
         .LeeAction(@"确定", ^{
             [kUserInfoHelper logout:^(id obj, NSError *error) {
                 if (!error) {
+                    // 通知退出成功的通知
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kUserLoginOutSuccessNotification object:self userInfo:nil];
                     [kNSUserDefaults removeObjectForKey:kAppHasCompletedLoginToken];
                     [kNSUserDefaults removeObjectForKey:kAppHasCompletedLoginUserInfo];
                     kApplicationDelegate.userHelper.userInfo = nil;

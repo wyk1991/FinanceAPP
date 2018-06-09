@@ -52,12 +52,52 @@ static UserInfoModelHelper *_instance;
 
 - (void)logout:(UICallback)callback {
     [SVProgressHUD showInfoWithStatus:@"正在退出.."];
-    [self startPostRequest:userLoginOut inParam:@{} outParse:^(id retData, NSError *error) {
+    [self startPostRequest:userLoginOut inParam:@{@"session_id": kApplicationDelegate.userHelper.userInfo.token} outParse:^(id retData, NSError *error) {
         if ([retData[@"status"] integerValue] == 100) {
             callback(retData, error);
         }
     } callback:^(id obj, NSError *error) {
-        
+        callback(error,nil);
     }];
+}
+
+- (void)getUserInfoWithToken:(NSString *)token callback:(UICallback)callback{
+    [self startGETRequest:user_info inParam:@{@"session_id": token} outParse:^(id retData, NSError *error) {
+        if ([retData[@"status"] integerValue] == 100) {
+            
+            NSMutableDictionary *result = [NSMutableDictionary dictionaryWithDictionary:@{@"user": retData[@"user"]}];
+            
+            [self dealGetUserInfo:result withToken:token];
+            
+            callback(retData, nil);
+        }
+        if ([retData[@"status"] integerValue] == 204) { // token失效
+            [kNSUserDefaults removeObjectForKey:kAppHasCompletedLoginToken];
+            [kNSUserDefaults removeObjectForKey:kAppHasCompletedLoginUserInfo];
+            kApplicationDelegate.userHelper.userInfo = nil;
+            
+            return;
+        }
+        
+    } callback:^(id obj, NSError *error) {
+        callback(nil,error);
+    }];
+}
+
+- (void)dealGetUserInfo:(id)result withToken:(NSString *)token{
+    [result addEntriesFromDictionary:@{@"session_id": token}];
+    
+    if ([kNSUserDefaults valueForKey:kAppHasCompletedLoginUserInfo]) {
+        kApplicationDelegate.userHelper.userInfo = nil;
+        [kNSUserDefaults removeObjectForKey:kAppHasCompletedLoginUserInfo];
+    }
+    // 保存个人偏好设置信息
+    UserInfoModel *model = [UserInfoModel mj_objectWithKeyValues:result];
+    // 归档数据将数据装换为data格式
+    NSData *modelData = [NSKeyedArchiver archivedDataWithRootObject:model];
+    [kNSUserDefaults setObject:modelData forKey:kAppHasCompletedLoginUserInfo];
+    [kNSUserDefaults synchronize];
+    
+    
 }
 @end

@@ -19,4 +19,7 @@
 //定义退出登录方法
 - (void)logout:(UICallback)callback;
 
+// 获取个人信息
+- (void)getUserInfoWithToken:(NSString *)token callback:(UICallback)callback;
+
 @end

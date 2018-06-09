@@ -28,7 +28,9 @@
 - (EarthBackView *)earthView {
     if (!_earthView) {
         _earthView = [[EarthBackView alloc] init];
-        _earthView.backgroundColor = [UIColor clearColor];
+        _earthView.frame = CGRectMake(0, 0, kScreenWidth, _clipHeight+CalculateHeight(250));
+        _earthView.userInteractionEnabled = YES;
+        _earthView.backgroundColor = RGB(42, 60, 89);
     }
     return _earthView;
 }
@@ -36,7 +38,9 @@
 - (ClipBackView *)clipView {
     if (!_clipView) {
         _clipView = [[ClipBackView alloc] init];
-        _clipView.backgroundColor = RGB(31, 45, 79);
+        _clipView.frame = CGRectMake(0, CalculateHeight(150), kScreenWidth, _clipHeight + CalculateHeight(100));
+        _clipView.userInteractionEnabled = YES;
+        _clipView.backgroundColor = [UIColor clearColor];
         _clipView.clipImg = self.clipImg;
     }
     return _clipView;
@@ -52,34 +56,35 @@
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, CalculateHeight(200)+_clipHeight)];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
         _scrollView.scrollEnabled = YES;
-        _scrollView.showsVerticalScrollIndicator = true;
-        _scrollView.showsHorizontalScrollIndicator = false;
-        
+        _scrollView.userInteractionEnabled = YES;
+        _scrollView.backgroundColor = RGB(42, 60, 89);
+        _scrollView.contentSize = CGSizeMake(kScreenWidth, CalculateHeight(300)+_clipHeight);
     }
     return _scrollView;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.view.userInteractionEnabled = YES;
     self.view.backgroundColor = RGB(42, 60, 89);
     
     [self.view addSubview:self.scrollView];
     [self.view addSubview:self.bottomView];
     [self.scrollView addSubview:self.earthView];
-    [self.scrollView addSubview:self.clipView];
-    
+    [self.earthView addSubview:self.clipView];
+    self.scrollView.delaysContentTouches = YES;
+    self.scrollView.canCancelContentTouches = NO;
     [self addMasnory];
     
-    self.scrollView.contentSize = CGSizeMake(kScreenWidth, CalculateHeight(200)+_clipHeight);
 }
 
 - (instancetype)initWithClipImage:(UIImage *)image Height:(CGFloat)height {
     if (self = [super init]) {
         _clipHeight = height;
         self.clipImg = image;
+        
     }
     return self;
 }
@@ -89,15 +94,6 @@
         make.bottom.offset(0);
         make.left.right.offset(0);
         make.size.mas_equalTo(CGSizeMake(kScreenWidth, CalculateHeight(50)));
-    }];
-    [_earthView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.right.offset(0);
-        make.size.mas_equalTo(CGSizeMake(kScreenWidth, CalculateHeight(250)));
-    }];
-    [_clipView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.offset(CalculateWidth(10));
-        make.right.offset(-CalculateWidth(10));
-        make.top.equalTo(_earthView.mas_bottom).offset(-CalculateHeight(70));
     }];
 }
 
@@ -142,12 +138,23 @@
 }
 
 - (void)clipTheScreenImageToPhoto {
-    CGSize size = CGSizeMake(kScreenWidth, CalculateHeight(200)+self.clipHeight);
-    // 设置截屏大小
-    UIGraphicsBeginImageContextWithOptions(size, YES, 0);
-    [[self.scrollView layer] renderInContext:UIGraphicsGetCurrentContext()];
+    CGPoint saveContentOffset = self.scrollView.contentOffset;
+    CGRect saveFrame = self.scrollView.frame;
+    
+    self.scrollView.frame = CGRectMake(0, self.scrollView.frame.origin.y,self.scrollView.contentSize.width, self.scrollView.contentSize.height);
+    UIGraphicsBeginImageContextWithOptions(self.scrollView.contentSize, YES, 0);
+    [self.scrollView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    
+//    CGSize size = CGSizeMake(kScreenWidth, CalculateHeight(300)+self.clipHeight);
+//    // 设置截屏大小
+//    UIGraphicsBeginImageContextWithOptions(size, YES, 0);
+//    [[self.scrollView layer] renderInContext:UIGraphicsGetCurrentContext()];
+    
     UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsGetCurrentContext();
+    
+    self.scrollView.contentOffset = saveContentOffset;
+    self.scrollView.frame = saveFrame;
     
     ALAssetsLibrary * library = [ALAssetsLibrary new];
     

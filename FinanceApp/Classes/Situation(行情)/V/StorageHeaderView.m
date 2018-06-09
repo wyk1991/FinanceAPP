@@ -122,18 +122,18 @@
     [super layoutSubviews];
     [_iconImg mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.offset(k_leftMargin);
-        make.centerY.offset(0);
+        make.centerY.offset(0).offset(CalculateHeight(15/4));
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(25), CalculateHeight(25)));
     }];
     [_titleLb mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_iconImg.mas_right).offset(CalculateWidth(10));
-        make.centerY.offset(0);
+        make.centerY.offset(0).offset(CalculateHeight(15/4));
         make.size.mas_equalTo(CGSizeMake(CalculateWidth(80), CalculateHeight(17)));
     }];
     [_searchBackView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_titleLb.mas_right).offset(CalculateWidth(15));
-        make.centerY.offset(0);
-        make.size.mas_equalTo(CGSizeMake(CalculateWidth(175), CalculateHeight(23)));
+        make.centerY.offset(0).offset(CalculateHeight(15/4));
+        make.size.mas_equalTo(CGSizeMake(CalculateWidth(200), CalculateHeight(30)));
     }];
 }
 

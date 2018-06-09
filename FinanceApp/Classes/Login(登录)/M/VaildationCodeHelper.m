@@ -13,7 +13,6 @@
 - (void)helperGetValidationCodeCallback:(UICallback)callBack telStr:(NSString *)str {
     [self startGETRequest:verifyTelCode inParam:@{@"phone": str} outParse:^(id retData, NSError *error) {
         if ([retData[@"status"] integerValue] == 100) {
-            [LDToast showToastWith:@"success"];
             callBack(retData, error);
         }
         

@@ -10,7 +10,7 @@
 
 @interface NewsModel : NSObject
 
-
+@property (nonatomic, strong) NSString *id;
 @property (nonatomic, strong) NSString *status;
 @property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) NSString *author;

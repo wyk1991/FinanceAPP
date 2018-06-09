@@ -12,6 +12,7 @@
 #define kUseisLoginWithToke @"userIsLoginToken"
 
 #define kUserLoginSuccessNotification @"userLoginSuccessNotification"
+#define kUserLoginOutSuccessNotification @"userLoginOutSuccessNotification"
 /** 修改货币的设置通知 */
 #define kUserChangeCurrencyNotification @"userChangeCurrencyNotificatin"
 /** 修改红涨绿跌 */

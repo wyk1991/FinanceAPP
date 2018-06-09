@@ -12,5 +12,6 @@
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *logo;
-@property (nonatomic, assign) BOOL isSelect;
+// 1 选中状态 0 未选中的状态
+@property (nonatomic, copy) NSString *selected;
 @end

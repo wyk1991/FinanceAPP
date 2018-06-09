@@ -123,15 +123,25 @@
         [avatorImg sd_setImageWithURL:[NSURL URLWithString:kApplicationDelegate.userHelper.userInfo.user.avatar_url] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
             
         }];
+        UIImageView *phImg = [[UIImageView alloc] init];
+        phImg.contentMode = UIViewContentModeScaleToFill;
+        phImg.userInteractionEnabled = YES;
+        [phImg setImage:[UIImage imageNamed:@"__picker_ic_camera_n"]];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickAvator)];
         [avatorImg addGestureRecognizer:tap];
         
         [v addSubview:avatorImg];
+        [v addSubview:phImg];
         
         [avatorImg mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(v);
             make.centerY.equalTo(v);
             make.size.mas_equalTo(CGSizeMake(60, 60));
+        }];
+        [phImg mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(avatorImg.mas_right).offset(-CalculateWidth(25));
+            make.top.equalTo(avatorImg.mas_bottom).offset(-CalculateHeight(25));
+            make.size.mas_equalTo(CGSizeMake(CalculateWidth(25), CalculateHeight(25)));
         }];
         self.userImg = avatorImg;
         return v;

@@ -112,8 +112,7 @@ static SituationHelper *_instance;
     }
     
     NSArray *arr = [CoinDetailListModel mj_objectArrayWithKeyValuesArray:result];
-    
-    self.coinListData = [NSMutableArray arrayWithArray:arr];
+    [self.coinListData addObjectsFromArray:arr];
 }
 
 - (void)dealCoinAllInfo:(id)result {
@@ -121,7 +120,7 @@ static SituationHelper *_instance;
     if ([result[@"status"] integerValue] == 100) {
         CoinAllInfoModel *model = [CoinAllInfoModel mj_objectWithKeyValues:result];
         tmp = @[
-                              @{@"icon_img": @"ic_monetary_aggregates", @"coin_count": model.num_coins, @"title": @"货币总量"},
+                              @{@"icon_img": @"ic_monetary_aggregates", @"coin_count": [NSString stringWithFormat:@"%@个",model.num_coins], @"title": @"货币总量"},
                               @{@"icon_img": @"ic_arrow_total_value", @"coin_count":[[kNSUserDefaults valueForKey:user_currency] isEqualToString:@"cny"]? model.circulate_money_cny : model.circulate_money_usd, @"title":@"流通总市值"},
                               @{@"icon_img": @"ic_exchange", @"coin_count": [NSString stringWithFormat:@"%@个", model.num_trading_market], @"title": @"交易所"},
                               @{@"icon_img": @"ic_24h", @"coin_count": [[kNSUserDefaults valueForKey:user_currency] isEqualToString:@"cny"] ? model.oneday_money_cny : model.oneday_money_usd, @"title": @"24H交易额"}
@@ -166,6 +165,14 @@ static SituationHelper *_instance;
         [usdArr addObject:[NSNumber numberWithDouble:[trackM.price_usd doubleValue]]];
         [dateArr addObject:[[MJYUtils mjy_timeChangeWith:trackM.time] substringFromIndex:10]];
     }
+//    NSMutableArray *tmp = @[].mutableCopy;
+//    for (int i=0; i<dateArr.count; i++) {
+//        if (i%2 == 0) { // 偶数
+//            [tmp addObject:dateArr[i]];
+//        }
+//
+//    }
+    
     [self.chartList addObject:[NSDictionary dictionaryWithObject:cnyArr forKey:@"cny"]];
     [self.chartList addObject:[NSDictionary dictionaryWithObject:usdArr forKey:@"usd"]];
     [self.chartList addObject:[NSDictionary dictionaryWithObject:dateArr forKey:@"time"]];
@@ -232,7 +239,7 @@ static SituationHelper *_instance;
  */
 - (void)helperGetOptionCoinListWithPath:(NSString *)path params:(NSDictionary *)params callBack:(UICallback)callback {
     WS(weakSelf);
-    [weakSelf startPostRequest:path inParam:params outParse:^(id retData, NSError *error) {
+    [weakSelf startGETRequest:path inParam:params outParse:^(id retData, NSError *error) {
         
         [weakSelf dealOptionData:retData];
         callback(retData, nil);
@@ -258,5 +265,57 @@ static SituationHelper *_instance;
     }
     return _optionsCoinList;
 }
+
+- (void)helpDeleteOptionListItemWithPath:(NSString *)path params:(NSDictionary *)params callback:(UICallback)callback {
+    WS(weakSelf);
+    [weakSelf startPostRequest:path inParam:params outParse:^(id retData, NSError *error) {
+        callback(retData, nil);
+    } callback:^(id obj, NSError *error) {
+        callback(nil, error);
+    }];
+}
+
+- (void)helpAddOptionItemWithPath:(NSString *)path params:(NSString *)str callback:(UICallback)callback {
+    WS(weakSelf);
+//    [weakSelf startPostRequest:path inParam:str outParse:^(id retData, NSError *error) {
+//        callback(retData, nil);
+//    } callback:^(id obj, NSError *error) {
+//        callback(nil, error);
+//    }];
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    
+    NSMutableURLRequest *req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:[NSString stringWithFormat:@"%@%@", Base_URL, path] parameters:nil error:nil];
+    
+    req.timeoutInterval= [[[NSUserDefaults standardUserDefaults] valueForKey:@"timeoutInterval"] longValue];
+    
+    [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    [req setHTTPBody:[str dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    [[manager dataTaskWithRequest:req completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        
+        if (!error) {
+            
+            NSLog(@"Reply JSON: %@", responseObject);
+            
+            if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                
+                //blah blah
+                callback(responseObject, nil);
+            }
+            
+        } else {
+            
+            NSLog(@"Error: %@, %@, %@", error, response, responseObject);
+            
+        }
+        
+    }] resume];
+    
+}
+
 
 @end

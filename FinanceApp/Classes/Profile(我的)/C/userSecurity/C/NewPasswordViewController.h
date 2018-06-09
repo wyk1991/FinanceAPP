@@ -9,5 +9,6 @@
 #import "BaseViewController.h"
 
 @interface NewPasswordViewController : BaseViewController
+@property (nonatomic, strong) NSString *bindingTel;
 
 @end

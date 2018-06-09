@@ -9,6 +9,7 @@
 #import "SituationSearchViewController.h"
 #import "CoinListCell.h"
 #import "SitutaionResultModel.h"
+#import "ArticleWebViewController.h"
 
 @interface SituationSearchViewController ()<UITextFieldDelegate,UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UIView *naviTitle;
@@ -155,7 +156,7 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView  =[UIView new];
-        _tableView.separatorStyle = 0;
+        _tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.showsHorizontalScrollIndicator = NO;
         _tableView.showsVerticalScrollIndicator = NO;
@@ -260,6 +261,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
 }
 
 - (void)cancelBtnClick:(UIButton *)btn {

@@ -25,8 +25,7 @@
 #import "CoinAllInfoModel.h"
 #import "SituationSearchViewController.h"
 
-
-#import "AAChartView.h"
+#import "WYNormalFooter.h"
 
 #define MAS_SHORTHAND
 #define MAS_SHORTHAND_GLOBALS
@@ -57,17 +56,16 @@ SearchTextClick
 @property (nonatomic, strong) StorageHeaderView *coinTopView;
 /** charts顶部图片 */
 @property (nonatomic, strong) NormalCoinHeadView *chartsTopView;
+@property (nonatomic, strong) UIView *chartsLine;
 
 @property (nonatomic,assign) float cellLastX; //最后的cell的移动距离
 
 @property (nonatomic, strong) SituationHelper *helper;
 
 
-@property (nonatomic,strong) UITableView *leftTableView, *rightTableView;
 @property (nonatomic,strong) UIScrollView *buttomScrollView;
 
-@property (nonatomic, strong) UITableView *optionTableView;
-
+@property (nonatomic, strong) UIButton *addBtn;
 @property (nonatomic,strong) NSArray *rightTitles;
 
 @property (nonatomic, strong) NSMutableArray *touchPoints;
@@ -92,6 +90,24 @@ SearchTextClick
     return _helper;
 }
 
+- (UIButton *)addBtn {
+    if (!_addBtn) {
+        _addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _addBtn.frame = CGRectMake((kScreenWidth - CalculateWidth(200))/2, kScreenHeight/2, CalculateWidth(200), CalculateHeight(50));
+        [_addBtn setTitle:@"＋添加自选行情" forState:UIControlStateNormal];
+        [_addBtn setTitleColor:k_line forState:UIControlStateNormal];
+        _addBtn.titleLabel.font = k_text_font_args(CalculateHeight(17));
+        _addBtn.backgroundColor = [UIColor clearColor];
+        _addBtn.layer.cornerRadius = 10.0f;
+        _addBtn.layer.masksToBounds = YES;
+        
+        _addBtn.layer.borderColor = k_line_color.CGColor;
+        _addBtn.layer.borderWidth = CalculateHeight(1);
+        [_addBtn addTarget:self action:@selector(addBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _addBtn;
+}
+
 -(NSArray *)rightTitles{
     if (!_rightTitles) {
         _rightTitles = @[].mutableCopy;
@@ -113,10 +129,18 @@ SearchTextClick
     if (!_chartsTopView) {
         _chartsTopView = [[NormalCoinHeadView alloc] init];
         _chartsTopView.backgroundColor = [UIColor clearColor];
-        _chartsTopView.frame = CGRectMake(0, CalculateHeight(15/2), kScreenWidth, CalculateHeight(264));
+        _chartsTopView.frame = CGRectMake(0, 0, kScreenWidth, CalculateHeight(264));
         
     }
     return _chartsTopView;
+}
+
+- (UIView *)chartsLine {
+    if (!_chartsLine) {
+        _chartsLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, CalculateHeight(15/2))];
+        _chartsLine.backgroundColor = k_back_color;
+    }
+    return _chartsLine;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame withShowType:(CoinShowType)showType withIndex:(NSInteger)index{
@@ -127,24 +151,29 @@ SearchTextClick
         // 请求数据
         [self loadDataWithType:showType index:index];
         if (showType == 0) {
+            // 判断当前是否登录
             [self configOptionTableViewWith:showType rightTitles:[SituationManager rightTitleWithType:showType]];
+           
+            
         } else {
             [self loadScrollerTableWith:showType leftTitles:[SituationManager leftTitleWithType:showType] rightTitles:[SituationManager rightTitleWithType:showType]];
         }
         // 加载头部视图
         [self configViewWith:showType];
         
-        [self addNotification];
     }
     return self;
 }
 
-- (void)addNotification {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:kUserChangeCurrencyNotification object:nil];
-}
+
 
 - (void)reloadData {
     [self loadDataWithType:self.showType index:self.selectedIndex];
+}
+
+- (void)changeTheState {
+    [self.optionTableView setHidden:YES];
+    [self.addBtn setHidden:NO];
 }
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
@@ -153,28 +182,45 @@ SearchTextClick
     }
 }
 
+- (void)showAddBtn {
+    // 显示添加自选的按钮
+    [self.addBtn setHidden:NO];
+}
+
+- (void)addBtnClick {
+    if (_delegate && [_delegate respondsToSelector:@selector(didClickAddBtn:)]) {
+        [_delegate didClickAddBtn:self];
+    }
+}
+
 - (void)configOptionTableViewWith:(CoinShowType)type rightTitles:(NSArray *)rightTitles {
     if (_rightTitles != rightTitles) {
         _rightTitles = rightTitles;
     }
-    self.optionTopView = [[UIView alloc] initWithFrame:CGRectMake(0, CalculateHeight(15/2), kScreenWidth, CalculateHeight(40))];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, CalculateHeight(15/2))];
+    line.backgroundColor = k_back_color;
+    
+    self.optionTopView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, CalculateHeight(40+15/2))];
     self.optionTopView.backgroundColor = [UIColor clearColor];
     
     UIView *view1 = [self viewWithLeftLabelNumber:1];
-    view1.frame = CGRectMake(0, 0, kScreenWidth*7/18, CalculateHeight(40));
-    view1.backgroundColor  = k_siuation_leftHeadBg;
+    view1.frame = CGRectMake(0, CalculateHeight(15/2), kScreenWidth*7/18, CalculateHeight(40));
+    view1.backgroundColor  = RGB(225, 220, 220);
     UIView *view2 = [self viewWithRightLabelNumber:2];
-    view2.frame = CGRectMake(kScreenWidth*7/18, 0, kScreenWidth*11/18, CalculateHeight(40));
+    view2.frame = CGRectMake(kScreenWidth*7/18, CalculateHeight(15/2), kScreenWidth*11/18, CalculateHeight(40));
     int i = 0;
     for (UILabel *label in view2.subviews) {
         label.text = self.rightTitles[i++];
     }
-    view2.backgroundColor = [UIColor lightGrayColor];
+    view2.backgroundColor = RGB(206, 206, 206);
     [self.optionTopView addSubview:view1];
     [self.optionTopView addSubview:view2];
+    [self.optionTopView addSubview:line];
+    
     
     self.optionTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-    self.optionTableView.frame = CGRectMake(0, CalculateHeight(15/2+40), kScreenWidth, kScreenHeight);
+    self.optionTableView.frame = CGRectMake(0, CalculateHeight(15/2+40), kScreenWidth, kScreenHeight - CalculateHeight(80));
+    [self.optionTableView setContentInset:UIEdgeInsetsMake(0, 0, CalculateHeight(150), 0)];
     self.optionTableView.tableFooterView = [UIView new];
     self.optionTableView.delegate = self;
     self.optionTableView.dataSource = self;
@@ -182,11 +228,16 @@ SearchTextClick
     self.optionTableView.showsHorizontalScrollIndicator = false;
     [self.optionTableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     
+    self.optionTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        self.helper.optionPage = 1;
+        [self loadMoreData];
+    }];
+    
     // 添加长按手势
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognized:)];
     [self.optionTableView addGestureRecognizer:longPress];
     
-//    [self.optionTableView registerClass:[OptionDetailCell class] forCellReuseIdentifier:optionListCellIdentifier];
+    //    [self.optionTableView registerClass:[OptionDetailCell class] forCellReuseIdentifier:optionListCellIdentifier];
     [self.optionTableView registerNib:[UINib nibWithNibName:@"OptionDetailCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:optionListCellIdentifier];
     
     [self addSubview:self.optionTableView];
@@ -205,10 +256,7 @@ SearchTextClick
     self.leftTableView.showsVerticalScrollIndicator = NO;
     [self.leftTableView registerClass:[SituationCell class] forCellReuseIdentifier:situationCellIden];
     [self.leftTableView.tableFooterView setHidden:YES];
-    // 添加下拉刷新的
-    self.leftTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        [self loadMoreData];
-    }];
+    
     [self addSubview:self.leftTableView];
     
     self.rightTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, type == 0 ? kScreenWidth*11/18: self.rightTitles.count * (self.showType >= 2 ? chartRightLabelWidth : RightLabelWidth) + 20 + RightLabelMagin*(self.rightTitles.count-1), [UIScreen mainScreen].bounds.size.height) style:UITableViewStylePlain];
@@ -218,9 +266,14 @@ SearchTextClick
     self.rightTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.rightTableView.showsVerticalScrollIndicator = NO;
     [self.rightTableView.tableFooterView setHidden:YES];
-    self.rightTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        [self loadMoreData];
-    }];
+    
+    // 添加下拉刷新
+    if (type == 1) {
+        self.leftTableView.mj_footer = [WYNormalFooter footerWithRefreshingBlock:^{
+            self.helper.page++;
+            [self loadMoreData];
+        }];
+    }
     
     self.buttomScrollView = [[UIScrollView alloc] init];
     self.buttomScrollView.frame = CGRectMake(CGRectGetMaxX(self.leftTableView.frame), type == 0 ? CalculateHeight(15/2) : ( type == 1 ? CalculateHeight(211+15/2) : CalculateHeight(250 + 18)), kScreenWidth*11/18, kScreenHeight);
@@ -248,6 +301,7 @@ SearchTextClick
     switch (type) {
         case 0:
             [self addSubview:self.optionTopView];
+            [self addSubview:self.addBtn];
             break;
         case 1: {
             [self addSubview:self.coinTopView];
@@ -255,6 +309,7 @@ SearchTextClick
             break;
         case 2: {
             [self addSubview:self.chartsTopView];
+            [self.chartsTopView addSubview:self.chartsLine];
         }
             
         default:
@@ -267,10 +322,25 @@ SearchTextClick
     WS(weakSelf);
     switch (type) {
         case 0: {
-            NSString *url = [NSString stringWithFormat:@"%@?sessionid=%@&name=BTC&market=Huobi&userid=anything",situation_optin_list,kApplicationDelegate.userHelper.userInfo.token];
+            NSString *url = [NSString stringWithFormat:@"%@?session_id=%@",situation_optin_list,kApplicationDelegate.userHelper.userInfo.token];
             [weakSelf.helper helperGetOptionCoinListWithPath:url params:@{} callBack:^(id obj, NSError *error) {
                 if (!error) {
-                    [self.optionTableView reloadData];
+                    if (self.helper.optionsCoinList.count) {
+                        [self.optionTableView setHidden:NO];
+                        [self.optionTopView setHidden:NO];
+                        [self.addBtn setHidden:YES];
+                        [self.optionTableView reloadData];
+                    } else {
+                        [self.optionTableView setHidden:YES];
+                        [self.optionTopView setHidden:YES];
+                        [self.addBtn setHidden:NO];
+                    }
+                    
+                }
+                if ([obj[@"status"] integerValue] == 204) {
+                    [self.optionTableView setHidden:YES];
+                    [self.optionTopView setHidden:YES];
+                    [self.addBtn setHidden:NO];
                 }
             }];
         }
@@ -311,7 +381,44 @@ SearchTextClick
 
 #pragma mark - 加载更多coin列表数据
 - (void)loadMoreData {
-    
+    if (self.showType == 1) {
+        WS(weakSelf);
+        [weakSelf.helper helperGetListCoinWithPath:situation_listCoin params:@{@"statrt": [NSString stringWithFormat:@"%ld",weakSelf.helper.page]}callBack:^(id obj, NSError *error) {
+            if (!error) {
+                if ([obj[@"coins"] count]) {
+                    
+                    [self.leftTableView reloadData];
+                    [self.rightTableView reloadData];
+                    [self.leftTableView.mj_footer endRefreshing];
+                    [self.rightTableView.mj_footer endRefreshing];
+                } else {
+                    [self.leftTableView.mj_footer endRefreshing];
+                    [self.rightTableView.mj_footer endRefreshing];
+                }
+            }
+        }];
+    }
+    if (self.showType == 0) {
+        WS(weakSelf);
+         NSString *url = [NSString stringWithFormat:@"%@?session_id=%@",situation_optin_list,kApplicationDelegate.userHelper.userInfo.token];
+        [weakSelf.helper helperGetOptionCoinListWithPath:url params:@{} callBack:^(id obj, NSError *error) {
+            if (!error) {
+                if ([obj[@"coinlist"] count]) {
+                    [self.optionTableView reloadData];
+                    [self.optionTopView setHidden:NO];
+                    [self.addBtn setHidden:YES];
+                    [self.optionTableView setHidden:NO];
+                    [self.optionTableView.mj_header endRefreshing];
+                } else {
+                    [self.optionTableView reloadData];
+                    [self.addBtn setHidden:NO];
+                    [self.optionTableView setHidden:YES];
+                    [self.optionTopView setHidden:YES];
+                    [self.optionTableView.mj_header endRefreshing];
+                }
+            }
+        }];
+    }
 }
 
 - (void)configCoinDetailData {
@@ -378,22 +485,12 @@ SearchTextClick
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-//    if (self.showType == 0) {
-//        return self.helper.optionsCoinList.count;
-//    }
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.showType == 0) {
-//        NSString *cateStr = [(OptionCoinModel *)[self.helper.optionsCoinList objectAtIndex:section] market];
-//
-//        MCDropdownListSectionStatu openOrNot = [[self.helper.optionOpenDict valueForKey:cateStr] unsignedIntegerValue];
-//
-//        if (openOrNot == MCDropdownListSectionStatuOpen) {
-//            return 1;
-//        }
         return self.helper.optionsCoinList.count;
     }
     return  self.showType == 1 ? self.helper.coinListData.count : self.helper.chartCoinList.count;
@@ -401,18 +498,6 @@ SearchTextClick
 #pragma mark -- 设置左右两个table View的自定义头部View
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     if (self.showType == 0) {
-//        OptionSectionView *headerView = nil;
-//        headerView = [[OptionSectionView alloc] init];
-//        headerView.frame = CGRectMake(0, 0, tableView.bounds.size.width, CalculateHeight(50));
-//        headerView.backgroundColor = k_white_color;
-//        headerView.model = self.helper.optionsCoinList[section];
-//        UIButton* btn = [[UIButton alloc] initWithFrame:headerView.frame];
-//        [headerView addSubview:btn];
-//
-//        [btn addTarget:self action:@selector(onExpandSection:) forControlEvents:UIControlEventTouchUpInside];
-//        btn.tag = section;
-//
-//        return headerView;
     }
     if (tableView == self.rightTableView) {
         UIView *rightHeaderView = [self viewWithRightLabelNumber:self.rightTitles.count];
@@ -420,7 +505,7 @@ SearchTextClick
         for (UILabel *label in rightHeaderView.subviews) {
             label.text = self.rightTitles[i++];
         }
-        rightHeaderView.backgroundColor = k_siuation_leftHeadBg;
+        rightHeaderView.backgroundColor = RGB(206, 206, 206);
         return rightHeaderView;
     }else{
         UIView *leftHeaderView;
@@ -430,7 +515,7 @@ SearchTextClick
             
             leftHeaderView = [self viewWithLeftLabelNumber:1];
         }
-        leftHeaderView.backgroundColor = [UIColor lightGrayColor];
+        leftHeaderView.backgroundColor = RGB(225, 220, 220);
         return leftHeaderView;
     }
 }
@@ -487,7 +572,20 @@ SearchTextClick
     
     UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
        // 实现点击的删除
-        
+        OptionCoinModel *model = self.helper.optionsCoinList[indexPath.row];
+        NSDictionary *dic = @{
+                              @"session_id": kApplicationDelegate.userHelper.userInfo.token,
+                              @"coin_name": model.coin_name,
+                              @"markets": model.market
+                              };
+        [self.helper helpDeleteOptionListItemWithPath:situation_optionDelet params:dic callback:^(id obj, NSError *error) {
+            if ([obj[@"status"] integerValue] == 100) {
+                [self.helper.optionsCoinList removeObjectAtIndex:indexPath.row];
+                [SVProgressHUD showSuccessWithStatus:@"删除成功"];
+                
+                [self.optionTableView reloadData];
+            }
+        }];
     }];
     
     UITableViewRowAction *pushTopAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"置顶" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
@@ -512,6 +610,12 @@ SearchTextClick
         [_delegate didClickToSeachCoin:self];
     }
     
+}
+
+- (void)dealloc {
+    // 移除通知
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kUserLoginSuccessNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kUserLoginOutSuccessNotification object:nil];
 }
 
 - (void)SpreadImageClick:(UITapGestureRecognizer*)tap{
@@ -551,7 +655,7 @@ SearchTextClick
     // 计算label的宽度
     NSMutableArray *tmp = @[].mutableCopy;
     for (NSString *str in self.rightTitles) {
-        CGFloat value = [str widthWithFont:k_textB_font_args(CalculateHeight(16)) height:LabelHeight]+CalculateWidth(2);
+        CGFloat value = [str widthWithFont:k_text_font_args(CalculateHeight(16)) height:LabelHeight]+CalculateWidth(2);
         [tmp addObject:[NSString stringWithFormat:@"%f", value]];
     }
     CGFloat tmpf = 0.0;
@@ -561,7 +665,8 @@ SearchTextClick
         }
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(i==0 ? CalculateWidth(57)+i*(self.showType >= 2 ? chartRightLabelMargin : RightLabelMagin) :  CalculateWidth(57)+i*(self.showType >= 2 ? chartRightLabelMargin : RightLabelMagin)+ tmpf, 0, CalculateWidth([tmp[i] integerValue] + CalculateWidth(2)), LabelHeight)];
-        label.font = k_textB_font_args(CalculateHeight(16));
+        label.font = k_text_font_args(CalculateHeight(16));
+        label.textColor = RGB(168, 168, 168);
         label.tag = i;
         label.textAlignment = 0;
         [view addSubview:label];
@@ -574,7 +679,8 @@ SearchTextClick
     
     for (int i = 0; i < num; i++) {
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(num==2 ? CalculateWidth(22)+LeftLableMagin*i: CalculateWidth(15), 0, CalculateWidth(40)  , LabelHeight)];
-        label.font = k_textB_font_args(CalculateHeight(16));
+        label.font = k_text_font_args(CalculateHeight(16));
+        label.textColor  = k_siuation_unselectTag;
         label.tag = i;
         [label setText:[SituationManager leftTitleWithType:self.showType][i]];
         label.textAlignment = 0;
@@ -584,9 +690,7 @@ SearchTextClick
 }
 
 - (void)fetchData {
-    if (self.selectedIndex==0 || self.selectedIndex==1) {
-        return;
-    }
+    
     [self loadDataWithType:self.showType index:self.selectedIndex];
 }
 
@@ -598,13 +702,13 @@ SearchTextClick
     if (scrollView.contentOffset.y > CalculateHeight(10)) {
         [UIView animateWithDuration:0.5 animations:^{
             if (self.showType == 1) {
-                self.coinTopView.st_y = -CalculateHeight(211+15/2);
+                self.coinTopView.st_y = -CalculateHeight(211);
                 self.leftTableView.st_y = 0;
                 self.buttomScrollView.st_y = 0;
             } else {
-                self.chartsTopView.st_y = -CalculateHeight(146+4);
-                self.leftTableView.st_y = CalculateHeight(104+15/2);
-                self.buttomScrollView.st_y = CalculateHeight(104+15/2);
+                self.chartsTopView.st_y = -CalculateHeight(146+15/2);
+                self.leftTableView.st_y = CalculateHeight(116);
+                self.buttomScrollView.st_y = CalculateHeight(116);
             }
             
         }];
@@ -613,7 +717,7 @@ SearchTextClick
             if (self.showType == 1) {
                 self.coinTopView.st_y = CalculateHeight(15/2);
             } else {
-                self.chartsTopView.st_y = CalculateHeight(15/2);
+                self.chartsTopView.st_y = 0;
             }
             self.leftTableView.st_y = self.showType == 1 ? CalculateHeight(211+15/2):CalculateHeight(250+18);
             self.buttomScrollView.st_y = self.showType == 1 ? CalculateHeight(211+15/2):CalculateHeight(250+18);
@@ -730,5 +834,7 @@ SearchTextClick
     snapshot.layer.shadowOpacity = 0.4;
     return snapshot;
 }
+
+
 
 @end

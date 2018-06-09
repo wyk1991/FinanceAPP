@@ -123,7 +123,7 @@ AALineDashSyleType const AALineDashSyleTypeLongDashDotDot  = @"LongDashDotDot";
         self.subtitleFontSize       = @9;
         self.dataLabelFontColor     = @"#000000";//数据标签默认颜色为黑色
         self.dataLabelFontWeight    = AAChartFontWeightTypeBold;//图表的数据字体为粗体
-        self.dataLabelFontSize      = @10;
+        self.dataLabelFontSize      = @9;
         self.xAxisLabelsFontSize    = @11;//x轴字体大小
         self.xAxisLabelsFontColor   = @"#778899";//浅石板灰色字体
         self.xAxisLabelsFontWeight  = AAChartFontWeightTypeThin;//细体字
@@ -132,7 +132,7 @@ AALineDashSyleType const AALineDashSyleTypeLongDashDotDot  = @"LongDashDotDot";
         self.yAxisLabelsFontWeight  = AAChartFontWeightTypeThin;//细体字
         self.yAxisAlternateGridColor= @"#ffffff";//backcolor of every other grid line area
         
-        self.xAxisCrosshairWidth    = @1.5;//Zero width to disable crosshair by default
+        self.xAxisCrosshairWidth    = @1;//Zero width to disable crosshair by default
         self.xAxisCrosshairColor    = @"#778899";//浅石板灰准星线
         self.xAxisCrosshairDashStyleType = AALineDashSyleTypeLongDashDot;
 //        self.yAxisCrosshairWidth    = @0;//Zero width to disable crosshair by default

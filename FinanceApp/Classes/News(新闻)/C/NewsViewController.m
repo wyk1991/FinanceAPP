@@ -157,11 +157,8 @@ static NSString * const reuseID  = @"DDChannelCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    // 设置navigationItem 为自定义的频道滚动图
-    
-    
 }
+
 - (void)loadTagData {
     WS(weakSelf);
     [[HomeHelper shareHelper] helperGetTagDataFromPath:tag_list callBack:^(id obj, NSError *error) {
@@ -183,7 +180,7 @@ static NSString * const reuseID  = @"DDChannelCell";
 - (void)setupChannelLabel
 {
     CGFloat margin = CalculateWidth(15);
-    CGFloat x = 8;
+    CGFloat x = 0;
     CGFloat h = self.smallScrollView.bounds.size.height;
     int i = 0;
     for (NSString *str in self.list_now) {

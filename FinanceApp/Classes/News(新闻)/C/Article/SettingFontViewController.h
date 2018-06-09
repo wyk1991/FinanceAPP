@@ -6,12 +6,13 @@
 //  Copyright © 2018年 wyk. All rights reserved.
 //
 
-#import "BaseViewController.h"
+#import "BaseView.h"
 
 typedef void(^ClickFontSize)(NSInteger index);
 
-@interface SettingFontViewController : BaseViewController
+@interface SettingFontViewController : BaseView
 
 @property (nonatomic, copy) ClickFontSize fontBlock;
 
+- (void)show;
 @end

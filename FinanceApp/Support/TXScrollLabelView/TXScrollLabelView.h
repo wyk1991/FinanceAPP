@@ -67,6 +67,9 @@ typedef NS_ENUM(NSInteger, TXScrollLabelViewType) {
 @property (assign, nonatomic) NSTextAlignment textAlignment;
 /** 字体大小 */
 @property (strong, nonatomic) UIFont *font;
+
+/** */
+@property (nonatomic, assign) NSLineBreakMode mode;
 //根据内容自适应宽度 Pending!!
 @property (assign, nonatomic) BOOL autoWidth;
 

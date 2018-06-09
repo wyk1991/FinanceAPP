@@ -36,6 +36,7 @@
     [kApplicationDelegate monitorNetworking];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json", @"text/javascript",@"text/html",@"text/plain",nil];
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
     
     NSString *urlStr = [NSString stringWithFormat:@"%@%@", Base_URL, url];
     
@@ -53,7 +54,6 @@
         
     }];
 }
-
 
 
 @end

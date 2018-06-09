@@ -35,6 +35,7 @@
     if (!_headImg) {
         _headImg = [[UIImageView alloc] init];
         ViewBorderRadius(_headImg, CalculateWidth(27), 0, k_white_color);
+        NSLog(@"%@", kApplicationDelegate.userHelper.userInfo.user);
         [_headImg sd_setImageWithURL:[NSURL URLWithString:kApplicationDelegate.userHelper.userInfo.user.avatar_url] placeholderImage:[UIImage imageNamed:@"icon_defaut_avatar"]];
         _headImg.contentMode = UIViewContentModeScaleAspectFill;
     }
